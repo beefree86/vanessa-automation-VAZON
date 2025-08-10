@@ -8945,7 +8945,7 @@
 		ИмяEpf = "vanessa-automation-single.epf";
 	КонецЕсли;	 
 	
-	Стр = """%1"" /N""%2"" /TestManager /Execute ""%3"" /IBConnectionString ""%4"" /C""%5""";
+	Стр = """%1"" ENTERPRISE /N""%2"" /TestManager /Execute ""%3"" /IBConnectionString ""%4"" /C""%5""";
 	Стр = ПодставитьПараметрыВСтроку(Стр,
 		КаталогПрограммы() + ИмяИсполняемогоФайлаТонкийКлиент,
 		ИмяПользователя(),
@@ -8977,7 +8977,7 @@
 		ИмяEpf = "vanessa-automation-single.epf";
 	КонецЕсли;	 
 	
-	Стр = " oscript _quote_%6_quote_ ""%1"" /N""%2"" /TestManager /Execute ""%3"" /IBConnectionString ""%4"" /C""%5""";
+	Стр = " oscript _quote_%6_quote_ ""%1"" ENTERPRISE /N""%2"" /TestManager /Execute ""%3"" /IBConnectionString ""%4"" /C""%5""";
 	Стр = ПодставитьПараметрыВСтроку(Стр,
 		КаталогПрограммы() + ИмяИсполняемогоФайлаТонкийКлиент,
 		ИмяПользователя(),
