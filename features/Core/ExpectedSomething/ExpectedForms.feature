@@ -700,6 +700,20 @@
 	И файл "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки1.txt" равен файлу "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки2.txt" по шаблону
 	И файл "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки2.txt" равен файлу "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки1.txt" по шаблону
 	
+	И файл "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки1.txt" содержит строки
+		|"123"|
+		|"456"|
+	И файл "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки1.txt" не содержит строки
+		|"1234"|
+		|"4567"|
+	И файл "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки1.txt" содержит строки по шаблону
+		|"*12*"|
+		|"*78*"|
+	И файл "$КаталогИнструментов$\features\Core\ExpectedSomething\files\ФайлПроверки1.txt" не содержит строки по шаблону
+		|"*234*"|
+		|"*4556*"|
+
+
 	И в поле с именем "РеквизитСтрока" я ввожу текст из файла "InputTextFile01.txt"
 	И элемент формы с именем "РеквизитСтрока" стал равен "123"
 	
