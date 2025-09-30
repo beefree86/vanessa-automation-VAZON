@@ -530,6 +530,9 @@
 									<TitleLocation>None</TitleLocation>
 									<ContextMenu name="MarkdownViewerКонтекстноеМеню" id="132"/>
 									<ExtendedTooltip name="MarkdownViewerРасширеннаяПодсказка" id="133"/>
+									<Events>
+										<Event name="DocumentComplete">MarkdownViewerДокументСформирован</Event>
+									</Events>
 								</HTMLDocumentField>
 							</ChildItems>
 						</UsualGroup>
