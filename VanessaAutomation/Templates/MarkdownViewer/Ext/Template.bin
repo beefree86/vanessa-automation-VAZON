@@ -1,0 +1,4759 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Markdown Viewer</title>
+  <script>
+var __defProp = Object.defineProperty;
+var __typeError = (msg) => {
+  throw TypeError(msg);
+};
+var __defNormalProp = (obj, key, value) => key in obj ? __defProp(obj, key, { enumerable: true, configurable: true, writable: true, value }) : obj[key] = value;
+var __publicField = (obj, key, value) => __defNormalProp(obj, typeof key !== "symbol" ? key + "" : key, value);
+var __accessCheck = (obj, member, msg) => member.has(obj) || __typeError("Cannot " + msg);
+var __privateAdd = (obj, member, value) => member.has(obj) ? __typeError("Cannot add the same private member more than once") : member instanceof WeakSet ? member.add(obj) : member.set(obj, value);
+var __privateMethod = (obj, member, method) => (__accessCheck(obj, member, "access private method"), method);
+var _Marked_instances, parseMarkdown_fn, onError_fn;
+(function polyfill() {
+  const relList = document.createElement("link").relList;
+  if (relList && relList.supports && relList.supports("modulepreload")) {
+    return;
+  }
+  for (const link2 of document.querySelectorAll('link[rel="modulepreload"]')) {
+    processPreload(link2);
+  }
+  new MutationObserver((mutations) => {
+    for (const mutation of mutations) {
+      if (mutation.type !== "childList") {
+        continue;
+      }
+      for (const node of mutation.addedNodes) {
+        if (node.tagName === "LINK" && node.rel === "modulepreload")
+          processPreload(node);
+      }
+    }
+  }).observe(document, { childList: true, subtree: true });
+  function getFetchOpts(link2) {
+    const fetchOpts = {};
+    if (link2.integrity) fetchOpts.integrity = link2.integrity;
+    if (link2.referrerPolicy) fetchOpts.referrerPolicy = link2.referrerPolicy;
+    if (link2.crossOrigin === "use-credentials")
+      fetchOpts.credentials = "include";
+    else if (link2.crossOrigin === "anonymous") fetchOpts.credentials = "omit";
+    else fetchOpts.credentials = "same-origin";
+    return fetchOpts;
+  }
+  function processPreload(link2) {
+    if (link2.ep)
+      return;
+    link2.ep = true;
+    const fetchOpts = getFetchOpts(link2);
+    fetch(link2.href, fetchOpts);
+  }
+})();
+if (!String.prototype.trimEnd) {
+  String.prototype.trimEnd = function() {
+    return this.replace(/\s+$/, "");
+  };
+}
+if (!String.prototype.trimStart) {
+  String.prototype.trimStart = function() {
+    return this.replace(/^\s+/, "");
+  };
+}
+if (!String.prototype.trimLeft) {
+  String.prototype.trimLeft = String.prototype.trimStart;
+}
+if (!String.prototype.trimRight) {
+  String.prototype.trimRight = String.prototype.trimEnd;
+}
+if (!Array.prototype.flat) {
+  Array.prototype.flat = function(depth) {
+    depth = depth || 1;
+    var result = [];
+    for (var i = 0; i < this.length; i++) {
+      if (Array.isArray(this[i]) && depth > 0) {
+        result = result.concat(this[i].flat(depth - 1));
+      } else {
+        result.push(this[i]);
+      }
+    }
+    return result;
+  };
+}
+if (!Array.prototype.includes) {
+  Array.prototype.includes = function(searchElement, fromIndex) {
+    fromIndex = fromIndex || 0;
+    for (var i = fromIndex; i < this.length; i++) {
+      if (this[i] === searchElement) {
+        return true;
+      }
+    }
+    return false;
+  };
+}
+if (!Object.assign) {
+  Object.assign = function(target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source2 = arguments[i];
+      for (var key in source2) {
+        if (source2.hasOwnProperty(key)) {
+          target[key] = source2[key];
+        }
+      }
+    }
+    return target;
+  };
+}
+if (!Array.isArray) {
+  Array.isArray = function(arg) {
+    return Object.prototype.toString.call(arg) === "[object Array]";
+  };
+}
+if (!Object.keys) {
+  Object.keys = function(obj) {
+    var keys = [];
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        keys.push(key);
+      }
+    }
+    return keys;
+  };
+}
+if (!Object.prototype.hasOwnProperty) {
+  Object.prototype.hasOwnProperty = function(prop) {
+    return this[prop] !== void 0;
+  };
+}
+if (!window.Promise) {
+  window.Promise = function(executor) {
+    var self = this;
+    self.state = "pending";
+    self.value = void 0;
+    self.handlers = [];
+    function resolve(result) {
+      if (self.state === "pending") {
+        self.state = "fulfilled";
+        self.value = result;
+        self.handlers.forEach(handle);
+        self.handlers = null;
+      }
+    }
+    function reject(error2) {
+      if (self.state === "pending") {
+        self.state = "rejected";
+        self.value = error2;
+        self.handlers.forEach(handle);
+        self.handlers = null;
+      }
+    }
+    function handle(handler) {
+      if (self.state === "pending") {
+        self.handlers.push(handler);
+      } else {
+        if (self.state === "fulfilled" && typeof handler.onFulfilled === "function") {
+          handler.onFulfilled(self.value);
+        }
+        if (self.state === "rejected" && typeof handler.onRejected === "function") {
+          handler.onRejected(self.value);
+        }
+      }
+    }
+    this.then = function(onFulfilled, onRejected) {
+      return new Promise(function(resolve2, reject2) {
+        handle({
+          onFulfilled: function(result) {
+            try {
+              resolve2(onFulfilled ? onFulfilled(result) : result);
+            } catch (ex) {
+              reject2(ex);
+            }
+          },
+          onRejected: function(error2) {
+            try {
+              resolve2(onRejected ? onRejected(error2) : error2);
+            } catch (ex) {
+              reject2(ex);
+            }
+          }
+        });
+      });
+    };
+    this.catch = function(onRejected) {
+      return this.then(null, onRejected);
+    };
+    try {
+      executor(resolve, reject);
+    } catch (ex) {
+      reject(ex);
+    }
+  };
+}
+function _getDefaults() {
+  return {
+    async: false,
+    breaks: false,
+    extensions: null,
+    gfm: true,
+    hooks: null,
+    pedantic: false,
+    renderer: null,
+    silent: false,
+    tokenizer: null,
+    walkTokens: null
+  };
+}
+let _defaults = _getDefaults();
+function changeDefaults(newDefaults) {
+  _defaults = newDefaults;
+}
+const escapeTest = /[&<>"']/;
+const escapeReplace = new RegExp(escapeTest.source, "g");
+const escapeTestNoEncode = /[<>"']|&(?!(#\d{1,7}|#[Xx][a-fA-F0-9]{1,6}|\w+);)/;
+const escapeReplaceNoEncode = new RegExp(escapeTestNoEncode.source, "g");
+const escapeReplacements = {
+  "&": "&amp;",
+  "<": "&lt;",
+  ">": "&gt;",
+  '"': "&quot;",
+  "'": "&#39;"
+};
+const getEscapeReplacement = (ch) => escapeReplacements[ch];
+function escape$1(html2, encode) {
+  if (encode) {
+    if (escapeTest.test(html2)) {
+      return html2.replace(escapeReplace, getEscapeReplacement);
+    }
+  } else {
+    if (escapeTestNoEncode.test(html2)) {
+      return html2.replace(escapeReplaceNoEncode, getEscapeReplacement);
+    }
+  }
+  return html2;
+}
+const unescapeTest = /&(#(?:\d+)|(?:#x[0-9A-Fa-f]+)|(?:\w+));?/ig;
+function unescape(html2) {
+  return html2.replace(unescapeTest, (_, n) => {
+    n = n.toLowerCase();
+    if (n === "colon")
+      return ":";
+    if (n.charAt(0) === "#") {
+      return n.charAt(1) === "x" ? String.fromCharCode(parseInt(n.substring(2), 16)) : String.fromCharCode(+n.substring(1));
+    }
+    return "";
+  });
+}
+const caret = /(^|[^\[])\^/g;
+function edit(regex, opt) {
+  let source2 = typeof regex === "string" ? regex : regex.source;
+  opt = opt || "";
+  const obj = {
+    replace: (name, val) => {
+      let valSource = typeof val === "string" ? val : val.source;
+      valSource = valSource.replace(caret, "$1");
+      source2 = source2.replace(name, valSource);
+      return obj;
+    },
+    getRegex: () => {
+      return new RegExp(source2, opt);
+    }
+  };
+  return obj;
+}
+function cleanUrl(href) {
+  try {
+    href = encodeURI(href).replace(/%25/g, "%");
+  } catch (e) {
+    return null;
+  }
+  return href;
+}
+const noopTest = { exec: () => null };
+function splitCells(tableRow, count) {
+  const row = tableRow.replace(/\|/g, (match, offset, str) => {
+    let escaped = false;
+    let curr = offset;
+    while (--curr >= 0 && str[curr] === "\\")
+      escaped = !escaped;
+    if (escaped) {
+      return "|";
+    } else {
+      return " |";
+    }
+  }), cells = row.split(/ \|/);
+  let i = 0;
+  if (!cells[0].trim()) {
+    cells.shift();
+  }
+  if (cells.length > 0 && !cells[cells.length - 1].trim()) {
+    cells.pop();
+  }
+  if (count) {
+    if (cells.length > count) {
+      cells.splice(count);
+    } else {
+      while (cells.length < count)
+        cells.push("");
+    }
+  }
+  for (; i < cells.length; i++) {
+    cells[i] = cells[i].trim().replace(/\\\|/g, "|");
+  }
+  return cells;
+}
+function rtrim(str, c, invert) {
+  const l = str.length;
+  if (l === 0) {
+    return "";
+  }
+  let suffLen = 0;
+  while (suffLen < l) {
+    const currChar = str.charAt(l - suffLen - 1);
+    if (currChar === c && true) {
+      suffLen++;
+    } else {
+      break;
+    }
+  }
+  return str.slice(0, l - suffLen);
+}
+function findClosingBracket(str, b) {
+  if (str.indexOf(b[1]) === -1) {
+    return -1;
+  }
+  let level = 0;
+  for (let i = 0; i < str.length; i++) {
+    if (str[i] === "\\") {
+      i++;
+    } else if (str[i] === b[0]) {
+      level++;
+    } else if (str[i] === b[1]) {
+      level--;
+      if (level < 0) {
+        return i;
+      }
+    }
+  }
+  return -1;
+}
+function outputLink(cap, link2, raw, lexer) {
+  const href = link2.href;
+  const title = link2.title ? escape$1(link2.title) : null;
+  const text = cap[1].replace(/\\([\[\]])/g, "$1");
+  if (cap[0].charAt(0) !== "!") {
+    lexer.state.inLink = true;
+    const token = {
+      type: "link",
+      raw,
+      href,
+      title,
+      text,
+      tokens: lexer.inlineTokens(text)
+    };
+    lexer.state.inLink = false;
+    return token;
+  }
+  return {
+    type: "image",
+    raw,
+    href,
+    title,
+    text: escape$1(text)
+  };
+}
+function indentCodeCompensation(raw, text) {
+  const matchIndentToCode = raw.match(/^(\s+)(?:```)/);
+  if (matchIndentToCode === null) {
+    return text;
+  }
+  const indentToCode = matchIndentToCode[1];
+  return text.split("\n").map((node) => {
+    const matchIndentInNode = node.match(/^\s+/);
+    if (matchIndentInNode === null) {
+      return node;
+    }
+    const [indentInNode] = matchIndentInNode;
+    if (indentInNode.length >= indentToCode.length) {
+      return node.slice(indentToCode.length);
+    }
+    return node;
+  }).join("\n");
+}
+class _Tokenizer {
+  // set by the lexer
+  constructor(options) {
+    __publicField(this, "options");
+    __publicField(this, "rules");
+    // set by the lexer
+    __publicField(this, "lexer");
+    this.options = options || _defaults;
+  }
+  space(src) {
+    const cap = this.rules.block.newline.exec(src);
+    if (cap && cap[0].length > 0) {
+      return {
+        type: "space",
+        raw: cap[0]
+      };
+    }
+  }
+  code(src) {
+    const cap = this.rules.block.code.exec(src);
+    if (cap) {
+      const text = cap[0].replace(/^ {1,4}/gm, "");
+      return {
+        type: "code",
+        raw: cap[0],
+        codeBlockStyle: "indented",
+        text: !this.options.pedantic ? rtrim(text, "\n") : text
+      };
+    }
+  }
+  fences(src) {
+    const cap = this.rules.block.fences.exec(src);
+    if (cap) {
+      const raw = cap[0];
+      const text = indentCodeCompensation(raw, cap[3] || "");
+      return {
+        type: "code",
+        raw,
+        lang: cap[2] ? cap[2].trim().replace(this.rules.inline.anyPunctuation, "$1") : cap[2],
+        text
+      };
+    }
+  }
+  heading(src) {
+    const cap = this.rules.block.heading.exec(src);
+    if (cap) {
+      let text = cap[2].trim();
+      if (/#$/.test(text)) {
+        const trimmed = rtrim(text, "#");
+        if (this.options.pedantic) {
+          text = trimmed.trim();
+        } else if (!trimmed || / $/.test(trimmed)) {
+          text = trimmed.trim();
+        }
+      }
+      return {
+        type: "heading",
+        raw: cap[0],
+        depth: cap[1].length,
+        text,
+        tokens: this.lexer.inline(text)
+      };
+    }
+  }
+  hr(src) {
+    const cap = this.rules.block.hr.exec(src);
+    if (cap) {
+      return {
+        type: "hr",
+        raw: cap[0]
+      };
+    }
+  }
+  blockquote(src) {
+    const cap = this.rules.block.blockquote.exec(src);
+    if (cap) {
+      let text = cap[0].replace(/\n {0,3}((?:=+|-+) *)(?=\n|$)/g, "\n    $1");
+      text = rtrim(text.replace(/^ *>[ \t]?/gm, ""), "\n");
+      const top = this.lexer.state.top;
+      this.lexer.state.top = true;
+      const tokens = this.lexer.blockTokens(text);
+      this.lexer.state.top = top;
+      return {
+        type: "blockquote",
+        raw: cap[0],
+        tokens,
+        text
+      };
+    }
+  }
+  list(src) {
+    let cap = this.rules.block.list.exec(src);
+    if (cap) {
+      let bull = cap[1].trim();
+      const isordered = bull.length > 1;
+      const list2 = {
+        type: "list",
+        raw: "",
+        ordered: isordered,
+        start: isordered ? +bull.slice(0, -1) : "",
+        loose: false,
+        items: []
+      };
+      bull = isordered ? `\\d{1,9}\\${bull.slice(-1)}` : `\\${bull}`;
+      if (this.options.pedantic) {
+        bull = isordered ? bull : "[*+-]";
+      }
+      const itemRegex = new RegExp(`^( {0,3}${bull})((?:[	 ][^\\n]*)?(?:\\n|$))`);
+      let raw = "";
+      let itemContents = "";
+      let endsWithBlankLine = false;
+      while (src) {
+        let endEarly = false;
+        if (!(cap = itemRegex.exec(src))) {
+          break;
+        }
+        if (this.rules.block.hr.test(src)) {
+          break;
+        }
+        raw = cap[0];
+        src = src.substring(raw.length);
+        let line = cap[2].split("\n", 1)[0].replace(/^\t+/, (t) => " ".repeat(3 * t.length));
+        let nextLine = src.split("\n", 1)[0];
+        let indent = 0;
+        if (this.options.pedantic) {
+          indent = 2;
+          itemContents = line.trimStart();
+        } else {
+          indent = cap[2].search(/[^ ]/);
+          indent = indent > 4 ? 1 : indent;
+          itemContents = line.slice(indent);
+          indent += cap[1].length;
+        }
+        let blankLine = false;
+        if (!line && /^ *$/.test(nextLine)) {
+          raw += nextLine + "\n";
+          src = src.substring(nextLine.length + 1);
+          endEarly = true;
+        }
+        if (!endEarly) {
+          const nextBulletRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:[*+-]|\\d{1,9}[.)])((?:[ 	][^\\n]*)?(?:\\n|$))`);
+          const hrRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}((?:- *){3,}|(?:_ *){3,}|(?:\\* *){3,})(?:\\n+|$)`);
+          const fencesBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}(?:\`\`\`|~~~)`);
+          const headingBeginRegex = new RegExp(`^ {0,${Math.min(3, indent - 1)}}#`);
+          while (src) {
+            const rawLine = src.split("\n", 1)[0];
+            nextLine = rawLine;
+            if (this.options.pedantic) {
+              nextLine = nextLine.replace(/^ {1,4}(?=( {4})*[^ ])/g, "  ");
+            }
+            if (fencesBeginRegex.test(nextLine)) {
+              break;
+            }
+            if (headingBeginRegex.test(nextLine)) {
+              break;
+            }
+            if (nextBulletRegex.test(nextLine)) {
+              break;
+            }
+            if (hrRegex.test(src)) {
+              break;
+            }
+            if (nextLine.search(/[^ ]/) >= indent || !nextLine.trim()) {
+              itemContents += "\n" + nextLine.slice(indent);
+            } else {
+              if (blankLine) {
+                break;
+              }
+              if (line.search(/[^ ]/) >= 4) {
+                break;
+              }
+              if (fencesBeginRegex.test(line)) {
+                break;
+              }
+              if (headingBeginRegex.test(line)) {
+                break;
+              }
+              if (hrRegex.test(line)) {
+                break;
+              }
+              itemContents += "\n" + nextLine;
+            }
+            if (!blankLine && !nextLine.trim()) {
+              blankLine = true;
+            }
+            raw += rawLine + "\n";
+            src = src.substring(rawLine.length + 1);
+            line = nextLine.slice(indent);
+          }
+        }
+        if (!list2.loose) {
+          if (endsWithBlankLine) {
+            list2.loose = true;
+          } else if (/\n *\n *$/.test(raw)) {
+            endsWithBlankLine = true;
+          }
+        }
+        let istask = null;
+        let ischecked;
+        if (this.options.gfm) {
+          istask = /^\[[ xX]\] /.exec(itemContents);
+          if (istask) {
+            ischecked = istask[0] !== "[ ] ";
+            itemContents = itemContents.replace(/^\[[ xX]\] +/, "");
+          }
+        }
+        list2.items.push({
+          type: "list_item",
+          raw,
+          task: !!istask,
+          checked: ischecked,
+          loose: false,
+          text: itemContents,
+          tokens: []
+        });
+        list2.raw += raw;
+      }
+      list2.items[list2.items.length - 1].raw = raw.trimEnd();
+      list2.items[list2.items.length - 1].text = itemContents.trimEnd();
+      list2.raw = list2.raw.trimEnd();
+      for (let i = 0; i < list2.items.length; i++) {
+        this.lexer.state.top = false;
+        list2.items[i].tokens = this.lexer.blockTokens(list2.items[i].text, []);
+        if (!list2.loose) {
+          const spacers = list2.items[i].tokens.filter((t) => t.type === "space");
+          const hasMultipleLineBreaks = spacers.length > 0 && spacers.some((t) => /\n.*\n/.test(t.raw));
+          list2.loose = hasMultipleLineBreaks;
+        }
+      }
+      if (list2.loose) {
+        for (let i = 0; i < list2.items.length; i++) {
+          list2.items[i].loose = true;
+        }
+      }
+      return list2;
+    }
+  }
+  html(src) {
+    const cap = this.rules.block.html.exec(src);
+    if (cap) {
+      const token = {
+        type: "html",
+        block: true,
+        raw: cap[0],
+        pre: cap[1] === "pre" || cap[1] === "script" || cap[1] === "style",
+        text: cap[0]
+      };
+      return token;
+    }
+  }
+  def(src) {
+    const cap = this.rules.block.def.exec(src);
+    if (cap) {
+      const tag2 = cap[1].toLowerCase().replace(/\s+/g, " ");
+      const href = cap[2] ? cap[2].replace(/^<(.*)>$/, "$1").replace(this.rules.inline.anyPunctuation, "$1") : "";
+      const title = cap[3] ? cap[3].substring(1, cap[3].length - 1).replace(this.rules.inline.anyPunctuation, "$1") : cap[3];
+      return {
+        type: "def",
+        tag: tag2,
+        raw: cap[0],
+        href,
+        title
+      };
+    }
+  }
+  table(src) {
+    const cap = this.rules.block.table.exec(src);
+    if (!cap) {
+      return;
+    }
+    if (!/[:|]/.test(cap[2])) {
+      return;
+    }
+    const headers = splitCells(cap[1]);
+    const aligns = cap[2].replace(/^\||\| *$/g, "").split("|");
+    const rows = cap[3] && cap[3].trim() ? cap[3].replace(/\n[ \t]*$/, "").split("\n") : [];
+    const item = {
+      type: "table",
+      raw: cap[0],
+      header: [],
+      align: [],
+      rows: []
+    };
+    if (headers.length !== aligns.length) {
+      return;
+    }
+    for (const align of aligns) {
+      if (/^ *-+: *$/.test(align)) {
+        item.align.push("right");
+      } else if (/^ *:-+: *$/.test(align)) {
+        item.align.push("center");
+      } else if (/^ *:-+ *$/.test(align)) {
+        item.align.push("left");
+      } else {
+        item.align.push(null);
+      }
+    }
+    for (const header of headers) {
+      item.header.push({
+        text: header,
+        tokens: this.lexer.inline(header)
+      });
+    }
+    for (const row of rows) {
+      item.rows.push(splitCells(row, item.header.length).map((cell) => {
+        return {
+          text: cell,
+          tokens: this.lexer.inline(cell)
+        };
+      }));
+    }
+    return item;
+  }
+  lheading(src) {
+    const cap = this.rules.block.lheading.exec(src);
+    if (cap) {
+      return {
+        type: "heading",
+        raw: cap[0],
+        depth: cap[2].charAt(0) === "=" ? 1 : 2,
+        text: cap[1],
+        tokens: this.lexer.inline(cap[1])
+      };
+    }
+  }
+  paragraph(src) {
+    const cap = this.rules.block.paragraph.exec(src);
+    if (cap) {
+      const text = cap[1].charAt(cap[1].length - 1) === "\n" ? cap[1].slice(0, -1) : cap[1];
+      return {
+        type: "paragraph",
+        raw: cap[0],
+        text,
+        tokens: this.lexer.inline(text)
+      };
+    }
+  }
+  text(src) {
+    const cap = this.rules.block.text.exec(src);
+    if (cap) {
+      return {
+        type: "text",
+        raw: cap[0],
+        text: cap[0],
+        tokens: this.lexer.inline(cap[0])
+      };
+    }
+  }
+  escape(src) {
+    const cap = this.rules.inline.escape.exec(src);
+    if (cap) {
+      return {
+        type: "escape",
+        raw: cap[0],
+        text: escape$1(cap[1])
+      };
+    }
+  }
+  tag(src) {
+    const cap = this.rules.inline.tag.exec(src);
+    if (cap) {
+      if (!this.lexer.state.inLink && /^<a /i.test(cap[0])) {
+        this.lexer.state.inLink = true;
+      } else if (this.lexer.state.inLink && /^<\/a>/i.test(cap[0])) {
+        this.lexer.state.inLink = false;
+      }
+      if (!this.lexer.state.inRawBlock && /^<(pre|code|kbd|script)(\s|>)/i.test(cap[0])) {
+        this.lexer.state.inRawBlock = true;
+      } else if (this.lexer.state.inRawBlock && /^<\/(pre|code|kbd|script)(\s|>)/i.test(cap[0])) {
+        this.lexer.state.inRawBlock = false;
+      }
+      return {
+        type: "html",
+        raw: cap[0],
+        inLink: this.lexer.state.inLink,
+        inRawBlock: this.lexer.state.inRawBlock,
+        block: false,
+        text: cap[0]
+      };
+    }
+  }
+  link(src) {
+    const cap = this.rules.inline.link.exec(src);
+    if (cap) {
+      const trimmedUrl = cap[2].trim();
+      if (!this.options.pedantic && /^</.test(trimmedUrl)) {
+        if (!/>$/.test(trimmedUrl)) {
+          return;
+        }
+        const rtrimSlash = rtrim(trimmedUrl.slice(0, -1), "\\");
+        if ((trimmedUrl.length - rtrimSlash.length) % 2 === 0) {
+          return;
+        }
+      } else {
+        const lastParenIndex = findClosingBracket(cap[2], "()");
+        if (lastParenIndex > -1) {
+          const start = cap[0].indexOf("!") === 0 ? 5 : 4;
+          const linkLen = start + cap[1].length + lastParenIndex;
+          cap[2] = cap[2].substring(0, lastParenIndex);
+          cap[0] = cap[0].substring(0, linkLen).trim();
+          cap[3] = "";
+        }
+      }
+      let href = cap[2];
+      let title = "";
+      if (this.options.pedantic) {
+        const link2 = /^([^'"]*[^\s])\s+(['"])(.*)\2/.exec(href);
+        if (link2) {
+          href = link2[1];
+          title = link2[3];
+        }
+      } else {
+        title = cap[3] ? cap[3].slice(1, -1) : "";
+      }
+      href = href.trim();
+      if (/^</.test(href)) {
+        if (this.options.pedantic && !/>$/.test(trimmedUrl)) {
+          href = href.slice(1);
+        } else {
+          href = href.slice(1, -1);
+        }
+      }
+      return outputLink(cap, {
+        href: href ? href.replace(this.rules.inline.anyPunctuation, "$1") : href,
+        title: title ? title.replace(this.rules.inline.anyPunctuation, "$1") : title
+      }, cap[0], this.lexer);
+    }
+  }
+  reflink(src, links) {
+    let cap;
+    if ((cap = this.rules.inline.reflink.exec(src)) || (cap = this.rules.inline.nolink.exec(src))) {
+      const linkString = (cap[2] || cap[1]).replace(/\s+/g, " ");
+      const link2 = links[linkString.toLowerCase()];
+      if (!link2) {
+        const text = cap[0].charAt(0);
+        return {
+          type: "text",
+          raw: text,
+          text
+        };
+      }
+      return outputLink(cap, link2, cap[0], this.lexer);
+    }
+  }
+  emStrong(src, maskedSrc, prevChar = "") {
+    let match = this.rules.inline.emStrongLDelim.exec(src);
+    if (!match)
+      return;
+    if (match[3] && prevChar.match(/[\p{L}\p{N}]/u))
+      return;
+    const nextChar = match[1] || match[2] || "";
+    if (!nextChar || !prevChar || this.rules.inline.punctuation.exec(prevChar)) {
+      const lLength = [...match[0]].length - 1;
+      let rDelim, rLength, delimTotal = lLength, midDelimTotal = 0;
+      const endReg = match[0][0] === "*" ? this.rules.inline.emStrongRDelimAst : this.rules.inline.emStrongRDelimUnd;
+      endReg.lastIndex = 0;
+      maskedSrc = maskedSrc.slice(-1 * src.length + lLength);
+      while ((match = endReg.exec(maskedSrc)) != null) {
+        rDelim = match[1] || match[2] || match[3] || match[4] || match[5] || match[6];
+        if (!rDelim)
+          continue;
+        rLength = [...rDelim].length;
+        if (match[3] || match[4]) {
+          delimTotal += rLength;
+          continue;
+        } else if (match[5] || match[6]) {
+          if (lLength % 3 && !((lLength + rLength) % 3)) {
+            midDelimTotal += rLength;
+            continue;
+          }
+        }
+        delimTotal -= rLength;
+        if (delimTotal > 0)
+          continue;
+        rLength = Math.min(rLength, rLength + delimTotal + midDelimTotal);
+        const lastCharLength = [...match[0]][0].length;
+        const raw = src.slice(0, lLength + match.index + lastCharLength + rLength);
+        if (Math.min(lLength, rLength) % 2) {
+          const text2 = raw.slice(1, -1);
+          return {
+            type: "em",
+            raw,
+            text: text2,
+            tokens: this.lexer.inlineTokens(text2)
+          };
+        }
+        const text = raw.slice(2, -2);
+        return {
+          type: "strong",
+          raw,
+          text,
+          tokens: this.lexer.inlineTokens(text)
+        };
+      }
+    }
+  }
+  codespan(src) {
+    const cap = this.rules.inline.code.exec(src);
+    if (cap) {
+      let text = cap[2].replace(/\n/g, " ");
+      const hasNonSpaceChars = /[^ ]/.test(text);
+      const hasSpaceCharsOnBothEnds = /^ /.test(text) && / $/.test(text);
+      if (hasNonSpaceChars && hasSpaceCharsOnBothEnds) {
+        text = text.substring(1, text.length - 1);
+      }
+      text = escape$1(text, true);
+      return {
+        type: "codespan",
+        raw: cap[0],
+        text
+      };
+    }
+  }
+  br(src) {
+    const cap = this.rules.inline.br.exec(src);
+    if (cap) {
+      return {
+        type: "br",
+        raw: cap[0]
+      };
+    }
+  }
+  del(src) {
+    const cap = this.rules.inline.del.exec(src);
+    if (cap) {
+      return {
+        type: "del",
+        raw: cap[0],
+        text: cap[2],
+        tokens: this.lexer.inlineTokens(cap[2])
+      };
+    }
+  }
+  autolink(src) {
+    const cap = this.rules.inline.autolink.exec(src);
+    if (cap) {
+      let text, href;
+      if (cap[2] === "@") {
+        text = escape$1(cap[1]);
+        href = "mailto:" + text;
+      } else {
+        text = escape$1(cap[1]);
+        href = text;
+      }
+      return {
+        type: "link",
+        raw: cap[0],
+        text,
+        href,
+        tokens: [
+          {
+            type: "text",
+            raw: text,
+            text
+          }
+        ]
+      };
+    }
+  }
+  url(src) {
+    var _a, _b;
+    let cap;
+    if (cap = this.rules.inline.url.exec(src)) {
+      let text, href;
+      if (cap[2] === "@") {
+        text = escape$1(cap[0]);
+        href = "mailto:" + text;
+      } else {
+        let prevCapZero;
+        do {
+          prevCapZero = cap[0];
+          cap[0] = (_b = (_a = this.rules.inline._backpedal.exec(cap[0])) == null ? void 0 : _a[0]) != null ? _b : "";
+        } while (prevCapZero !== cap[0]);
+        text = escape$1(cap[0]);
+        if (cap[1] === "www.") {
+          href = "http://" + cap[0];
+        } else {
+          href = cap[0];
+        }
+      }
+      return {
+        type: "link",
+        raw: cap[0],
+        text,
+        href,
+        tokens: [
+          {
+            type: "text",
+            raw: text,
+            text
+          }
+        ]
+      };
+    }
+  }
+  inlineText(src) {
+    const cap = this.rules.inline.text.exec(src);
+    if (cap) {
+      let text;
+      if (this.lexer.state.inRawBlock) {
+        text = cap[0];
+      } else {
+        text = escape$1(cap[0]);
+      }
+      return {
+        type: "text",
+        raw: cap[0],
+        text
+      };
+    }
+  }
+}
+const newline = /^(?: *(?:\n|$))+/;
+const blockCode = /^( {4}[^\n]+(?:\n(?: *(?:\n|$))*)?)+/;
+const fences = /^ {0,3}(`{3,}(?=[^`\n]*(?:\n|$))|~{3,})([^\n]*)(?:\n|$)(?:|([\s\S]*?)(?:\n|$))(?: {0,3}\1[~`]* *(?=\n|$)|$)/;
+const hr = /^ {0,3}((?:-[\t ]*){3,}|(?:_[ \t]*){3,}|(?:\*[ \t]*){3,})(?:\n+|$)/;
+const heading = /^ {0,3}(#{1,6})(?=\s|$)(.*)(?:\n+|$)/;
+const bullet = /(?:[*+-]|\d{1,9}[.)])/;
+const lheading = edit(/^(?!bull |blockCode|fences|blockquote|heading|html)((?:.|\n(?!\s*?\n|bull |blockCode|fences|blockquote|heading|html))+?)\n {0,3}(=+|-+) *(?:\n+|$)/).replace(/bull/g, bullet).replace(/blockCode/g, / {4}/).replace(/fences/g, / {0,3}(?:`{3,}|~{3,})/).replace(/blockquote/g, / {0,3}>/).replace(/heading/g, / {0,3}#{1,6}/).replace(/html/g, / {0,3}<[^\n>]+>\n/).getRegex();
+const _paragraph = /^([^\n]+(?:\n(?!hr|heading|lheading|blockquote|fences|list|html|table| +\n)[^\n]+)*)/;
+const blockText = /^[^\n]+/;
+const _blockLabel = /(?!\s*\])(?:\\.|[^\[\]\\])+/;
+const def = edit(/^ {0,3}\[(label)\]: *(?:\n *)?([^<\s][^\s]*|<.*?>)(?:(?: +(?:\n *)?| *\n *)(title))? *(?:\n+|$)/).replace("label", _blockLabel).replace("title", /(?:"(?:\\"?|[^"\\])*"|'[^'\n]*(?:\n[^'\n]+)*\n?'|\([^()]*\))/).getRegex();
+const list = edit(/^( {0,3}bull)([ \t][^\n]+?)?(?:\n|$)/).replace(/bull/g, bullet).getRegex();
+const _tag = "address|article|aside|base|basefont|blockquote|body|caption|center|col|colgroup|dd|details|dialog|dir|div|dl|dt|fieldset|figcaption|figure|footer|form|frame|frameset|h[1-6]|head|header|hr|html|iframe|legend|li|link|main|menu|menuitem|meta|nav|noframes|ol|optgroup|option|p|param|search|section|summary|table|tbody|td|tfoot|th|thead|title|tr|track|ul";
+const _comment = /<!--(?:-?>|[\s\S]*?(?:-->|$))/;
+const html = edit("^ {0,3}(?:<(script|pre|style|textarea)[\\s>][\\s\\S]*?(?:</\\1>[^\\n]*\\n+|$)|comment[^\\n]*(\\n+|$)|<\\?[\\s\\S]*?(?:\\?>\\n*|$)|<![A-Z][\\s\\S]*?(?:>\\n*|$)|<!\\[CDATA\\[[\\s\\S]*?(?:\\]\\]>\\n*|$)|</?(tag)(?: +|\\n|/?>)[\\s\\S]*?(?:(?:\\n *)+\\n|$)|<(?!script|pre|style|textarea)([a-z][\\w-]*)(?:attribute)*? */?>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$)|</(?!script|pre|style|textarea)[a-z][\\w-]*\\s*>(?=[ \\t]*(?:\\n|$))[\\s\\S]*?(?:(?:\\n *)+\\n|$))", "i").replace("comment", _comment).replace("tag", _tag).replace("attribute", / +[a-zA-Z:_][\w.:-]*(?: *= *"[^"\n]*"| *= *'[^'\n]*'| *= *[^\s"'=<>`]+)?/).getRegex();
+const paragraph = edit(_paragraph).replace("hr", hr).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("|table", "").replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", _tag).getRegex();
+const blockquote = edit(/^( {0,3}> ?(paragraph|[^\n]*)(?:\n|$))+/).replace("paragraph", paragraph).getRegex();
+const blockNormal = {
+  blockquote,
+  code: blockCode,
+  def,
+  fences,
+  heading,
+  hr,
+  html,
+  lheading,
+  list,
+  newline,
+  paragraph,
+  table: noopTest,
+  text: blockText
+};
+const gfmTable = edit("^ *([^\\n ].*)\\n {0,3}((?:\\| *)?:?-+:? *(?:\\| *:?-+:? *)*(?:\\| *)?)(?:\\n((?:(?! *\\n|hr|heading|blockquote|code|fences|list|html).*(?:\\n|$))*)\\n*|$)").replace("hr", hr).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("blockquote", " {0,3}>").replace("code", " {4}[^\\n]").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", _tag).getRegex();
+const blockGfm = {
+  ...blockNormal,
+  table: gfmTable,
+  paragraph: edit(_paragraph).replace("hr", hr).replace("heading", " {0,3}#{1,6}(?:\\s|$)").replace("|lheading", "").replace("table", gfmTable).replace("blockquote", " {0,3}>").replace("fences", " {0,3}(?:`{3,}(?=[^`\\n]*\\n)|~{3,})[^\\n]*\\n").replace("list", " {0,3}(?:[*+-]|1[.)]) ").replace("html", "</?(?:tag)(?: +|\\n|/?>)|<(?:script|pre|style|textarea|!--)").replace("tag", _tag).getRegex()
+};
+const blockPedantic = {
+  ...blockNormal,
+  html: edit(`^ *(?:comment *(?:\\n|\\s*$)|<(tag)[\\s\\S]+?</\\1> *(?:\\n{2,}|\\s*$)|<tag(?:"[^"]*"|'[^']*'|\\s[^'"/>\\s]*)*?/?> *(?:\\n{2,}|\\s*$))`).replace("comment", _comment).replace(/tag/g, "(?!(?:a|em|strong|small|s|cite|q|dfn|abbr|data|time|code|var|samp|kbd|sub|sup|i|b|u|mark|ruby|rt|rp|bdi|bdo|span|br|wbr|ins|del|img)\\b)\\w+(?!:|[^\\w\\s@]*@)\\b").getRegex(),
+  def: /^ *\[([^\]]+)\]: *<?([^\s>]+)>?(?: +(["(][^\n]+[")]))? *(?:\n+|$)/,
+  heading: /^(#{1,6})(.*)(?:\n+|$)/,
+  fences: noopTest,
+  // fences not supported
+  lheading: /^(.+?)\n {0,3}(=+|-+) *(?:\n+|$)/,
+  paragraph: edit(_paragraph).replace("hr", hr).replace("heading", " *#{1,6} *[^\n]").replace("lheading", lheading).replace("|table", "").replace("blockquote", " {0,3}>").replace("|fences", "").replace("|list", "").replace("|html", "").replace("|tag", "").getRegex()
+};
+const escape$2 = /^\\([!"#$%&'()*+,\-./:;<=>?@\[\]\\^_`{|}~])/;
+const inlineCode = /^(`+)([^`]|[^`][\s\S]*?[^`])\1(?!`)/;
+const br = /^( {2,}|\\)\n(?!\s*$)/;
+const inlineText = /^(`+|[^`])(?:(?= {2,}\n)|[\s\S]*?(?:(?=[\\<!\[`*_]|\b_|$)|[^ ](?= {2,}\n)))/;
+const _punctuation = "\\p{P}\\p{S}";
+const punctuation = edit(/^((?![*_])[\spunctuation])/, "u").replace(/punctuation/g, _punctuation).getRegex();
+const blockSkip = /\[[^[\]]*?\]\([^\(\)]*?\)|`[^`]*?`|<[^<>]*?>/g;
+const emStrongLDelim = edit(/^(?:\*+(?:((?!\*)[punct])|[^\s*]))|^_+(?:((?!_)[punct])|([^\s_]))/, "u").replace(/punct/g, _punctuation).getRegex();
+const emStrongRDelimAst = edit("^[^_*]*?__[^_*]*?\\*[^_*]*?(?=__)|[^*]+(?=[^*])|(?!\\*)[punct](\\*+)(?=[\\s]|$)|[^punct\\s](\\*+)(?!\\*)(?=[punct\\s]|$)|(?!\\*)[punct\\s](\\*+)(?=[^punct\\s])|[\\s](\\*+)(?!\\*)(?=[punct])|(?!\\*)[punct](\\*+)(?!\\*)(?=[punct])|[^punct\\s](\\*+)(?=[^punct\\s])", "gu").replace(/punct/g, _punctuation).getRegex();
+const emStrongRDelimUnd = edit("^[^_*]*?\\*\\*[^_*]*?_[^_*]*?(?=\\*\\*)|[^_]+(?=[^_])|(?!_)[punct](_+)(?=[\\s]|$)|[^punct\\s](_+)(?!_)(?=[punct\\s]|$)|(?!_)[punct\\s](_+)(?=[^punct\\s])|[\\s](_+)(?!_)(?=[punct])|(?!_)[punct](_+)(?!_)(?=[punct])", "gu").replace(/punct/g, _punctuation).getRegex();
+const anyPunctuation = edit(/\\([punct])/, "gu").replace(/punct/g, _punctuation).getRegex();
+const autolink = edit(/^<(scheme:[^\s\x00-\x1f<>]*|email)>/).replace("scheme", /[a-zA-Z][a-zA-Z0-9+.-]{1,31}/).replace("email", /[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+(@)[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)+(?![-_])/).getRegex();
+const _inlineComment = edit(_comment).replace("(?:-->|$)", "-->").getRegex();
+const tag = edit("^comment|^</[a-zA-Z][\\w:-]*\\s*>|^<[a-zA-Z][\\w-]*(?:attribute)*?\\s*/?>|^<\\?[\\s\\S]*?\\?>|^<![a-zA-Z]+\\s[\\s\\S]*?>|^<!\\[CDATA\\[[\\s\\S]*?\\]\\]>").replace("comment", _inlineComment).replace("attribute", /\s+[a-zA-Z:_][\w.:-]*(?:\s*=\s*"[^"]*"|\s*=\s*'[^']*'|\s*=\s*[^\s"'=<>`]+)?/).getRegex();
+const _inlineLabel = /(?:\[(?:\\.|[^\[\]\\])*\]|\\.|`[^`]*`|[^\[\]\\`])*?/;
+const link = edit(/^!?\[(label)\]\(\s*(href)(?:\s+(title))?\s*\)/).replace("label", _inlineLabel).replace("href", /<(?:\\.|[^\n<>\\])+>|[^\s\x00-\x1f]*/).replace("title", /"(?:\\"?|[^"\\])*"|'(?:\\'?|[^'\\])*'|\((?:\\\)?|[^)\\])*\)/).getRegex();
+const reflink = edit(/^!?\[(label)\]\[(ref)\]/).replace("label", _inlineLabel).replace("ref", _blockLabel).getRegex();
+const nolink = edit(/^!?\[(ref)\](?:\[\])?/).replace("ref", _blockLabel).getRegex();
+const reflinkSearch = edit("reflink|nolink(?!\\()", "g").replace("reflink", reflink).replace("nolink", nolink).getRegex();
+const inlineNormal = {
+  _backpedal: noopTest,
+  // only used for GFM url
+  anyPunctuation,
+  autolink,
+  blockSkip,
+  br,
+  code: inlineCode,
+  del: noopTest,
+  emStrongLDelim,
+  emStrongRDelimAst,
+  emStrongRDelimUnd,
+  escape: escape$2,
+  link,
+  nolink,
+  punctuation,
+  reflink,
+  reflinkSearch,
+  tag,
+  text: inlineText,
+  url: noopTest
+};
+const inlinePedantic = {
+  ...inlineNormal,
+  link: edit(/^!?\[(label)\]\((.*?)\)/).replace("label", _inlineLabel).getRegex(),
+  reflink: edit(/^!?\[(label)\]\s*\[([^\]]*)\]/).replace("label", _inlineLabel).getRegex()
+};
+const inlineGfm = {
+  ...inlineNormal,
+  escape: edit(escape$2).replace("])", "~|])").getRegex(),
+  url: edit(/^((?:ftp|https?):\/\/|www\.)(?:[a-zA-Z0-9\-]+\.?)+[^\s<]*|^email/, "i").replace("email", /[A-Za-z0-9._+-]+(@)[a-zA-Z0-9-_]+(?:\.[a-zA-Z0-9-_]*[a-zA-Z0-9])+(?![-_])/).getRegex(),
+  _backpedal: /(?:[^?!.,:;*_'"~()&]+|\([^)]*\)|&(?![a-zA-Z0-9]+;$)|[?!.,:;*_'"~)]+(?!$))+/,
+  del: /^(~~?)(?=[^\s~])([\s\S]*?[^\s~])\1(?=[^~]|$)/,
+  text: /^([`~]+|[^`~])(?:(?= {2,}\n)|(?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)|[\s\S]*?(?:(?=[\\<!\[`*~_]|\b_|https?:\/\/|ftp:\/\/|www\.|$)|[^ ](?= {2,}\n)|[^a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-](?=[a-zA-Z0-9.!#$%&'*+\/=?_`{\|}~-]+@)))/
+};
+const inlineBreaks = {
+  ...inlineGfm,
+  br: edit(br).replace("{2,}", "*").getRegex(),
+  text: edit(inlineGfm.text).replace("\\b_", "\\b_| {2,}\\n").replace(/\{2,\}/g, "*").getRegex()
+};
+const block = {
+  normal: blockNormal,
+  gfm: blockGfm,
+  pedantic: blockPedantic
+};
+const inline = {
+  normal: inlineNormal,
+  gfm: inlineGfm,
+  breaks: inlineBreaks,
+  pedantic: inlinePedantic
+};
+class _Lexer {
+  constructor(options) {
+    __publicField(this, "tokens");
+    __publicField(this, "options");
+    __publicField(this, "state");
+    __publicField(this, "tokenizer");
+    __publicField(this, "inlineQueue");
+    this.tokens = [];
+    this.tokens.links = /* @__PURE__ */ Object.create(null);
+    this.options = options || _defaults;
+    this.options.tokenizer = this.options.tokenizer || new _Tokenizer();
+    this.tokenizer = this.options.tokenizer;
+    this.tokenizer.options = this.options;
+    this.tokenizer.lexer = this;
+    this.inlineQueue = [];
+    this.state = {
+      inLink: false,
+      inRawBlock: false,
+      top: true
+    };
+    const rules = {
+      block: block.normal,
+      inline: inline.normal
+    };
+    if (this.options.pedantic) {
+      rules.block = block.pedantic;
+      rules.inline = inline.pedantic;
+    } else if (this.options.gfm) {
+      rules.block = block.gfm;
+      if (this.options.breaks) {
+        rules.inline = inline.breaks;
+      } else {
+        rules.inline = inline.gfm;
+      }
+    }
+    this.tokenizer.rules = rules;
+  }
+  /**
+   * Expose Rules
+   */
+  static get rules() {
+    return {
+      block,
+      inline
+    };
+  }
+  /**
+   * Static Lex Method
+   */
+  static lex(src, options) {
+    const lexer = new _Lexer(options);
+    return lexer.lex(src);
+  }
+  /**
+   * Static Lex Inline Method
+   */
+  static lexInline(src, options) {
+    const lexer = new _Lexer(options);
+    return lexer.inlineTokens(src);
+  }
+  /**
+   * Preprocessing
+   */
+  lex(src) {
+    src = src.replace(/\r\n|\r/g, "\n");
+    this.blockTokens(src, this.tokens);
+    for (let i = 0; i < this.inlineQueue.length; i++) {
+      const next = this.inlineQueue[i];
+      this.inlineTokens(next.src, next.tokens);
+    }
+    this.inlineQueue = [];
+    return this.tokens;
+  }
+  blockTokens(src, tokens = []) {
+    if (this.options.pedantic) {
+      src = src.replace(/\t/g, "    ").replace(/^ +$/gm, "");
+    } else {
+      src = src.replace(/^( *)(\t+)/gm, (_, leading, tabs) => {
+        return leading + "    ".repeat(tabs.length);
+      });
+    }
+    let token;
+    let lastToken;
+    let cutSrc;
+    let lastParagraphClipped;
+    while (src) {
+      if (this.options.extensions && this.options.extensions.block && this.options.extensions.block.some((extTokenizer) => {
+        if (token = extTokenizer.call({ lexer: this }, src, tokens)) {
+          src = src.substring(token.raw.length);
+          tokens.push(token);
+          return true;
+        }
+        return false;
+      })) {
+        continue;
+      }
+      if (token = this.tokenizer.space(src)) {
+        src = src.substring(token.raw.length);
+        if (token.raw.length === 1 && tokens.length > 0) {
+          tokens[tokens.length - 1].raw += "\n";
+        } else {
+          tokens.push(token);
+        }
+        continue;
+      }
+      if (token = this.tokenizer.code(src)) {
+        src = src.substring(token.raw.length);
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && (lastToken.type === "paragraph" || lastToken.type === "text")) {
+          lastToken.raw += "\n" + token.raw;
+          lastToken.text += "\n" + token.text;
+          this.inlineQueue[this.inlineQueue.length - 1].src = lastToken.text;
+        } else {
+          tokens.push(token);
+        }
+        continue;
+      }
+      if (token = this.tokenizer.fences(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.heading(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.hr(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.blockquote(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.list(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.html(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.def(src)) {
+        src = src.substring(token.raw.length);
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && (lastToken.type === "paragraph" || lastToken.type === "text")) {
+          lastToken.raw += "\n" + token.raw;
+          lastToken.text += "\n" + token.raw;
+          this.inlineQueue[this.inlineQueue.length - 1].src = lastToken.text;
+        } else if (!this.tokens.links[token.tag]) {
+          this.tokens.links[token.tag] = {
+            href: token.href,
+            title: token.title
+          };
+        }
+        continue;
+      }
+      if (token = this.tokenizer.table(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.lheading(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      cutSrc = src;
+      if (this.options.extensions && this.options.extensions.startBlock) {
+        let startIndex = Infinity;
+        const tempSrc = src.slice(1);
+        let tempStart;
+        this.options.extensions.startBlock.forEach((getStartIndex) => {
+          tempStart = getStartIndex.call({ lexer: this }, tempSrc);
+          if (typeof tempStart === "number" && tempStart >= 0) {
+            startIndex = Math.min(startIndex, tempStart);
+          }
+        });
+        if (startIndex < Infinity && startIndex >= 0) {
+          cutSrc = src.substring(0, startIndex + 1);
+        }
+      }
+      if (this.state.top && (token = this.tokenizer.paragraph(cutSrc))) {
+        lastToken = tokens[tokens.length - 1];
+        if (lastParagraphClipped && lastToken.type === "paragraph") {
+          lastToken.raw += "\n" + token.raw;
+          lastToken.text += "\n" + token.text;
+          this.inlineQueue.pop();
+          this.inlineQueue[this.inlineQueue.length - 1].src = lastToken.text;
+        } else {
+          tokens.push(token);
+        }
+        lastParagraphClipped = cutSrc.length !== src.length;
+        src = src.substring(token.raw.length);
+        continue;
+      }
+      if (token = this.tokenizer.text(src)) {
+        src = src.substring(token.raw.length);
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && lastToken.type === "text") {
+          lastToken.raw += "\n" + token.raw;
+          lastToken.text += "\n" + token.text;
+          this.inlineQueue.pop();
+          this.inlineQueue[this.inlineQueue.length - 1].src = lastToken.text;
+        } else {
+          tokens.push(token);
+        }
+        continue;
+      }
+      if (src) {
+        const errMsg = "Infinite loop on byte: " + src.charCodeAt(0);
+        if (this.options.silent) {
+          console.error(errMsg);
+          break;
+        } else {
+          throw new Error(errMsg);
+        }
+      }
+    }
+    this.state.top = true;
+    return tokens;
+  }
+  inline(src, tokens = []) {
+    this.inlineQueue.push({ src, tokens });
+    return tokens;
+  }
+  /**
+   * Lexing/Compiling
+   */
+  inlineTokens(src, tokens = []) {
+    let token, lastToken, cutSrc;
+    let maskedSrc = src;
+    let match;
+    let keepPrevChar, prevChar;
+    if (this.tokens.links) {
+      const links = Object.keys(this.tokens.links);
+      if (links.length > 0) {
+        while ((match = this.tokenizer.rules.inline.reflinkSearch.exec(maskedSrc)) != null) {
+          if (links.includes(match[0].slice(match[0].lastIndexOf("[") + 1, -1))) {
+            maskedSrc = maskedSrc.slice(0, match.index) + "[" + "a".repeat(match[0].length - 2) + "]" + maskedSrc.slice(this.tokenizer.rules.inline.reflinkSearch.lastIndex);
+          }
+        }
+      }
+    }
+    while ((match = this.tokenizer.rules.inline.blockSkip.exec(maskedSrc)) != null) {
+      maskedSrc = maskedSrc.slice(0, match.index) + "[" + "a".repeat(match[0].length - 2) + "]" + maskedSrc.slice(this.tokenizer.rules.inline.blockSkip.lastIndex);
+    }
+    while ((match = this.tokenizer.rules.inline.anyPunctuation.exec(maskedSrc)) != null) {
+      maskedSrc = maskedSrc.slice(0, match.index) + "++" + maskedSrc.slice(this.tokenizer.rules.inline.anyPunctuation.lastIndex);
+    }
+    while (src) {
+      if (!keepPrevChar) {
+        prevChar = "";
+      }
+      keepPrevChar = false;
+      if (this.options.extensions && this.options.extensions.inline && this.options.extensions.inline.some((extTokenizer) => {
+        if (token = extTokenizer.call({ lexer: this }, src, tokens)) {
+          src = src.substring(token.raw.length);
+          tokens.push(token);
+          return true;
+        }
+        return false;
+      })) {
+        continue;
+      }
+      if (token = this.tokenizer.escape(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.tag(src)) {
+        src = src.substring(token.raw.length);
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && token.type === "text" && lastToken.type === "text") {
+          lastToken.raw += token.raw;
+          lastToken.text += token.text;
+        } else {
+          tokens.push(token);
+        }
+        continue;
+      }
+      if (token = this.tokenizer.link(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.reflink(src, this.tokens.links)) {
+        src = src.substring(token.raw.length);
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && token.type === "text" && lastToken.type === "text") {
+          lastToken.raw += token.raw;
+          lastToken.text += token.text;
+        } else {
+          tokens.push(token);
+        }
+        continue;
+      }
+      if (token = this.tokenizer.emStrong(src, maskedSrc, prevChar)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.codespan(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.br(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.del(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (token = this.tokenizer.autolink(src)) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      if (!this.state.inLink && (token = this.tokenizer.url(src))) {
+        src = src.substring(token.raw.length);
+        tokens.push(token);
+        continue;
+      }
+      cutSrc = src;
+      if (this.options.extensions && this.options.extensions.startInline) {
+        let startIndex = Infinity;
+        const tempSrc = src.slice(1);
+        let tempStart;
+        this.options.extensions.startInline.forEach((getStartIndex) => {
+          tempStart = getStartIndex.call({ lexer: this }, tempSrc);
+          if (typeof tempStart === "number" && tempStart >= 0) {
+            startIndex = Math.min(startIndex, tempStart);
+          }
+        });
+        if (startIndex < Infinity && startIndex >= 0) {
+          cutSrc = src.substring(0, startIndex + 1);
+        }
+      }
+      if (token = this.tokenizer.inlineText(cutSrc)) {
+        src = src.substring(token.raw.length);
+        if (token.raw.slice(-1) !== "_") {
+          prevChar = token.raw.slice(-1);
+        }
+        keepPrevChar = true;
+        lastToken = tokens[tokens.length - 1];
+        if (lastToken && lastToken.type === "text") {
+          lastToken.raw += token.raw;
+          lastToken.text += token.text;
+        } else {
+          tokens.push(token);
+        }
+        continue;
+      }
+      if (src) {
+        const errMsg = "Infinite loop on byte: " + src.charCodeAt(0);
+        if (this.options.silent) {
+          console.error(errMsg);
+          break;
+        } else {
+          throw new Error(errMsg);
+        }
+      }
+    }
+    return tokens;
+  }
+}
+class _Renderer {
+  constructor(options) {
+    __publicField(this, "options");
+    this.options = options || _defaults;
+  }
+  code(code, infostring, escaped) {
+    var _a;
+    const lang = (_a = (infostring || "").match(/^\S*/)) == null ? void 0 : _a[0];
+    code = code.replace(/\n$/, "") + "\n";
+    if (!lang) {
+      return "<pre><code>" + (escaped ? code : escape$1(code, true)) + "</code></pre>\n";
+    }
+    return '<pre><code class="language-' + escape$1(lang) + '">' + (escaped ? code : escape$1(code, true)) + "</code></pre>\n";
+  }
+  blockquote(quote) {
+    return `<blockquote>
+${quote}</blockquote>
+`;
+  }
+  html(html2, block2) {
+    return html2;
+  }
+  heading(text, level, raw) {
+    return `<h${level}>${text}</h${level}>
+`;
+  }
+  hr() {
+    return "<hr>\n";
+  }
+  list(body, ordered, start) {
+    const type = ordered ? "ol" : "ul";
+    const startatt = ordered && start !== 1 ? ' start="' + start + '"' : "";
+    return "<" + type + startatt + ">\n" + body + "</" + type + ">\n";
+  }
+  listitem(text, task, checked) {
+    return `<li>${text}</li>
+`;
+  }
+  checkbox(checked) {
+    return "<input " + (checked ? 'checked="" ' : "") + 'disabled="" type="checkbox">';
+  }
+  paragraph(text) {
+    return `<p>${text}</p>
+`;
+  }
+  table(header, body) {
+    if (body)
+      body = `<tbody>${body}</tbody>`;
+    return "<table>\n<thead>\n" + header + "</thead>\n" + body + "</table>\n";
+  }
+  tablerow(content) {
+    return `<tr>
+${content}</tr>
+`;
+  }
+  tablecell(content, flags) {
+    const type = flags.header ? "th" : "td";
+    const tag2 = flags.align ? `<${type} align="${flags.align}">` : `<${type}>`;
+    return tag2 + content + `</${type}>
+`;
+  }
+  /**
+   * span level renderer
+   */
+  strong(text) {
+    return `<strong>${text}</strong>`;
+  }
+  em(text) {
+    return `<em>${text}</em>`;
+  }
+  codespan(text) {
+    return `<code>${text}</code>`;
+  }
+  br() {
+    return "<br>";
+  }
+  del(text) {
+    return `<del>${text}</del>`;
+  }
+  link(href, title, text) {
+    const cleanHref = cleanUrl(href);
+    if (cleanHref === null) {
+      return text;
+    }
+    href = cleanHref;
+    let out = '<a href="' + href + '"';
+    if (title) {
+      out += ' title="' + title + '"';
+    }
+    out += ">" + text + "</a>";
+    return out;
+  }
+  image(href, title, text) {
+    const cleanHref = cleanUrl(href);
+    if (cleanHref === null) {
+      return text;
+    }
+    href = cleanHref;
+    let out = `<img src="${href}" alt="${text}"`;
+    if (title) {
+      out += ` title="${title}"`;
+    }
+    out += ">";
+    return out;
+  }
+  text(text) {
+    return text;
+  }
+}
+class _TextRenderer {
+  // no need for block level renderers
+  strong(text) {
+    return text;
+  }
+  em(text) {
+    return text;
+  }
+  codespan(text) {
+    return text;
+  }
+  del(text) {
+    return text;
+  }
+  html(text) {
+    return text;
+  }
+  text(text) {
+    return text;
+  }
+  link(href, title, text) {
+    return "" + text;
+  }
+  image(href, title, text) {
+    return "" + text;
+  }
+  br() {
+    return "";
+  }
+}
+class _Parser {
+  constructor(options) {
+    __publicField(this, "options");
+    __publicField(this, "renderer");
+    __publicField(this, "textRenderer");
+    this.options = options || _defaults;
+    this.options.renderer = this.options.renderer || new _Renderer();
+    this.renderer = this.options.renderer;
+    this.renderer.options = this.options;
+    this.textRenderer = new _TextRenderer();
+  }
+  /**
+   * Static Parse Method
+   */
+  static parse(tokens, options) {
+    const parser = new _Parser(options);
+    return parser.parse(tokens);
+  }
+  /**
+   * Static Parse Inline Method
+   */
+  static parseInline(tokens, options) {
+    const parser = new _Parser(options);
+    return parser.parseInline(tokens);
+  }
+  /**
+   * Parse Loop
+   */
+  parse(tokens, top = true) {
+    let out = "";
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (this.options.extensions && this.options.extensions.renderers && this.options.extensions.renderers[token.type]) {
+        const genericToken = token;
+        const ret = this.options.extensions.renderers[genericToken.type].call({ parser: this }, genericToken);
+        if (ret !== false || !["space", "hr", "heading", "code", "table", "blockquote", "list", "html", "paragraph", "text"].includes(genericToken.type)) {
+          out += ret || "";
+          continue;
+        }
+      }
+      switch (token.type) {
+        case "space": {
+          continue;
+        }
+        case "hr": {
+          out += this.renderer.hr();
+          continue;
+        }
+        case "heading": {
+          const headingToken = token;
+          out += this.renderer.heading(this.parseInline(headingToken.tokens), headingToken.depth, unescape(this.parseInline(headingToken.tokens, this.textRenderer)));
+          continue;
+        }
+        case "code": {
+          const codeToken = token;
+          out += this.renderer.code(codeToken.text, codeToken.lang, !!codeToken.escaped);
+          continue;
+        }
+        case "table": {
+          const tableToken = token;
+          let header = "";
+          let cell = "";
+          for (let j = 0; j < tableToken.header.length; j++) {
+            cell += this.renderer.tablecell(this.parseInline(tableToken.header[j].tokens), { header: true, align: tableToken.align[j] });
+          }
+          header += this.renderer.tablerow(cell);
+          let body = "";
+          for (let j = 0; j < tableToken.rows.length; j++) {
+            const row = tableToken.rows[j];
+            cell = "";
+            for (let k = 0; k < row.length; k++) {
+              cell += this.renderer.tablecell(this.parseInline(row[k].tokens), { header: false, align: tableToken.align[k] });
+            }
+            body += this.renderer.tablerow(cell);
+          }
+          out += this.renderer.table(header, body);
+          continue;
+        }
+        case "blockquote": {
+          const blockquoteToken = token;
+          const body = this.parse(blockquoteToken.tokens);
+          out += this.renderer.blockquote(body);
+          continue;
+        }
+        case "list": {
+          const listToken = token;
+          const ordered = listToken.ordered;
+          const start = listToken.start;
+          const loose = listToken.loose;
+          let body = "";
+          for (let j = 0; j < listToken.items.length; j++) {
+            const item = listToken.items[j];
+            const checked = item.checked;
+            const task = item.task;
+            let itemBody = "";
+            if (item.task) {
+              const checkbox = this.renderer.checkbox(!!checked);
+              if (loose) {
+                if (item.tokens.length > 0 && item.tokens[0].type === "paragraph") {
+                  item.tokens[0].text = checkbox + " " + item.tokens[0].text;
+                  if (item.tokens[0].tokens && item.tokens[0].tokens.length > 0 && item.tokens[0].tokens[0].type === "text") {
+                    item.tokens[0].tokens[0].text = checkbox + " " + item.tokens[0].tokens[0].text;
+                  }
+                } else {
+                  item.tokens.unshift({
+                    type: "text",
+                    text: checkbox + " "
+                  });
+                }
+              } else {
+                itemBody += checkbox + " ";
+              }
+            }
+            itemBody += this.parse(item.tokens, loose);
+            body += this.renderer.listitem(itemBody, task, !!checked);
+          }
+          out += this.renderer.list(body, ordered, start);
+          continue;
+        }
+        case "html": {
+          const htmlToken = token;
+          out += this.renderer.html(htmlToken.text, htmlToken.block);
+          continue;
+        }
+        case "paragraph": {
+          const paragraphToken = token;
+          out += this.renderer.paragraph(this.parseInline(paragraphToken.tokens));
+          continue;
+        }
+        case "text": {
+          let textToken = token;
+          let body = textToken.tokens ? this.parseInline(textToken.tokens) : textToken.text;
+          while (i + 1 < tokens.length && tokens[i + 1].type === "text") {
+            textToken = tokens[++i];
+            body += "\n" + (textToken.tokens ? this.parseInline(textToken.tokens) : textToken.text);
+          }
+          out += top ? this.renderer.paragraph(body) : body;
+          continue;
+        }
+        default: {
+          const errMsg = 'Token with "' + token.type + '" type was not found.';
+          if (this.options.silent) {
+            console.error(errMsg);
+            return "";
+          } else {
+            throw new Error(errMsg);
+          }
+        }
+      }
+    }
+    return out;
+  }
+  /**
+   * Parse Inline Tokens
+   */
+  parseInline(tokens, renderer) {
+    renderer = renderer || this.renderer;
+    let out = "";
+    for (let i = 0; i < tokens.length; i++) {
+      const token = tokens[i];
+      if (this.options.extensions && this.options.extensions.renderers && this.options.extensions.renderers[token.type]) {
+        const ret = this.options.extensions.renderers[token.type].call({ parser: this }, token);
+        if (ret !== false || !["escape", "html", "link", "image", "strong", "em", "codespan", "br", "del", "text"].includes(token.type)) {
+          out += ret || "";
+          continue;
+        }
+      }
+      switch (token.type) {
+        case "escape": {
+          const escapeToken = token;
+          out += renderer.text(escapeToken.text);
+          break;
+        }
+        case "html": {
+          const tagToken = token;
+          out += renderer.html(tagToken.text);
+          break;
+        }
+        case "link": {
+          const linkToken = token;
+          out += renderer.link(linkToken.href, linkToken.title, this.parseInline(linkToken.tokens, renderer));
+          break;
+        }
+        case "image": {
+          const imageToken = token;
+          out += renderer.image(imageToken.href, imageToken.title, imageToken.text);
+          break;
+        }
+        case "strong": {
+          const strongToken = token;
+          out += renderer.strong(this.parseInline(strongToken.tokens, renderer));
+          break;
+        }
+        case "em": {
+          const emToken = token;
+          out += renderer.em(this.parseInline(emToken.tokens, renderer));
+          break;
+        }
+        case "codespan": {
+          const codespanToken = token;
+          out += renderer.codespan(codespanToken.text);
+          break;
+        }
+        case "br": {
+          out += renderer.br();
+          break;
+        }
+        case "del": {
+          const delToken = token;
+          out += renderer.del(this.parseInline(delToken.tokens, renderer));
+          break;
+        }
+        case "text": {
+          const textToken = token;
+          out += renderer.text(textToken.text);
+          break;
+        }
+        default: {
+          const errMsg = 'Token with "' + token.type + '" type was not found.';
+          if (this.options.silent) {
+            console.error(errMsg);
+            return "";
+          } else {
+            throw new Error(errMsg);
+          }
+        }
+      }
+    }
+    return out;
+  }
+}
+class _Hooks {
+  constructor(options) {
+    __publicField(this, "options");
+    this.options = options || _defaults;
+  }
+  /**
+   * Process markdown before marked
+   */
+  preprocess(markdown) {
+    return markdown;
+  }
+  /**
+   * Process HTML after marked is finished
+   */
+  postprocess(html2) {
+    return html2;
+  }
+  /**
+   * Process all tokens before walk tokens
+   */
+  processAllTokens(tokens) {
+    return tokens;
+  }
+}
+__publicField(_Hooks, "passThroughHooks", /* @__PURE__ */ new Set([
+  "preprocess",
+  "postprocess",
+  "processAllTokens"
+]));
+class Marked {
+  constructor(...args) {
+    __privateAdd(this, _Marked_instances);
+    __publicField(this, "defaults", _getDefaults());
+    __publicField(this, "options", this.setOptions);
+    __publicField(this, "parse", __privateMethod(this, _Marked_instances, parseMarkdown_fn).call(this, _Lexer.lex, _Parser.parse));
+    __publicField(this, "parseInline", __privateMethod(this, _Marked_instances, parseMarkdown_fn).call(this, _Lexer.lexInline, _Parser.parseInline));
+    __publicField(this, "Parser", _Parser);
+    __publicField(this, "Renderer", _Renderer);
+    __publicField(this, "TextRenderer", _TextRenderer);
+    __publicField(this, "Lexer", _Lexer);
+    __publicField(this, "Tokenizer", _Tokenizer);
+    __publicField(this, "Hooks", _Hooks);
+    this.use(...args);
+  }
+  /**
+   * Run callback for every token
+   */
+  walkTokens(tokens, callback) {
+    var _a, _b;
+    let values = [];
+    for (const token of tokens) {
+      values = values.concat(callback.call(this, token));
+      switch (token.type) {
+        case "table": {
+          const tableToken = token;
+          for (const cell of tableToken.header) {
+            values = values.concat(this.walkTokens(cell.tokens, callback));
+          }
+          for (const row of tableToken.rows) {
+            for (const cell of row) {
+              values = values.concat(this.walkTokens(cell.tokens, callback));
+            }
+          }
+          break;
+        }
+        case "list": {
+          const listToken = token;
+          values = values.concat(this.walkTokens(listToken.items, callback));
+          break;
+        }
+        default: {
+          const genericToken = token;
+          if ((_b = (_a = this.defaults.extensions) == null ? void 0 : _a.childTokens) == null ? void 0 : _b[genericToken.type]) {
+            this.defaults.extensions.childTokens[genericToken.type].forEach((childTokens) => {
+              const tokens2 = genericToken[childTokens].flat(Infinity);
+              values = values.concat(this.walkTokens(tokens2, callback));
+            });
+          } else if (genericToken.tokens) {
+            values = values.concat(this.walkTokens(genericToken.tokens, callback));
+          }
+        }
+      }
+    }
+    return values;
+  }
+  use(...args) {
+    const extensions = this.defaults.extensions || { renderers: {}, childTokens: {} };
+    args.forEach((pack) => {
+      const opts = { ...pack };
+      opts.async = this.defaults.async || opts.async || false;
+      if (pack.extensions) {
+        pack.extensions.forEach((ext) => {
+          if (!ext.name) {
+            throw new Error("extension name required");
+          }
+          if ("renderer" in ext) {
+            const prevRenderer = extensions.renderers[ext.name];
+            if (prevRenderer) {
+              extensions.renderers[ext.name] = function(...args2) {
+                let ret = ext.renderer.apply(this, args2);
+                if (ret === false) {
+                  ret = prevRenderer.apply(this, args2);
+                }
+                return ret;
+              };
+            } else {
+              extensions.renderers[ext.name] = ext.renderer;
+            }
+          }
+          if ("tokenizer" in ext) {
+            if (!ext.level || ext.level !== "block" && ext.level !== "inline") {
+              throw new Error("extension level must be 'block' or 'inline'");
+            }
+            const extLevel = extensions[ext.level];
+            if (extLevel) {
+              extLevel.unshift(ext.tokenizer);
+            } else {
+              extensions[ext.level] = [ext.tokenizer];
+            }
+            if (ext.start) {
+              if (ext.level === "block") {
+                if (extensions.startBlock) {
+                  extensions.startBlock.push(ext.start);
+                } else {
+                  extensions.startBlock = [ext.start];
+                }
+              } else if (ext.level === "inline") {
+                if (extensions.startInline) {
+                  extensions.startInline.push(ext.start);
+                } else {
+                  extensions.startInline = [ext.start];
+                }
+              }
+            }
+          }
+          if ("childTokens" in ext && ext.childTokens) {
+            extensions.childTokens[ext.name] = ext.childTokens;
+          }
+        });
+        opts.extensions = extensions;
+      }
+      if (pack.renderer) {
+        const renderer = this.defaults.renderer || new _Renderer(this.defaults);
+        for (const prop in pack.renderer) {
+          if (!(prop in renderer)) {
+            throw new Error(`renderer '${prop}' does not exist`);
+          }
+          if (prop === "options") {
+            continue;
+          }
+          const rendererProp = prop;
+          const rendererFunc = pack.renderer[rendererProp];
+          const prevRenderer = renderer[rendererProp];
+          renderer[rendererProp] = (...args2) => {
+            let ret = rendererFunc.apply(renderer, args2);
+            if (ret === false) {
+              ret = prevRenderer.apply(renderer, args2);
+            }
+            return ret || "";
+          };
+        }
+        opts.renderer = renderer;
+      }
+      if (pack.tokenizer) {
+        const tokenizer = this.defaults.tokenizer || new _Tokenizer(this.defaults);
+        for (const prop in pack.tokenizer) {
+          if (!(prop in tokenizer)) {
+            throw new Error(`tokenizer '${prop}' does not exist`);
+          }
+          if (["options", "rules", "lexer"].includes(prop)) {
+            continue;
+          }
+          const tokenizerProp = prop;
+          const tokenizerFunc = pack.tokenizer[tokenizerProp];
+          const prevTokenizer = tokenizer[tokenizerProp];
+          tokenizer[tokenizerProp] = (...args2) => {
+            let ret = tokenizerFunc.apply(tokenizer, args2);
+            if (ret === false) {
+              ret = prevTokenizer.apply(tokenizer, args2);
+            }
+            return ret;
+          };
+        }
+        opts.tokenizer = tokenizer;
+      }
+      if (pack.hooks) {
+        const hooks = this.defaults.hooks || new _Hooks();
+        for (const prop in pack.hooks) {
+          if (!(prop in hooks)) {
+            throw new Error(`hook '${prop}' does not exist`);
+          }
+          if (prop === "options") {
+            continue;
+          }
+          const hooksProp = prop;
+          const hooksFunc = pack.hooks[hooksProp];
+          const prevHook = hooks[hooksProp];
+          if (_Hooks.passThroughHooks.has(prop)) {
+            hooks[hooksProp] = (arg) => {
+              if (this.defaults.async) {
+                return Promise.resolve(hooksFunc.call(hooks, arg)).then((ret2) => {
+                  return prevHook.call(hooks, ret2);
+                });
+              }
+              const ret = hooksFunc.call(hooks, arg);
+              return prevHook.call(hooks, ret);
+            };
+          } else {
+            hooks[hooksProp] = (...args2) => {
+              let ret = hooksFunc.apply(hooks, args2);
+              if (ret === false) {
+                ret = prevHook.apply(hooks, args2);
+              }
+              return ret;
+            };
+          }
+        }
+        opts.hooks = hooks;
+      }
+      if (pack.walkTokens) {
+        const walkTokens = this.defaults.walkTokens;
+        const packWalktokens = pack.walkTokens;
+        opts.walkTokens = function(token) {
+          let values = [];
+          values.push(packWalktokens.call(this, token));
+          if (walkTokens) {
+            values = values.concat(walkTokens.call(this, token));
+          }
+          return values;
+        };
+      }
+      this.defaults = { ...this.defaults, ...opts };
+    });
+    return this;
+  }
+  setOptions(opt) {
+    this.defaults = { ...this.defaults, ...opt };
+    return this;
+  }
+  lexer(src, options) {
+    return _Lexer.lex(src, options != null ? options : this.defaults);
+  }
+  parser(tokens, options) {
+    return _Parser.parse(tokens, options != null ? options : this.defaults);
+  }
+}
+_Marked_instances = new WeakSet();
+parseMarkdown_fn = function(lexer, parser) {
+  return (src, options) => {
+    const origOpt = { ...options };
+    const opt = { ...this.defaults, ...origOpt };
+    if (this.defaults.async === true && origOpt.async === false) {
+      if (!opt.silent) {
+        console.warn("marked(): The async option was set to true by an extension. The async: false option sent to parse will be ignored.");
+      }
+      opt.async = true;
+    }
+    const throwError = __privateMethod(this, _Marked_instances, onError_fn).call(this, !!opt.silent, !!opt.async);
+    if (typeof src === "undefined" || src === null) {
+      return throwError(new Error("marked(): input parameter is undefined or null"));
+    }
+    if (typeof src !== "string") {
+      return throwError(new Error("marked(): input parameter is of type " + Object.prototype.toString.call(src) + ", string expected"));
+    }
+    if (opt.hooks) {
+      opt.hooks.options = opt;
+    }
+    if (opt.async) {
+      return Promise.resolve(opt.hooks ? opt.hooks.preprocess(src) : src).then((src2) => lexer(src2, opt)).then((tokens) => opt.hooks ? opt.hooks.processAllTokens(tokens) : tokens).then((tokens) => opt.walkTokens ? Promise.all(this.walkTokens(tokens, opt.walkTokens)).then(() => tokens) : tokens).then((tokens) => parser(tokens, opt)).then((html2) => opt.hooks ? opt.hooks.postprocess(html2) : html2).catch(throwError);
+    }
+    try {
+      if (opt.hooks) {
+        src = opt.hooks.preprocess(src);
+      }
+      let tokens = lexer(src, opt);
+      if (opt.hooks) {
+        tokens = opt.hooks.processAllTokens(tokens);
+      }
+      if (opt.walkTokens) {
+        this.walkTokens(tokens, opt.walkTokens);
+      }
+      let html2 = parser(tokens, opt);
+      if (opt.hooks) {
+        html2 = opt.hooks.postprocess(html2);
+      }
+      return html2;
+    } catch (e) {
+      return throwError(e);
+    }
+  };
+};
+onError_fn = function(silent, async) {
+  return (e) => {
+    e.message += "\nPlease report this to https://github.com/markedjs/marked.";
+    if (silent) {
+      const msg = "<p>An error occurred:</p><pre>" + escape$1(e.message + "", true) + "</pre>";
+      if (async) {
+        return Promise.resolve(msg);
+      }
+      return msg;
+    }
+    if (async) {
+      return Promise.reject(e);
+    }
+    throw e;
+  };
+};
+const markedInstance = new Marked();
+function marked(src, opt) {
+  return markedInstance.parse(src, opt);
+}
+marked.options = marked.setOptions = function(options) {
+  markedInstance.setOptions(options);
+  marked.defaults = markedInstance.defaults;
+  changeDefaults(marked.defaults);
+  return marked;
+};
+marked.getDefaults = _getDefaults;
+marked.defaults = _defaults;
+marked.use = function(...args) {
+  markedInstance.use(...args);
+  marked.defaults = markedInstance.defaults;
+  changeDefaults(marked.defaults);
+  return marked;
+};
+marked.walkTokens = function(tokens, callback) {
+  return markedInstance.walkTokens(tokens, callback);
+};
+marked.parseInline = markedInstance.parseInline;
+marked.Parser = _Parser;
+marked.parser = _Parser.parse;
+marked.Renderer = _Renderer;
+marked.TextRenderer = _TextRenderer;
+marked.Lexer = _Lexer;
+marked.lexer = _Lexer.lex;
+marked.Tokenizer = _Tokenizer;
+marked.Hooks = _Hooks;
+marked.parse = marked;
+marked.options;
+marked.setOptions;
+marked.use;
+marked.walkTokens;
+marked.parseInline;
+_Parser.parse;
+_Lexer.lex;
+function getDefaultExportFromCjs(x) {
+  return x && x.__esModule && Object.prototype.hasOwnProperty.call(x, "default") ? x["default"] : x;
+}
+function deepFreeze(obj) {
+  if (obj instanceof Map) {
+    obj.clear = obj.delete = obj.set = function() {
+      throw new Error("map is read-only");
+    };
+  } else if (obj instanceof Set) {
+    obj.add = obj.clear = obj.delete = function() {
+      throw new Error("set is read-only");
+    };
+  }
+  Object.freeze(obj);
+  Object.getOwnPropertyNames(obj).forEach((name) => {
+    const prop = obj[name];
+    const type = typeof prop;
+    if ((type === "object" || type === "function") && !Object.isFrozen(prop)) {
+      deepFreeze(prop);
+    }
+  });
+  return obj;
+}
+class Response {
+  /**
+   * @param {CompiledMode} mode
+   */
+  constructor(mode) {
+    if (mode.data === void 0) mode.data = {};
+    this.data = mode.data;
+    this.isMatchIgnored = false;
+  }
+  ignoreMatch() {
+    this.isMatchIgnored = true;
+  }
+}
+function escapeHTML(value) {
+  return value.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;").replace(/'/g, "&#x27;");
+}
+function inherit$1(original, ...objects) {
+  const result = /* @__PURE__ */ Object.create(null);
+  for (const key in original) {
+    result[key] = original[key];
+  }
+  objects.forEach(function(obj) {
+    for (const key in obj) {
+      result[key] = obj[key];
+    }
+  });
+  return (
+    /** @type {T} */
+    result
+  );
+}
+const SPAN_CLOSE = "</span>";
+const emitsWrappingTags = (node) => {
+  return !!node.scope;
+};
+const scopeToCSSClass = (name, { prefix }) => {
+  if (name.startsWith("language:")) {
+    return name.replace("language:", "language-");
+  }
+  if (name.includes(".")) {
+    const pieces = name.split(".");
+    return [
+      `${prefix}${pieces.shift()}`,
+      ...pieces.map((x, i) => `${x}${"_".repeat(i + 1)}`)
+    ].join(" ");
+  }
+  return `${prefix}${name}`;
+};
+class HTMLRenderer {
+  /**
+   * Creates a new HTMLRenderer
+   *
+   * @param {Tree} parseTree - the parse tree (must support `walk` API)
+   * @param {{classPrefix: string}} options
+   */
+  constructor(parseTree, options) {
+    this.buffer = "";
+    this.classPrefix = options.classPrefix;
+    parseTree.walk(this);
+  }
+  /**
+   * Adds texts to the output stream
+   *
+   * @param {string} text */
+  addText(text) {
+    this.buffer += escapeHTML(text);
+  }
+  /**
+   * Adds a node open to the output stream (if needed)
+   *
+   * @param {Node} node */
+  openNode(node) {
+    if (!emitsWrappingTags(node)) return;
+    const className = scopeToCSSClass(
+      node.scope,
+      { prefix: this.classPrefix }
+    );
+    this.span(className);
+  }
+  /**
+   * Adds a node close to the output stream (if needed)
+   *
+   * @param {Node} node */
+  closeNode(node) {
+    if (!emitsWrappingTags(node)) return;
+    this.buffer += SPAN_CLOSE;
+  }
+  /**
+   * returns the accumulated buffer
+  */
+  value() {
+    return this.buffer;
+  }
+  // helpers
+  /**
+   * Builds a span element
+   *
+   * @param {string} className */
+  span(className) {
+    this.buffer += `<span class="${className}">`;
+  }
+}
+const newNode = (opts = {}) => {
+  const result = { children: [] };
+  Object.assign(result, opts);
+  return result;
+};
+class TokenTree {
+  constructor() {
+    this.rootNode = newNode();
+    this.stack = [this.rootNode];
+  }
+  get top() {
+    return this.stack[this.stack.length - 1];
+  }
+  get root() {
+    return this.rootNode;
+  }
+  /** @param {Node} node */
+  add(node) {
+    this.top.children.push(node);
+  }
+  /** @param {string} scope */
+  openNode(scope) {
+    const node = newNode({ scope });
+    this.add(node);
+    this.stack.push(node);
+  }
+  closeNode() {
+    if (this.stack.length > 1) {
+      return this.stack.pop();
+    }
+    return void 0;
+  }
+  closeAllNodes() {
+    while (this.closeNode()) ;
+  }
+  toJSON() {
+    return JSON.stringify(this.rootNode, null, 4);
+  }
+  /**
+   * @typedef { import("./html_renderer").Renderer } Renderer
+   * @param {Renderer} builder
+   */
+  walk(builder) {
+    return this.constructor._walk(builder, this.rootNode);
+  }
+  /**
+   * @param {Renderer} builder
+   * @param {Node} node
+   */
+  static _walk(builder, node) {
+    if (typeof node === "string") {
+      builder.addText(node);
+    } else if (node.children) {
+      builder.openNode(node);
+      node.children.forEach((child) => this._walk(builder, child));
+      builder.closeNode(node);
+    }
+    return builder;
+  }
+  /**
+   * @param {Node} node
+   */
+  static _collapse(node) {
+    if (typeof node === "string") return;
+    if (!node.children) return;
+    if (node.children.every((el) => typeof el === "string")) {
+      node.children = [node.children.join("")];
+    } else {
+      node.children.forEach((child) => {
+        TokenTree._collapse(child);
+      });
+    }
+  }
+}
+class TokenTreeEmitter extends TokenTree {
+  /**
+   * @param {*} options
+   */
+  constructor(options) {
+    super();
+    this.options = options;
+  }
+  /**
+   * @param {string} text
+   */
+  addText(text) {
+    if (text === "") {
+      return;
+    }
+    this.add(text);
+  }
+  /** @param {string} scope */
+  startScope(scope) {
+    this.openNode(scope);
+  }
+  endScope() {
+    this.closeNode();
+  }
+  /**
+   * @param {Emitter & {root: DataNode}} emitter
+   * @param {string} name
+   */
+  __addSublanguage(emitter, name) {
+    const node = emitter.root;
+    if (name) node.scope = `language:${name}`;
+    this.add(node);
+  }
+  toHTML() {
+    const renderer = new HTMLRenderer(this, this.options);
+    return renderer.value();
+  }
+  finalize() {
+    this.closeAllNodes();
+    return true;
+  }
+}
+function source(re) {
+  if (!re) return null;
+  if (typeof re === "string") return re;
+  return re.source;
+}
+function lookahead(re) {
+  return concat("(?=", re, ")");
+}
+function anyNumberOfTimes(re) {
+  return concat("(?:", re, ")*");
+}
+function optional(re) {
+  return concat("(?:", re, ")?");
+}
+function concat(...args) {
+  const joined = args.map((x) => source(x)).join("");
+  return joined;
+}
+function stripOptionsFromArgs(args) {
+  const opts = args[args.length - 1];
+  if (typeof opts === "object" && opts.constructor === Object) {
+    args.splice(args.length - 1, 1);
+    return opts;
+  } else {
+    return {};
+  }
+}
+function either(...args) {
+  const opts = stripOptionsFromArgs(args);
+  const joined = "(" + (opts.capture ? "" : "?:") + args.map((x) => source(x)).join("|") + ")";
+  return joined;
+}
+function countMatchGroups(re) {
+  return new RegExp(re.toString() + "|").exec("").length - 1;
+}
+function startsWith(re, lexeme) {
+  const match = re && re.exec(lexeme);
+  return match && match.index === 0;
+}
+const BACKREF_RE = /\[(?:[^\\\]]|\\.)*\]|\(\??|\\([1-9][0-9]*)|\\./;
+function _rewriteBackreferences(regexps, { joinWith }) {
+  let numCaptures = 0;
+  return regexps.map((regex) => {
+    numCaptures += 1;
+    const offset = numCaptures;
+    let re = source(regex);
+    let out = "";
+    while (re.length > 0) {
+      const match = BACKREF_RE.exec(re);
+      if (!match) {
+        out += re;
+        break;
+      }
+      out += re.substring(0, match.index);
+      re = re.substring(match.index + match[0].length);
+      if (match[0][0] === "\\" && match[1]) {
+        out += "\\" + String(Number(match[1]) + offset);
+      } else {
+        out += match[0];
+        if (match[0] === "(") {
+          numCaptures++;
+        }
+      }
+    }
+    return out;
+  }).map((re) => `(${re})`).join(joinWith);
+}
+const MATCH_NOTHING_RE = /\b\B/;
+const IDENT_RE = "[a-zA-Z]\\w*";
+const UNDERSCORE_IDENT_RE = "[a-zA-Z_]\\w*";
+const NUMBER_RE = "\\b\\d+(\\.\\d+)?";
+const C_NUMBER_RE = "(-?)(\\b0[xX][a-fA-F0-9]+|(\\b\\d+(\\.\\d*)?|\\.\\d+)([eE][-+]?\\d+)?)";
+const BINARY_NUMBER_RE = "\\b(0b[01]+)";
+const RE_STARTERS_RE = "!|!=|!==|%|%=|&|&&|&=|\\*|\\*=|\\+|\\+=|,|-|-=|/=|/|:|;|<<|<<=|<=|<|===|==|=|>>>=|>>=|>=|>>>|>>|>|\\?|\\[|\\{|\\(|\\^|\\^=|\\||\\|=|\\|\\||~";
+const SHEBANG = (opts = {}) => {
+  const beginShebang = /^#![ ]*\//;
+  if (opts.binary) {
+    opts.begin = concat(
+      beginShebang,
+      /.*\b/,
+      opts.binary,
+      /\b.*/
+    );
+  }
+  return inherit$1({
+    scope: "meta",
+    begin: beginShebang,
+    end: /$/,
+    relevance: 0,
+    /** @type {ModeCallback} */
+    "on:begin": (m, resp) => {
+      if (m.index !== 0) resp.ignoreMatch();
+    }
+  }, opts);
+};
+const BACKSLASH_ESCAPE = {
+  begin: "\\\\[\\s\\S]",
+  relevance: 0
+};
+const APOS_STRING_MODE = {
+  scope: "string",
+  begin: "'",
+  end: "'",
+  illegal: "\\n",
+  contains: [BACKSLASH_ESCAPE]
+};
+const QUOTE_STRING_MODE = {
+  scope: "string",
+  begin: '"',
+  end: '"',
+  illegal: "\\n",
+  contains: [BACKSLASH_ESCAPE]
+};
+const PHRASAL_WORDS_MODE = {
+  begin: /\b(a|an|the|are|I'm|isn't|don't|doesn't|won't|but|just|should|pretty|simply|enough|gonna|going|wtf|so|such|will|you|your|they|like|more)\b/
+};
+const COMMENT = function(begin, end, modeOptions = {}) {
+  const mode = inherit$1(
+    {
+      scope: "comment",
+      begin,
+      end,
+      contains: []
+    },
+    modeOptions
+  );
+  mode.contains.push({
+    scope: "doctag",
+    // hack to avoid the space from being included. the space is necessary to
+    // match here to prevent the plain text rule below from gobbling up doctags
+    begin: "[ ]*(?=(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):)",
+    end: /(TODO|FIXME|NOTE|BUG|OPTIMIZE|HACK|XXX):/,
+    excludeBegin: true,
+    relevance: 0
+  });
+  const ENGLISH_WORD = either(
+    // list of common 1 and 2 letter words in English
+    "I",
+    "a",
+    "is",
+    "so",
+    "us",
+    "to",
+    "at",
+    "if",
+    "in",
+    "it",
+    "on",
+    // note: this is not an exhaustive list of contractions, just popular ones
+    /[A-Za-z]+['](d|ve|re|ll|t|s|n)/,
+    // contractions - can't we'd they're let's, etc
+    /[A-Za-z]+[-][a-z]+/,
+    // `no-way`, etc.
+    /[A-Za-z][a-z]{2,}/
+    // allow capitalized words at beginning of sentences
+  );
+  mode.contains.push(
+    {
+      // TODO: how to include ", (, ) without breaking grammars that use these for
+      // comment delimiters?
+      // begin: /[ ]+([()"]?([A-Za-z'-]{3,}|is|a|I|so|us|[tT][oO]|at|if|in|it|on)[.]?[()":]?([.][ ]|[ ]|\))){3}/
+      // ---
+      // this tries to find sequences of 3 english words in a row (without any
+      // "programming" type syntax) this gives us a strong signal that we've
+      // TRULY found a comment - vs perhaps scanning with the wrong language.
+      // It's possible to find something that LOOKS like the start of the
+      // comment - but then if there is no readable text - good chance it is a
+      // false match and not a comment.
+      //
+      // for a visual example please see:
+      // https://github.com/highlightjs/highlight.js/issues/2827
+      begin: concat(
+        /[ ]+/,
+        // necessary to prevent us gobbling up doctags like /* @author Bob Mcgill */
+        "(",
+        ENGLISH_WORD,
+        /[.]?[:]?([.][ ]|[ ])/,
+        "){3}"
+      )
+      // look for 3 words in a row
+    }
+  );
+  return mode;
+};
+const C_LINE_COMMENT_MODE = COMMENT("//", "$");
+const C_BLOCK_COMMENT_MODE = COMMENT("/\\*", "\\*/");
+const HASH_COMMENT_MODE = COMMENT("#", "$");
+const NUMBER_MODE = {
+  scope: "number",
+  begin: NUMBER_RE,
+  relevance: 0
+};
+const C_NUMBER_MODE = {
+  scope: "number",
+  begin: C_NUMBER_RE,
+  relevance: 0
+};
+const BINARY_NUMBER_MODE = {
+  scope: "number",
+  begin: BINARY_NUMBER_RE,
+  relevance: 0
+};
+const REGEXP_MODE = {
+  scope: "regexp",
+  begin: /\/(?=[^/\n]*\/)/,
+  end: /\/[gimuy]*/,
+  contains: [
+    BACKSLASH_ESCAPE,
+    {
+      begin: /\[/,
+      end: /\]/,
+      relevance: 0,
+      contains: [BACKSLASH_ESCAPE]
+    }
+  ]
+};
+const TITLE_MODE = {
+  scope: "title",
+  begin: IDENT_RE,
+  relevance: 0
+};
+const UNDERSCORE_TITLE_MODE = {
+  scope: "title",
+  begin: UNDERSCORE_IDENT_RE,
+  relevance: 0
+};
+const METHOD_GUARD = {
+  // excludes method names from keyword processing
+  begin: "\\.\\s*" + UNDERSCORE_IDENT_RE,
+  relevance: 0
+};
+const END_SAME_AS_BEGIN = function(mode) {
+  return Object.assign(
+    mode,
+    {
+      /** @type {ModeCallback} */
+      "on:begin": (m, resp) => {
+        resp.data._beginMatch = m[1];
+      },
+      /** @type {ModeCallback} */
+      "on:end": (m, resp) => {
+        if (resp.data._beginMatch !== m[1]) resp.ignoreMatch();
+      }
+    }
+  );
+};
+var MODES = /* @__PURE__ */ Object.freeze({
+  __proto__: null,
+  APOS_STRING_MODE,
+  BACKSLASH_ESCAPE,
+  BINARY_NUMBER_MODE,
+  BINARY_NUMBER_RE,
+  COMMENT,
+  C_BLOCK_COMMENT_MODE,
+  C_LINE_COMMENT_MODE,
+  C_NUMBER_MODE,
+  C_NUMBER_RE,
+  END_SAME_AS_BEGIN,
+  HASH_COMMENT_MODE,
+  IDENT_RE,
+  MATCH_NOTHING_RE,
+  METHOD_GUARD,
+  NUMBER_MODE,
+  NUMBER_RE,
+  PHRASAL_WORDS_MODE,
+  QUOTE_STRING_MODE,
+  REGEXP_MODE,
+  RE_STARTERS_RE,
+  SHEBANG,
+  TITLE_MODE,
+  UNDERSCORE_IDENT_RE,
+  UNDERSCORE_TITLE_MODE
+});
+function skipIfHasPrecedingDot(match, response) {
+  const before = match.input[match.index - 1];
+  if (before === ".") {
+    response.ignoreMatch();
+  }
+}
+function scopeClassName(mode, _parent) {
+  if (mode.className !== void 0) {
+    mode.scope = mode.className;
+    delete mode.className;
+  }
+}
+function beginKeywords(mode, parent) {
+  if (!parent) return;
+  if (!mode.beginKeywords) return;
+  mode.begin = "\\b(" + mode.beginKeywords.split(" ").join("|") + ")(?!\\.)(?=\\b|\\s)";
+  mode.__beforeBegin = skipIfHasPrecedingDot;
+  mode.keywords = mode.keywords || mode.beginKeywords;
+  delete mode.beginKeywords;
+  if (mode.relevance === void 0) mode.relevance = 0;
+}
+function compileIllegal(mode, _parent) {
+  if (!Array.isArray(mode.illegal)) return;
+  mode.illegal = either(...mode.illegal);
+}
+function compileMatch(mode, _parent) {
+  if (!mode.match) return;
+  if (mode.begin || mode.end) throw new Error("begin & end are not supported with match");
+  mode.begin = mode.match;
+  delete mode.match;
+}
+function compileRelevance(mode, _parent) {
+  if (mode.relevance === void 0) mode.relevance = 1;
+}
+const beforeMatchExt = (mode, parent) => {
+  if (!mode.beforeMatch) return;
+  if (mode.starts) throw new Error("beforeMatch cannot be used with starts");
+  const originalMode = Object.assign({}, mode);
+  Object.keys(mode).forEach((key) => {
+    delete mode[key];
+  });
+  mode.keywords = originalMode.keywords;
+  mode.begin = concat(originalMode.beforeMatch, lookahead(originalMode.begin));
+  mode.starts = {
+    relevance: 0,
+    contains: [
+      Object.assign(originalMode, { endsParent: true })
+    ]
+  };
+  mode.relevance = 0;
+  delete originalMode.beforeMatch;
+};
+const COMMON_KEYWORDS = [
+  "of",
+  "and",
+  "for",
+  "in",
+  "not",
+  "or",
+  "if",
+  "then",
+  "parent",
+  // common variable name
+  "list",
+  // common variable name
+  "value"
+  // common variable name
+];
+const DEFAULT_KEYWORD_SCOPE = "keyword";
+function compileKeywords(rawKeywords, caseInsensitive, scopeName = DEFAULT_KEYWORD_SCOPE) {
+  const compiledKeywords = /* @__PURE__ */ Object.create(null);
+  if (typeof rawKeywords === "string") {
+    compileList(scopeName, rawKeywords.split(" "));
+  } else if (Array.isArray(rawKeywords)) {
+    compileList(scopeName, rawKeywords);
+  } else {
+    Object.keys(rawKeywords).forEach(function(scopeName2) {
+      Object.assign(
+        compiledKeywords,
+        compileKeywords(rawKeywords[scopeName2], caseInsensitive, scopeName2)
+      );
+    });
+  }
+  return compiledKeywords;
+  function compileList(scopeName2, keywordList) {
+    if (caseInsensitive) {
+      keywordList = keywordList.map((x) => x.toLowerCase());
+    }
+    keywordList.forEach(function(keyword) {
+      const pair = keyword.split("|");
+      compiledKeywords[pair[0]] = [scopeName2, scoreForKeyword(pair[0], pair[1])];
+    });
+  }
+}
+function scoreForKeyword(keyword, providedScore) {
+  if (providedScore) {
+    return Number(providedScore);
+  }
+  return commonKeyword(keyword) ? 0 : 1;
+}
+function commonKeyword(keyword) {
+  return COMMON_KEYWORDS.includes(keyword.toLowerCase());
+}
+const seenDeprecations = {};
+const error = (message) => {
+  console.error(message);
+};
+const warn = (message, ...args) => {
+  console.log(`WARN: ${message}`, ...args);
+};
+const deprecated = (version2, message) => {
+  if (seenDeprecations[`${version2}/${message}`]) return;
+  console.log(`Deprecated as of ${version2}. ${message}`);
+  seenDeprecations[`${version2}/${message}`] = true;
+};
+const MultiClassError = new Error();
+function remapScopeNames(mode, regexes, { key }) {
+  let offset = 0;
+  const scopeNames = mode[key];
+  const emit = {};
+  const positions = {};
+  for (let i = 1; i <= regexes.length; i++) {
+    positions[i + offset] = scopeNames[i];
+    emit[i + offset] = true;
+    offset += countMatchGroups(regexes[i - 1]);
+  }
+  mode[key] = positions;
+  mode[key]._emit = emit;
+  mode[key]._multi = true;
+}
+function beginMultiClass(mode) {
+  if (!Array.isArray(mode.begin)) return;
+  if (mode.skip || mode.excludeBegin || mode.returnBegin) {
+    error("skip, excludeBegin, returnBegin not compatible with beginScope: {}");
+    throw MultiClassError;
+  }
+  if (typeof mode.beginScope !== "object" || mode.beginScope === null) {
+    error("beginScope must be object");
+    throw MultiClassError;
+  }
+  remapScopeNames(mode, mode.begin, { key: "beginScope" });
+  mode.begin = _rewriteBackreferences(mode.begin, { joinWith: "" });
+}
+function endMultiClass(mode) {
+  if (!Array.isArray(mode.end)) return;
+  if (mode.skip || mode.excludeEnd || mode.returnEnd) {
+    error("skip, excludeEnd, returnEnd not compatible with endScope: {}");
+    throw MultiClassError;
+  }
+  if (typeof mode.endScope !== "object" || mode.endScope === null) {
+    error("endScope must be object");
+    throw MultiClassError;
+  }
+  remapScopeNames(mode, mode.end, { key: "endScope" });
+  mode.end = _rewriteBackreferences(mode.end, { joinWith: "" });
+}
+function scopeSugar(mode) {
+  if (mode.scope && typeof mode.scope === "object" && mode.scope !== null) {
+    mode.beginScope = mode.scope;
+    delete mode.scope;
+  }
+}
+function MultiClass(mode) {
+  scopeSugar(mode);
+  if (typeof mode.beginScope === "string") {
+    mode.beginScope = { _wrap: mode.beginScope };
+  }
+  if (typeof mode.endScope === "string") {
+    mode.endScope = { _wrap: mode.endScope };
+  }
+  beginMultiClass(mode);
+  endMultiClass(mode);
+}
+function compileLanguage(language) {
+  function langRe(value, global) {
+    return new RegExp(
+      source(value),
+      "m" + (language.case_insensitive ? "i" : "") + (language.unicodeRegex ? "u" : "") + (global ? "g" : "")
+    );
+  }
+  class MultiRegex {
+    constructor() {
+      this.matchIndexes = {};
+      this.regexes = [];
+      this.matchAt = 1;
+      this.position = 0;
+    }
+    // @ts-ignore
+    addRule(re, opts) {
+      opts.position = this.position++;
+      this.matchIndexes[this.matchAt] = opts;
+      this.regexes.push([opts, re]);
+      this.matchAt += countMatchGroups(re) + 1;
+    }
+    compile() {
+      if (this.regexes.length === 0) {
+        this.exec = () => null;
+      }
+      const terminators = this.regexes.map((el) => el[1]);
+      this.matcherRe = langRe(_rewriteBackreferences(terminators, { joinWith: "|" }), true);
+      this.lastIndex = 0;
+    }
+    /** @param {string} s */
+    exec(s) {
+      this.matcherRe.lastIndex = this.lastIndex;
+      const match = this.matcherRe.exec(s);
+      if (!match) {
+        return null;
+      }
+      const i = match.findIndex((el, i2) => i2 > 0 && el !== void 0);
+      const matchData = this.matchIndexes[i];
+      match.splice(0, i);
+      return Object.assign(match, matchData);
+    }
+  }
+  class ResumableMultiRegex {
+    constructor() {
+      this.rules = [];
+      this.multiRegexes = [];
+      this.count = 0;
+      this.lastIndex = 0;
+      this.regexIndex = 0;
+    }
+    // @ts-ignore
+    getMatcher(index) {
+      if (this.multiRegexes[index]) return this.multiRegexes[index];
+      const matcher = new MultiRegex();
+      this.rules.slice(index).forEach(([re, opts]) => matcher.addRule(re, opts));
+      matcher.compile();
+      this.multiRegexes[index] = matcher;
+      return matcher;
+    }
+    resumingScanAtSamePosition() {
+      return this.regexIndex !== 0;
+    }
+    considerAll() {
+      this.regexIndex = 0;
+    }
+    // @ts-ignore
+    addRule(re, opts) {
+      this.rules.push([re, opts]);
+      if (opts.type === "begin") this.count++;
+    }
+    /** @param {string} s */
+    exec(s) {
+      const m = this.getMatcher(this.regexIndex);
+      m.lastIndex = this.lastIndex;
+      let result = m.exec(s);
+      if (this.resumingScanAtSamePosition()) {
+        if (result && result.index === this.lastIndex) ;
+        else {
+          const m2 = this.getMatcher(0);
+          m2.lastIndex = this.lastIndex + 1;
+          result = m2.exec(s);
+        }
+      }
+      if (result) {
+        this.regexIndex += result.position + 1;
+        if (this.regexIndex === this.count) {
+          this.considerAll();
+        }
+      }
+      return result;
+    }
+  }
+  function buildModeRegex(mode) {
+    const mm = new ResumableMultiRegex();
+    mode.contains.forEach((term) => mm.addRule(term.begin, { rule: term, type: "begin" }));
+    if (mode.terminatorEnd) {
+      mm.addRule(mode.terminatorEnd, { type: "end" });
+    }
+    if (mode.illegal) {
+      mm.addRule(mode.illegal, { type: "illegal" });
+    }
+    return mm;
+  }
+  function compileMode(mode, parent) {
+    const cmode = (
+      /** @type CompiledMode */
+      mode
+    );
+    if (mode.isCompiled) return cmode;
+    [
+      scopeClassName,
+      // do this early so compiler extensions generally don't have to worry about
+      // the distinction between match/begin
+      compileMatch,
+      MultiClass,
+      beforeMatchExt
+    ].forEach((ext) => ext(mode, parent));
+    language.compilerExtensions.forEach((ext) => ext(mode, parent));
+    mode.__beforeBegin = null;
+    [
+      beginKeywords,
+      // do this later so compiler extensions that come earlier have access to the
+      // raw array if they wanted to perhaps manipulate it, etc.
+      compileIllegal,
+      // default to 1 relevance if not specified
+      compileRelevance
+    ].forEach((ext) => ext(mode, parent));
+    mode.isCompiled = true;
+    let keywordPattern = null;
+    if (typeof mode.keywords === "object" && mode.keywords.$pattern) {
+      mode.keywords = Object.assign({}, mode.keywords);
+      keywordPattern = mode.keywords.$pattern;
+      delete mode.keywords.$pattern;
+    }
+    keywordPattern = keywordPattern || /\w+/;
+    if (mode.keywords) {
+      mode.keywords = compileKeywords(mode.keywords, language.case_insensitive);
+    }
+    cmode.keywordPatternRe = langRe(keywordPattern, true);
+    if (parent) {
+      if (!mode.begin) mode.begin = /\B|\b/;
+      cmode.beginRe = langRe(cmode.begin);
+      if (!mode.end && !mode.endsWithParent) mode.end = /\B|\b/;
+      if (mode.end) cmode.endRe = langRe(cmode.end);
+      cmode.terminatorEnd = source(cmode.end) || "";
+      if (mode.endsWithParent && parent.terminatorEnd) {
+        cmode.terminatorEnd += (mode.end ? "|" : "") + parent.terminatorEnd;
+      }
+    }
+    if (mode.illegal) cmode.illegalRe = langRe(
+      /** @type {RegExp | string} */
+      mode.illegal
+    );
+    if (!mode.contains) mode.contains = [];
+    mode.contains = [].concat(...mode.contains.map(function(c) {
+      return expandOrCloneMode(c === "self" ? mode : c);
+    }));
+    mode.contains.forEach(function(c) {
+      compileMode(
+        /** @type Mode */
+        c,
+        cmode
+      );
+    });
+    if (mode.starts) {
+      compileMode(mode.starts, parent);
+    }
+    cmode.matcher = buildModeRegex(cmode);
+    return cmode;
+  }
+  if (!language.compilerExtensions) language.compilerExtensions = [];
+  if (language.contains && language.contains.includes("self")) {
+    throw new Error("ERR: contains `self` is not supported at the top-level of a language.  See documentation.");
+  }
+  language.classNameAliases = inherit$1(language.classNameAliases || {});
+  return compileMode(
+    /** @type Mode */
+    language
+  );
+}
+function dependencyOnParent(mode) {
+  if (!mode) return false;
+  return mode.endsWithParent || dependencyOnParent(mode.starts);
+}
+function expandOrCloneMode(mode) {
+  if (mode.variants && !mode.cachedVariants) {
+    mode.cachedVariants = mode.variants.map(function(variant) {
+      return inherit$1(mode, { variants: null }, variant);
+    });
+  }
+  if (mode.cachedVariants) {
+    return mode.cachedVariants;
+  }
+  if (dependencyOnParent(mode)) {
+    return inherit$1(mode, { starts: mode.starts ? inherit$1(mode.starts) : null });
+  }
+  if (Object.isFrozen(mode)) {
+    return inherit$1(mode);
+  }
+  return mode;
+}
+var version = "11.11.1";
+class HTMLInjectionError extends Error {
+  constructor(reason, html2) {
+    super(reason);
+    this.name = "HTMLInjectionError";
+    this.html = html2;
+  }
+}
+const escape = escapeHTML;
+const inherit = inherit$1;
+const NO_MATCH = Symbol("nomatch");
+const MAX_KEYWORD_HITS = 7;
+const HLJS = function(hljs) {
+  const languages = /* @__PURE__ */ Object.create(null);
+  const aliases = /* @__PURE__ */ Object.create(null);
+  const plugins = [];
+  let SAFE_MODE = true;
+  const LANGUAGE_NOT_FOUND = "Could not find the language '{}', did you forget to load/include a language module?";
+  const PLAINTEXT_LANGUAGE = { disableAutodetect: true, name: "Plain text", contains: [] };
+  let options = {
+    ignoreUnescapedHTML: false,
+    throwUnescapedHTML: false,
+    noHighlightRe: /^(no-?highlight)$/i,
+    languageDetectRe: /\blang(?:uage)?-([\w-]+)\b/i,
+    classPrefix: "hljs-",
+    cssSelector: "pre code",
+    languages: null,
+    // beta configuration options, subject to change, welcome to discuss
+    // https://github.com/highlightjs/highlight.js/issues/1086
+    __emitter: TokenTreeEmitter
+  };
+  function shouldNotHighlight(languageName) {
+    return options.noHighlightRe.test(languageName);
+  }
+  function blockLanguage(block2) {
+    let classes = block2.className + " ";
+    classes += block2.parentNode ? block2.parentNode.className : "";
+    const match = options.languageDetectRe.exec(classes);
+    if (match) {
+      const language = getLanguage(match[1]);
+      if (!language) {
+        warn(LANGUAGE_NOT_FOUND.replace("{}", match[1]));
+        warn("Falling back to no-highlight mode for this block.", block2);
+      }
+      return language ? match[1] : "no-highlight";
+    }
+    return classes.split(/\s+/).find((_class) => shouldNotHighlight(_class) || getLanguage(_class));
+  }
+  function highlight2(codeOrLanguageName, optionsOrCode, ignoreIllegals) {
+    let code = "";
+    let languageName = "";
+    if (typeof optionsOrCode === "object") {
+      code = codeOrLanguageName;
+      ignoreIllegals = optionsOrCode.ignoreIllegals;
+      languageName = optionsOrCode.language;
+    } else {
+      deprecated("10.7.0", "highlight(lang, code, ...args) has been deprecated.");
+      deprecated("10.7.0", "Please use highlight(code, options) instead.\nhttps://github.com/highlightjs/highlight.js/issues/2277");
+      languageName = codeOrLanguageName;
+      code = optionsOrCode;
+    }
+    if (ignoreIllegals === void 0) {
+      ignoreIllegals = true;
+    }
+    const context = {
+      code,
+      language: languageName
+    };
+    fire("before:highlight", context);
+    const result = context.result ? context.result : _highlight(context.language, context.code, ignoreIllegals);
+    result.code = context.code;
+    fire("after:highlight", result);
+    return result;
+  }
+  function _highlight(languageName, codeToHighlight, ignoreIllegals, continuation) {
+    const keywordHits = /* @__PURE__ */ Object.create(null);
+    function keywordData(mode, matchText) {
+      return mode.keywords[matchText];
+    }
+    function processKeywords() {
+      if (!top.keywords) {
+        emitter.addText(modeBuffer);
+        return;
+      }
+      let lastIndex = 0;
+      top.keywordPatternRe.lastIndex = 0;
+      let match = top.keywordPatternRe.exec(modeBuffer);
+      let buf = "";
+      while (match) {
+        buf += modeBuffer.substring(lastIndex, match.index);
+        const word = language.case_insensitive ? match[0].toLowerCase() : match[0];
+        const data = keywordData(top, word);
+        if (data) {
+          const [kind, keywordRelevance] = data;
+          emitter.addText(buf);
+          buf = "";
+          keywordHits[word] = (keywordHits[word] || 0) + 1;
+          if (keywordHits[word] <= MAX_KEYWORD_HITS) relevance += keywordRelevance;
+          if (kind.startsWith("_")) {
+            buf += match[0];
+          } else {
+            const cssClass = language.classNameAliases[kind] || kind;
+            emitKeyword(match[0], cssClass);
+          }
+        } else {
+          buf += match[0];
+        }
+        lastIndex = top.keywordPatternRe.lastIndex;
+        match = top.keywordPatternRe.exec(modeBuffer);
+      }
+      buf += modeBuffer.substring(lastIndex);
+      emitter.addText(buf);
+    }
+    function processSubLanguage() {
+      if (modeBuffer === "") return;
+      let result2 = null;
+      if (typeof top.subLanguage === "string") {
+        if (!languages[top.subLanguage]) {
+          emitter.addText(modeBuffer);
+          return;
+        }
+        result2 = _highlight(top.subLanguage, modeBuffer, true, continuations[top.subLanguage]);
+        continuations[top.subLanguage] = /** @type {CompiledMode} */
+        result2._top;
+      } else {
+        result2 = highlightAuto(modeBuffer, top.subLanguage.length ? top.subLanguage : null);
+      }
+      if (top.relevance > 0) {
+        relevance += result2.relevance;
+      }
+      emitter.__addSublanguage(result2._emitter, result2.language);
+    }
+    function processBuffer() {
+      if (top.subLanguage != null) {
+        processSubLanguage();
+      } else {
+        processKeywords();
+      }
+      modeBuffer = "";
+    }
+    function emitKeyword(keyword, scope) {
+      if (keyword === "") return;
+      emitter.startScope(scope);
+      emitter.addText(keyword);
+      emitter.endScope();
+    }
+    function emitMultiClass(scope, match) {
+      let i = 1;
+      const max = match.length - 1;
+      while (i <= max) {
+        if (!scope._emit[i]) {
+          i++;
+          continue;
+        }
+        const klass = language.classNameAliases[scope[i]] || scope[i];
+        const text = match[i];
+        if (klass) {
+          emitKeyword(text, klass);
+        } else {
+          modeBuffer = text;
+          processKeywords();
+          modeBuffer = "";
+        }
+        i++;
+      }
+    }
+    function startNewMode(mode, match) {
+      if (mode.scope && typeof mode.scope === "string") {
+        emitter.openNode(language.classNameAliases[mode.scope] || mode.scope);
+      }
+      if (mode.beginScope) {
+        if (mode.beginScope._wrap) {
+          emitKeyword(modeBuffer, language.classNameAliases[mode.beginScope._wrap] || mode.beginScope._wrap);
+          modeBuffer = "";
+        } else if (mode.beginScope._multi) {
+          emitMultiClass(mode.beginScope, match);
+          modeBuffer = "";
+        }
+      }
+      top = Object.create(mode, { parent: { value: top } });
+      return top;
+    }
+    function endOfMode(mode, match, matchPlusRemainder) {
+      let matched = startsWith(mode.endRe, matchPlusRemainder);
+      if (matched) {
+        if (mode["on:end"]) {
+          const resp = new Response(mode);
+          mode["on:end"](match, resp);
+          if (resp.isMatchIgnored) matched = false;
+        }
+        if (matched) {
+          while (mode.endsParent && mode.parent) {
+            mode = mode.parent;
+          }
+          return mode;
+        }
+      }
+      if (mode.endsWithParent) {
+        return endOfMode(mode.parent, match, matchPlusRemainder);
+      }
+    }
+    function doIgnore(lexeme) {
+      if (top.matcher.regexIndex === 0) {
+        modeBuffer += lexeme[0];
+        return 1;
+      } else {
+        resumeScanAtSamePosition = true;
+        return 0;
+      }
+    }
+    function doBeginMatch(match) {
+      const lexeme = match[0];
+      const newMode = match.rule;
+      const resp = new Response(newMode);
+      const beforeCallbacks = [newMode.__beforeBegin, newMode["on:begin"]];
+      for (const cb of beforeCallbacks) {
+        if (!cb) continue;
+        cb(match, resp);
+        if (resp.isMatchIgnored) return doIgnore(lexeme);
+      }
+      if (newMode.skip) {
+        modeBuffer += lexeme;
+      } else {
+        if (newMode.excludeBegin) {
+          modeBuffer += lexeme;
+        }
+        processBuffer();
+        if (!newMode.returnBegin && !newMode.excludeBegin) {
+          modeBuffer = lexeme;
+        }
+      }
+      startNewMode(newMode, match);
+      return newMode.returnBegin ? 0 : lexeme.length;
+    }
+    function doEndMatch(match) {
+      const lexeme = match[0];
+      const matchPlusRemainder = codeToHighlight.substring(match.index);
+      const endMode = endOfMode(top, match, matchPlusRemainder);
+      if (!endMode) {
+        return NO_MATCH;
+      }
+      const origin = top;
+      if (top.endScope && top.endScope._wrap) {
+        processBuffer();
+        emitKeyword(lexeme, top.endScope._wrap);
+      } else if (top.endScope && top.endScope._multi) {
+        processBuffer();
+        emitMultiClass(top.endScope, match);
+      } else if (origin.skip) {
+        modeBuffer += lexeme;
+      } else {
+        if (!(origin.returnEnd || origin.excludeEnd)) {
+          modeBuffer += lexeme;
+        }
+        processBuffer();
+        if (origin.excludeEnd) {
+          modeBuffer = lexeme;
+        }
+      }
+      do {
+        if (top.scope) {
+          emitter.closeNode();
+        }
+        if (!top.skip && !top.subLanguage) {
+          relevance += top.relevance;
+        }
+        top = top.parent;
+      } while (top !== endMode.parent);
+      if (endMode.starts) {
+        startNewMode(endMode.starts, match);
+      }
+      return origin.returnEnd ? 0 : lexeme.length;
+    }
+    function processContinuations() {
+      const list2 = [];
+      for (let current = top; current !== language; current = current.parent) {
+        if (current.scope) {
+          list2.unshift(current.scope);
+        }
+      }
+      list2.forEach((item) => emitter.openNode(item));
+    }
+    let lastMatch = {};
+    function processLexeme(textBeforeMatch, match) {
+      const lexeme = match && match[0];
+      modeBuffer += textBeforeMatch;
+      if (lexeme == null) {
+        processBuffer();
+        return 0;
+      }
+      if (lastMatch.type === "begin" && match.type === "end" && lastMatch.index === match.index && lexeme === "") {
+        modeBuffer += codeToHighlight.slice(match.index, match.index + 1);
+        if (!SAFE_MODE) {
+          const err = new Error(`0 width match regex (${languageName})`);
+          err.languageName = languageName;
+          err.badRule = lastMatch.rule;
+          throw err;
+        }
+        return 1;
+      }
+      lastMatch = match;
+      if (match.type === "begin") {
+        return doBeginMatch(match);
+      } else if (match.type === "illegal" && !ignoreIllegals) {
+        const err = new Error('Illegal lexeme "' + lexeme + '" for mode "' + (top.scope || "<unnamed>") + '"');
+        err.mode = top;
+        throw err;
+      } else if (match.type === "end") {
+        const processed = doEndMatch(match);
+        if (processed !== NO_MATCH) {
+          return processed;
+        }
+      }
+      if (match.type === "illegal" && lexeme === "") {
+        modeBuffer += "\n";
+        return 1;
+      }
+      if (iterations > 1e5 && iterations > match.index * 3) {
+        const err = new Error("potential infinite loop, way more iterations than matches");
+        throw err;
+      }
+      modeBuffer += lexeme;
+      return lexeme.length;
+    }
+    const language = getLanguage(languageName);
+    if (!language) {
+      error(LANGUAGE_NOT_FOUND.replace("{}", languageName));
+      throw new Error('Unknown language: "' + languageName + '"');
+    }
+    const md = compileLanguage(language);
+    let result = "";
+    let top = continuation || md;
+    const continuations = {};
+    const emitter = new options.__emitter(options);
+    processContinuations();
+    let modeBuffer = "";
+    let relevance = 0;
+    let index = 0;
+    let iterations = 0;
+    let resumeScanAtSamePosition = false;
+    try {
+      if (!language.__emitTokens) {
+        top.matcher.considerAll();
+        for (; ; ) {
+          iterations++;
+          if (resumeScanAtSamePosition) {
+            resumeScanAtSamePosition = false;
+          } else {
+            top.matcher.considerAll();
+          }
+          top.matcher.lastIndex = index;
+          const match = top.matcher.exec(codeToHighlight);
+          if (!match) break;
+          const beforeMatch = codeToHighlight.substring(index, match.index);
+          const processedCount = processLexeme(beforeMatch, match);
+          index = match.index + processedCount;
+        }
+        processLexeme(codeToHighlight.substring(index));
+      } else {
+        language.__emitTokens(codeToHighlight, emitter);
+      }
+      emitter.finalize();
+      result = emitter.toHTML();
+      return {
+        language: languageName,
+        value: result,
+        relevance,
+        illegal: false,
+        _emitter: emitter,
+        _top: top
+      };
+    } catch (err) {
+      if (err.message && err.message.includes("Illegal")) {
+        return {
+          language: languageName,
+          value: escape(codeToHighlight),
+          illegal: true,
+          relevance: 0,
+          _illegalBy: {
+            message: err.message,
+            index,
+            context: codeToHighlight.slice(index - 100, index + 100),
+            mode: err.mode,
+            resultSoFar: result
+          },
+          _emitter: emitter
+        };
+      } else if (SAFE_MODE) {
+        return {
+          language: languageName,
+          value: escape(codeToHighlight),
+          illegal: false,
+          relevance: 0,
+          errorRaised: err,
+          _emitter: emitter,
+          _top: top
+        };
+      } else {
+        throw err;
+      }
+    }
+  }
+  function justTextHighlightResult(code) {
+    const result = {
+      value: escape(code),
+      illegal: false,
+      relevance: 0,
+      _top: PLAINTEXT_LANGUAGE,
+      _emitter: new options.__emitter(options)
+    };
+    result._emitter.addText(code);
+    return result;
+  }
+  function highlightAuto(code, languageSubset) {
+    languageSubset = languageSubset || options.languages || Object.keys(languages);
+    const plaintext = justTextHighlightResult(code);
+    const results = languageSubset.filter(getLanguage).filter(autoDetection).map(
+      (name) => _highlight(name, code, false)
+    );
+    results.unshift(plaintext);
+    const sorted = results.sort((a, b) => {
+      if (a.relevance !== b.relevance) return b.relevance - a.relevance;
+      if (a.language && b.language) {
+        if (getLanguage(a.language).supersetOf === b.language) {
+          return 1;
+        } else if (getLanguage(b.language).supersetOf === a.language) {
+          return -1;
+        }
+      }
+      return 0;
+    });
+    const [best, secondBest] = sorted;
+    const result = best;
+    result.secondBest = secondBest;
+    return result;
+  }
+  function updateClassName(element, currentLang, resultLang) {
+    const language = currentLang && aliases[currentLang] || resultLang;
+    element.classList.add("hljs");
+    element.classList.add(`language-${language}`);
+  }
+  function highlightElement(element) {
+    let node = null;
+    const language = blockLanguage(element);
+    if (shouldNotHighlight(language)) return;
+    fire(
+      "before:highlightElement",
+      { el: element, language }
+    );
+    if (element.dataset.highlighted) {
+      console.log("Element previously highlighted. To highlight again, first unset `dataset.highlighted`.", element);
+      return;
+    }
+    if (element.children.length > 0) {
+      if (!options.ignoreUnescapedHTML) {
+        console.warn("One of your code blocks includes unescaped HTML. This is a potentially serious security risk.");
+        console.warn("https://github.com/highlightjs/highlight.js/wiki/security");
+        console.warn("The element with unescaped HTML:");
+        console.warn(element);
+      }
+      if (options.throwUnescapedHTML) {
+        const err = new HTMLInjectionError(
+          "One of your code blocks includes unescaped HTML.",
+          element.innerHTML
+        );
+        throw err;
+      }
+    }
+    node = element;
+    const text = node.textContent;
+    const result = language ? highlight2(text, { language, ignoreIllegals: true }) : highlightAuto(text);
+    element.innerHTML = result.value;
+    element.dataset.highlighted = "yes";
+    updateClassName(element, language, result.language);
+    element.result = {
+      language: result.language,
+      // TODO: remove with version 11.0
+      re: result.relevance,
+      relevance: result.relevance
+    };
+    if (result.secondBest) {
+      element.secondBest = {
+        language: result.secondBest.language,
+        relevance: result.secondBest.relevance
+      };
+    }
+    fire("after:highlightElement", { el: element, result, text });
+  }
+  function configure(userOptions) {
+    options = inherit(options, userOptions);
+  }
+  const initHighlighting = () => {
+    highlightAll();
+    deprecated("10.6.0", "initHighlighting() deprecated.  Use highlightAll() now.");
+  };
+  function initHighlightingOnLoad() {
+    highlightAll();
+    deprecated("10.6.0", "initHighlightingOnLoad() deprecated.  Use highlightAll() now.");
+  }
+  let wantsHighlight = false;
+  function highlightAll() {
+    function boot() {
+      highlightAll();
+    }
+    if (document.readyState === "loading") {
+      if (!wantsHighlight) {
+        window.addEventListener("DOMContentLoaded", boot, false);
+      }
+      wantsHighlight = true;
+      return;
+    }
+    const blocks = document.querySelectorAll(options.cssSelector);
+    blocks.forEach(highlightElement);
+  }
+  function registerLanguage(languageName, languageDefinition) {
+    let lang = null;
+    try {
+      lang = languageDefinition(hljs);
+    } catch (error$1) {
+      error("Language definition for '{}' could not be registered.".replace("{}", languageName));
+      if (!SAFE_MODE) {
+        throw error$1;
+      } else {
+        error(error$1);
+      }
+      lang = PLAINTEXT_LANGUAGE;
+    }
+    if (!lang.name) lang.name = languageName;
+    languages[languageName] = lang;
+    lang.rawDefinition = languageDefinition.bind(null, hljs);
+    if (lang.aliases) {
+      registerAliases(lang.aliases, { languageName });
+    }
+  }
+  function unregisterLanguage(languageName) {
+    delete languages[languageName];
+    for (const alias of Object.keys(aliases)) {
+      if (aliases[alias] === languageName) {
+        delete aliases[alias];
+      }
+    }
+  }
+  function listLanguages() {
+    return Object.keys(languages);
+  }
+  function getLanguage(name) {
+    name = (name || "").toLowerCase();
+    return languages[name] || languages[aliases[name]];
+  }
+  function registerAliases(aliasList, { languageName }) {
+    if (typeof aliasList === "string") {
+      aliasList = [aliasList];
+    }
+    aliasList.forEach((alias) => {
+      aliases[alias.toLowerCase()] = languageName;
+    });
+  }
+  function autoDetection(name) {
+    const lang = getLanguage(name);
+    return lang && !lang.disableAutodetect;
+  }
+  function upgradePluginAPI(plugin) {
+    if (plugin["before:highlightBlock"] && !plugin["before:highlightElement"]) {
+      plugin["before:highlightElement"] = (data) => {
+        plugin["before:highlightBlock"](
+          Object.assign({ block: data.el }, data)
+        );
+      };
+    }
+    if (plugin["after:highlightBlock"] && !plugin["after:highlightElement"]) {
+      plugin["after:highlightElement"] = (data) => {
+        plugin["after:highlightBlock"](
+          Object.assign({ block: data.el }, data)
+        );
+      };
+    }
+  }
+  function addPlugin(plugin) {
+    upgradePluginAPI(plugin);
+    plugins.push(plugin);
+  }
+  function removePlugin(plugin) {
+    const index = plugins.indexOf(plugin);
+    if (index !== -1) {
+      plugins.splice(index, 1);
+    }
+  }
+  function fire(event, args) {
+    const cb = event;
+    plugins.forEach(function(plugin) {
+      if (plugin[cb]) {
+        plugin[cb](args);
+      }
+    });
+  }
+  function deprecateHighlightBlock(el) {
+    deprecated("10.7.0", "highlightBlock will be removed entirely in v12.0");
+    deprecated("10.7.0", "Please use highlightElement now.");
+    return highlightElement(el);
+  }
+  Object.assign(hljs, {
+    highlight: highlight2,
+    highlightAuto,
+    highlightAll,
+    highlightElement,
+    // TODO: Remove with v12 API
+    highlightBlock: deprecateHighlightBlock,
+    configure,
+    initHighlighting,
+    initHighlightingOnLoad,
+    registerLanguage,
+    unregisterLanguage,
+    listLanguages,
+    getLanguage,
+    registerAliases,
+    autoDetection,
+    inherit,
+    addPlugin,
+    removePlugin
+  });
+  hljs.debugMode = function() {
+    SAFE_MODE = false;
+  };
+  hljs.safeMode = function() {
+    SAFE_MODE = true;
+  };
+  hljs.versionString = version;
+  hljs.regex = {
+    concat,
+    lookahead,
+    either,
+    optional,
+    anyNumberOfTimes
+  };
+  for (const key in MODES) {
+    if (typeof MODES[key] === "object") {
+      deepFreeze(MODES[key]);
+    }
+  }
+  Object.assign(hljs, MODES);
+  return hljs;
+};
+const highlight = HLJS({});
+highlight.newInstance = () => HLJS({});
+var core = highlight;
+highlight.HighlightJS = highlight;
+highlight.default = highlight;
+const HighlightJS = /* @__PURE__ */ getDefaultExportFromCjs(core);
+function json(hljs) {
+  const ATTRIBUTE = {
+    className: "attr",
+    begin: /"(\\.|[^\\"\r\n])*"(?=\s*:)/,
+    relevance: 1.01
+  };
+  const PUNCTUATION = {
+    match: /[{}[\],:]/,
+    className: "punctuation",
+    relevance: 0
+  };
+  const LITERALS = [
+    "true",
+    "false",
+    "null"
+  ];
+  const LITERALS_MODE = {
+    scope: "literal",
+    beginKeywords: LITERALS.join(" ")
+  };
+  return {
+    name: "JSON",
+    aliases: ["jsonc"],
+    keywords: {
+      literal: LITERALS
+    },
+    contains: [
+      ATTRIBUTE,
+      PUNCTUATION,
+      hljs.QUOTE_STRING_MODE,
+      LITERALS_MODE,
+      hljs.C_NUMBER_MODE,
+      hljs.C_LINE_COMMENT_MODE,
+      hljs.C_BLOCK_COMMENT_MODE
+    ],
+    illegal: "\\S"
+  };
+}
+function xml(hljs) {
+  const regex = hljs.regex;
+  const TAG_NAME_RE = regex.concat(/[\p{L}_]/u, regex.optional(/[\p{L}0-9_.-]*:/u), /[\p{L}0-9_.-]*/u);
+  const XML_IDENT_RE = /[\p{L}0-9._:-]+/u;
+  const XML_ENTITIES = {
+    className: "symbol",
+    begin: /&[a-z]+;|&#[0-9]+;|&#x[a-f0-9]+;/
+  };
+  const XML_META_KEYWORDS = {
+    begin: /\s/,
+    contains: [
+      {
+        className: "keyword",
+        begin: /#?[a-z_][a-z1-9_-]+/,
+        illegal: /\n/
+      }
+    ]
+  };
+  const XML_META_PAR_KEYWORDS = hljs.inherit(XML_META_KEYWORDS, {
+    begin: /\(/,
+    end: /\)/
+  });
+  const APOS_META_STRING_MODE = hljs.inherit(hljs.APOS_STRING_MODE, { className: "string" });
+  const QUOTE_META_STRING_MODE = hljs.inherit(hljs.QUOTE_STRING_MODE, { className: "string" });
+  const TAG_INTERNALS = {
+    endsWithParent: true,
+    illegal: /</,
+    relevance: 0,
+    contains: [
+      {
+        className: "attr",
+        begin: XML_IDENT_RE,
+        relevance: 0
+      },
+      {
+        begin: /=\s*/,
+        relevance: 0,
+        contains: [
+          {
+            className: "string",
+            endsParent: true,
+            variants: [
+              {
+                begin: /"/,
+                end: /"/,
+                contains: [XML_ENTITIES]
+              },
+              {
+                begin: /'/,
+                end: /'/,
+                contains: [XML_ENTITIES]
+              },
+              { begin: /[^\s"'=<>`]+/ }
+            ]
+          }
+        ]
+      }
+    ]
+  };
+  return {
+    name: "HTML, XML",
+    aliases: [
+      "html",
+      "xhtml",
+      "rss",
+      "atom",
+      "xjb",
+      "xsd",
+      "xsl",
+      "plist",
+      "wsf",
+      "svg"
+    ],
+    case_insensitive: true,
+    unicodeRegex: true,
+    contains: [
+      {
+        className: "meta",
+        begin: /<![a-z]/,
+        end: />/,
+        relevance: 10,
+        contains: [
+          XML_META_KEYWORDS,
+          QUOTE_META_STRING_MODE,
+          APOS_META_STRING_MODE,
+          XML_META_PAR_KEYWORDS,
+          {
+            begin: /\[/,
+            end: /\]/,
+            contains: [
+              {
+                className: "meta",
+                begin: /<![a-z]/,
+                end: />/,
+                contains: [
+                  XML_META_KEYWORDS,
+                  XML_META_PAR_KEYWORDS,
+                  QUOTE_META_STRING_MODE,
+                  APOS_META_STRING_MODE
+                ]
+              }
+            ]
+          }
+        ]
+      },
+      hljs.COMMENT(
+        /<!--/,
+        /-->/,
+        { relevance: 10 }
+      ),
+      {
+        begin: /<!\[CDATA\[/,
+        end: /\]\]>/,
+        relevance: 10
+      },
+      XML_ENTITIES,
+      // xml processing instructions
+      {
+        className: "meta",
+        end: /\?>/,
+        variants: [
+          {
+            begin: /<\?xml/,
+            relevance: 10,
+            contains: [
+              QUOTE_META_STRING_MODE
+            ]
+          },
+          {
+            begin: /<\?[a-z][a-z0-9]+/
+          }
+        ]
+      },
+      {
+        className: "tag",
+        /*
+        The lookahead pattern (?=...) ensures that 'begin' only matches
+        '<style' as a single word, followed by a whitespace or an
+        ending bracket.
+        */
+        begin: /<style(?=\s|>)/,
+        end: />/,
+        keywords: { name: "style" },
+        contains: [TAG_INTERNALS],
+        starts: {
+          end: /<\/style>/,
+          returnEnd: true,
+          subLanguage: [
+            "css",
+            "xml"
+          ]
+        }
+      },
+      {
+        className: "tag",
+        // See the comment in the <style tag about the lookahead pattern
+        begin: /<script(?=\s|>)/,
+        end: />/,
+        keywords: { name: "script" },
+        contains: [TAG_INTERNALS],
+        starts: {
+          end: /<\/script>/,
+          returnEnd: true,
+          subLanguage: [
+            "javascript",
+            "handlebars",
+            "xml"
+          ]
+        }
+      },
+      // we need this for now for jSX
+      {
+        className: "tag",
+        begin: /<>|<\/>/
+      },
+      // open tag
+      {
+        className: "tag",
+        begin: regex.concat(
+          /</,
+          regex.lookahead(regex.concat(
+            TAG_NAME_RE,
+            // <tag/>
+            // <tag>
+            // <tag ...
+            regex.either(/\/>/, />/, /\s/)
+          ))
+        ),
+        end: /\/?>/,
+        contains: [
+          {
+            className: "name",
+            begin: TAG_NAME_RE,
+            relevance: 0,
+            starts: TAG_INTERNALS
+          }
+        ]
+      },
+      // close tag
+      {
+        className: "tag",
+        begin: regex.concat(
+          /<\//,
+          regex.lookahead(regex.concat(
+            TAG_NAME_RE,
+            />/
+          ))
+        ),
+        contains: [
+          {
+            className: "name",
+            begin: TAG_NAME_RE,
+            relevance: 0
+          },
+          {
+            begin: />/,
+            relevance: 0,
+            endsParent: true
+          }
+        ]
+      }
+    ]
+  };
+}
+function _1c(hljs) {
+  const UNDERSCORE_IDENT_RE2 = "[A-Za-zА-Яа-яёЁ_][A-Za-zА-Яа-яёЁ_0-9]+";
+  const v7_keywords = "далее ";
+  const v8_keywords = "возврат вызватьисключение выполнить для если и из или иначе иначеесли исключение каждого конецесли конецпопытки конеццикла не новый перейти перем по пока попытка прервать продолжить тогда цикл экспорт ";
+  const KEYWORD = v7_keywords + v8_keywords;
+  const v7_meta_keywords = "загрузитьизфайла ";
+  const v8_meta_keywords = "вебклиент вместо внешнеесоединение клиент конецобласти мобильноеприложениеклиент мобильноеприложениесервер наклиенте наклиентенасервере наклиентенасерверебезконтекста насервере насерверебезконтекста область перед после сервер толстыйклиентобычноеприложение толстыйклиентуправляемоеприложение тонкийклиент ";
+  const METAKEYWORD = v7_meta_keywords + v8_meta_keywords;
+  const v7_system_constants = "разделительстраниц разделительстрок символтабуляции ";
+  const v7_global_context_methods = "ansitooem oemtoansi ввестивидсубконто ввестиперечисление ввестипериод ввестиплансчетов выбранныйплансчетов датагод датамесяц датачисло заголовоксистемы значениевстроку значениеизстроки каталогиб каталогпользователя кодсимв конгода конецпериодаби конецрассчитанногопериодаби конецстандартногоинтервала конквартала конмесяца коннедели лог лог10 максимальноеколичествосубконто названиеинтерфейса названиенабораправ назначитьвид назначитьсчет найтиссылки началопериодаби началостандартногоинтервала начгода начквартала начмесяца начнедели номерднягода номерднянедели номернеделигода обработкаожидания основнойжурналрасчетов основнойплансчетов основнойязык очиститьокносообщений периодстр получитьвремята получитьдатута получитьдокументта получитьзначенияотбора получитьпозициюта получитьпустоезначение получитьта префиксавтонумерации пропись пустоезначение разм разобратьпозициюдокумента рассчитатьрегистрына рассчитатьрегистрыпо симв создатьобъект статусвозврата стрколичествострок сформироватьпозициюдокумента счетпокоду текущеевремя типзначения типзначениястр установитьтана установитьтапо фиксшаблон шаблон ";
+  const v8_global_context_methods = "acos asin atan base64значение base64строка cos exp log log10 pow sin sqrt tan xmlзначение xmlстрока xmlтип xmlтипзнч активноеокно безопасныйрежим безопасныйрежимразделенияданных булево ввестидату ввестизначение ввестистроку ввестичисло возможностьчтенияxml вопрос восстановитьзначение врег выгрузитьжурналрегистрации выполнитьобработкуоповещения выполнитьпроверкуправдоступа вычислить год данныеформывзначение дата день деньгода деньнедели добавитьмесяц заблокироватьданныедляредактирования заблокироватьработупользователя завершитьработусистемы загрузитьвнешнююкомпоненту закрытьсправку записатьjson записатьxml записатьдатуjson записьжурналарегистрации заполнитьзначениясвойств запроситьразрешениепользователя запуститьприложение запуститьсистему зафиксироватьтранзакцию значениевданныеформы значениевстрокувнутр значениевфайл значениезаполнено значениеизстрокивнутр значениеизфайла изxmlтипа импортмоделиxdto имякомпьютера имяпользователя инициализироватьпредопределенныеданные информацияобошибке каталогбиблиотекимобильногоустройства каталогвременныхфайлов каталогдокументов каталогпрограммы кодироватьстроку кодлокализацииинформационнойбазы кодсимвола командасистемы конецгода конецдня конецквартала конецмесяца конецминуты конецнедели конецчаса конфигурациябазыданныхизмененадинамически конфигурацияизменена копироватьданныеформы копироватьфайл краткоепредставлениеошибки лев макс местноевремя месяц мин минута монопольныйрежим найти найтинедопустимыесимволыxml найтиокнопонавигационнойссылке найтипомеченныенаудаление найтипоссылкам найтифайлы началогода началодня началоквартала началомесяца началоминуты началонедели началочаса начатьзапросразрешенияпользователя начатьзапускприложения начатькопированиефайла начатьперемещениефайла начатьподключениевнешнейкомпоненты начатьподключениерасширенияработыскриптографией начатьподключениерасширенияработысфайлами начатьпоискфайлов начатьполучениекаталогавременныхфайлов начатьполучениекаталогадокументов начатьполучениерабочегокаталогаданныхпользователя начатьполучениефайлов начатьпомещениефайла начатьпомещениефайлов начатьсозданиедвоичныхданныхизфайла начатьсозданиекаталога начатьтранзакцию начатьудалениефайлов начатьустановкувнешнейкомпоненты начатьустановкурасширенияработыскриптографией начатьустановкурасширенияработысфайлами неделягода необходимостьзавершениясоединения номерсеансаинформационнойбазы номерсоединенияинформационнойбазы нрег нстр обновитьинтерфейс обновитьнумерациюобъектов обновитьповторноиспользуемыезначения обработкапрерыванияпользователя объединитьфайлы окр описаниеошибки оповестить оповеститьобизменении отключитьобработчикзапросанастроекклиенталицензирования отключитьобработчикожидания отключитьобработчикоповещения открытьзначение открытьиндекссправки открытьсодержаниесправки открытьсправку открытьформу открытьформумодально отменитьтранзакцию очиститьжурналрегистрации очиститьнастройкипользователя очиститьсообщения параметрыдоступа перейтипонавигационнойссылке переместитьфайл подключитьвнешнююкомпоненту подключитьобработчикзапросанастроекклиенталицензирования подключитьобработчикожидания подключитьобработчикоповещения подключитьрасширениеработыскриптографией подключитьрасширениеработысфайлами подробноепредставлениеошибки показатьвводдаты показатьвводзначения показатьвводстроки показатьвводчисла показатьвопрос показатьзначение показатьинформациюобошибке показатьнакарте показатьоповещениепользователя показатьпредупреждение полноеимяпользователя получитьcomобъект получитьxmlтип получитьадреспоместоположению получитьблокировкусеансов получитьвремязавершенияспящегосеанса получитьвремязасыпанияпассивногосеанса получитьвремяожиданияблокировкиданных получитьданныевыбора получитьдополнительныйпараметрклиенталицензирования получитьдопустимыекодылокализации получитьдопустимыечасовыепояса получитьзаголовокклиентскогоприложения получитьзаголовоксистемы получитьзначенияотборажурналарегистрации получитьидентификаторконфигурации получитьизвременногохранилища получитьимявременногофайла получитьимяклиенталицензирования получитьинформациюэкрановклиента получитьиспользованиежурналарегистрации получитьиспользованиесобытияжурналарегистрации получитькраткийзаголовокприложения получитьмакетоформления получитьмаскувсефайлы получитьмаскувсефайлыклиента получитьмаскувсефайлысервера получитьместоположениепоадресу получитьминимальнуюдлинупаролейпользователей получитьнавигационнуюссылку получитьнавигационнуюссылкуинформационнойбазы получитьобновлениеконфигурациибазыданных получитьобновлениепредопределенныхданныхинформационнойбазы получитьобщиймакет получитьобщуюформу получитьокна получитьоперативнуюотметкувремени получитьотключениебезопасногорежима получитьпараметрыфункциональныхопцийинтерфейса получитьполноеимяпредопределенногозначения получитьпредставлениянавигационныхссылок получитьпроверкусложностипаролейпользователей получитьразделительпути получитьразделительпутиклиента получитьразделительпутисервера получитьсеансыинформационнойбазы получитьскоростьклиентскогосоединения получитьсоединенияинформационнойбазы получитьсообщенияпользователю получитьсоответствиеобъектаиформы получитьсоставстандартногоинтерфейсаodata получитьструктурухранениябазыданных получитьтекущийсеансинформационнойбазы получитьфайл получитьфайлы получитьформу получитьфункциональнуюопцию получитьфункциональнуюопциюинтерфейса получитьчасовойпоясинформационнойбазы пользователиос поместитьвовременноехранилище поместитьфайл поместитьфайлы прав праводоступа предопределенноезначение представлениекодалокализации представлениепериода представлениеправа представлениеприложения представлениесобытияжурналарегистрации представлениечасовогопояса предупреждение прекратитьработусистемы привилегированныйрежим продолжитьвызов прочитатьjson прочитатьxml прочитатьдатуjson пустаястрока рабочийкаталогданныхпользователя разблокироватьданныедляредактирования разделитьфайл разорватьсоединениесвнешнимисточникомданных раскодироватьстроку рольдоступна секунда сигнал символ скопироватьжурналрегистрации смещениелетнеговремени смещениестандартноговремени соединитьбуферыдвоичныхданных создатькаталог создатьфабрикуxdto сокрл сокрлп сокрп сообщить состояние сохранитьзначение сохранитьнастройкипользователя сред стрдлина стрзаканчиваетсяна стрзаменить стрнайти стрначинаетсяс строка строкасоединенияинформационнойбазы стрполучитьстроку стрразделить стрсоединить стрсравнить стрчисловхождений стрчислострок стршаблон текущаядата текущаядатасеанса текущаяуниверсальнаядата текущаяуниверсальнаядатавмиллисекундах текущийвариантинтерфейсаклиентскогоприложения текущийвариантосновногошрифтаклиентскогоприложения текущийкодлокализации текущийрежимзапуска текущийязык текущийязыксистемы тип типзнч транзакцияактивна трег удалитьданныеинформационнойбазы удалитьизвременногохранилища удалитьобъекты удалитьфайлы универсальноевремя установитьбезопасныйрежим установитьбезопасныйрежимразделенияданных установитьблокировкусеансов установитьвнешнююкомпоненту установитьвремязавершенияспящегосеанса установитьвремязасыпанияпассивногосеанса установитьвремяожиданияблокировкиданных установитьзаголовокклиентскогоприложения установитьзаголовоксистемы установитьиспользованиежурналарегистрации установитьиспользованиесобытияжурналарегистрации установитькраткийзаголовокприложения установитьминимальнуюдлинупаролейпользователей установитьмонопольныйрежим установитьнастройкиклиенталицензирования установитьобновлениепредопределенныхданныхинформационнойбазы установитьотключениебезопасногорежима установитьпараметрыфункциональныхопцийинтерфейса установитьпривилегированныйрежим установитьпроверкусложностипаролейпользователей установитьрасширениеработыскриптографией установитьрасширениеработысфайлами установитьсоединениесвнешнимисточникомданных установитьсоответствиеобъектаиформы установитьсоставстандартногоинтерфейсаodata установитьчасовойпоясинформационнойбазы установитьчасовойпояссеанса формат цел час часовойпояс часовойпояссеанса число числопрописью этоадресвременногохранилища ";
+  const v8_global_context_property = "wsссылки библиотекакартинок библиотекамакетовоформлениякомпоновкиданных библиотекастилей бизнеспроцессы внешниеисточникиданных внешниеобработки внешниеотчеты встроенныепокупки главныйинтерфейс главныйстиль документы доставляемыеуведомления журналыдокументов задачи информацияобинтернетсоединении использованиерабочейдаты историяработыпользователя константы критерииотбора метаданные обработки отображениерекламы отправкадоставляемыхуведомлений отчеты панельзадачос параметрзапуска параметрысеанса перечисления планывидоврасчета планывидовхарактеристик планыобмена планысчетов полнотекстовыйпоиск пользователиинформационнойбазы последовательности проверкавстроенныхпокупок рабочаядата расширенияконфигурации регистрыбухгалтерии регистрынакопления регистрырасчета регистрысведений регламентныезадания сериализаторxdto справочники средствагеопозиционирования средствакриптографии средствамультимедиа средстваотображениярекламы средствапочты средствателефонии фабрикаxdto файловыепотоки фоновыезадания хранилищанастроек хранилищевариантовотчетов хранилищенастроекданныхформ хранилищеобщихнастроек хранилищепользовательскихнастроекдинамическихсписков хранилищепользовательскихнастроекотчетов хранилищесистемныхнастроек ";
+  const BUILTIN = v7_system_constants + v7_global_context_methods + v8_global_context_methods + v8_global_context_property;
+  const v8_system_sets_of_values = "webцвета windowsцвета windowsшрифты библиотекакартинок рамкистиля символы цветастиля шрифтыстиля ";
+  const v8_system_enums_interface = "автоматическоесохранениеданныхформывнастройках автонумерациявформе автораздвижениесерий анимациядиаграммы вариантвыравниванияэлементовизаголовков вариантуправлениявысотойтаблицы вертикальнаяпрокруткаформы вертикальноеположение вертикальноеположениеэлемента видгруппыформы виддекорацииформы виддополненияэлементаформы видизмененияданных видкнопкиформы видпереключателя видподписейкдиаграмме видполяформы видфлажка влияниеразмеранапузырекдиаграммы горизонтальноеположение горизонтальноеположениеэлемента группировкаколонок группировкаподчиненныхэлементовформы группыиэлементы действиеперетаскивания дополнительныйрежимотображения допустимыедействияперетаскивания интервалмеждуэлементамиформы использованиевывода использованиеполосыпрокрутки используемоезначениеточкибиржевойдиаграммы историявыборапривводе источникзначенийоситочекдиаграммы источникзначенияразмерапузырькадиаграммы категориягруппыкоманд максимумсерий начальноеотображениедерева начальноеотображениесписка обновлениетекстаредактирования ориентациядендрограммы ориентациядиаграммы ориентацияметокдиаграммы ориентацияметоксводнойдиаграммы ориентацияэлементаформы отображениевдиаграмме отображениевлегендедиаграммы отображениегруппыкнопок отображениезаголовкашкалыдиаграммы отображениезначенийсводнойдиаграммы отображениезначенияизмерительнойдиаграммы отображениеинтерваладиаграммыганта отображениекнопки отображениекнопкивыбора отображениеобсужденийформы отображениеобычнойгруппы отображениеотрицательныхзначенийпузырьковойдиаграммы отображениепанелипоиска отображениеподсказки отображениепредупрежденияприредактировании отображениеразметкиполосырегулирования отображениестраницформы отображениетаблицы отображениетекстазначениядиаграммыганта отображениеуправленияобычнойгруппы отображениефигурыкнопки палитрацветовдиаграммы поведениеобычнойгруппы поддержкамасштабадендрограммы поддержкамасштабадиаграммыганта поддержкамасштабасводнойдиаграммы поисквтаблицепривводе положениезаголовкаэлементаформы положениекартинкикнопкиформы положениекартинкиэлементаграфическойсхемы положениекоманднойпанелиформы положениекоманднойпанелиэлементаформы положениеопорнойточкиотрисовки положениеподписейкдиаграмме положениеподписейшкалызначенийизмерительнойдиаграммы положениесостоянияпросмотра положениестрокипоиска положениетекстасоединительнойлинии положениеуправленияпоиском положениешкалывремени порядокотображенияточекгоризонтальнойгистограммы порядоксерийвлегендедиаграммы размеркартинки расположениезаголовкашкалыдиаграммы растягиваниеповертикалидиаграммыганта режимавтоотображениясостояния режимвводастроктаблицы режимвыборанезаполненного режимвыделениядаты режимвыделениястрокитаблицы режимвыделениятаблицы режимизмененияразмера режимизменениясвязанногозначения режимиспользованиядиалогапечати режимиспользованияпараметракоманды режиммасштабированияпросмотра режимосновногоокнаклиентскогоприложения режимоткрытияокнаформы режимотображениявыделения режимотображениягеографическойсхемы режимотображениязначенийсерии режимотрисовкисеткиграфическойсхемы режимполупрозрачностидиаграммы режимпробеловдиаграммы режимразмещениянастранице режимредактированияколонки режимсглаживаниядиаграммы режимсглаживанияиндикатора режимсписказадач сквозноевыравнивание сохранениеданныхформывнастройках способзаполнениятекстазаголовкашкалыдиаграммы способопределенияограничивающегозначениядиаграммы стандартнаягруппакоманд стандартноеоформление статусоповещенияпользователя стильстрелки типаппроксимациилиниитрендадиаграммы типдиаграммы типединицышкалывремени типимпортасерийслоягеографическойсхемы типлиниигеографическойсхемы типлиниидиаграммы типмаркерагеографическойсхемы типмаркерадиаграммы типобластиоформления типорганизацииисточникаданныхгеографическойсхемы типотображениясериислоягеографическойсхемы типотображенияточечногообъектагеографическойсхемы типотображенияшкалыэлементалегендыгеографическойсхемы типпоискаобъектовгеографическойсхемы типпроекциигеографическойсхемы типразмещенияизмерений типразмещенияреквизитовизмерений типрамкиэлементауправления типсводнойдиаграммы типсвязидиаграммыганта типсоединениязначенийпосериямдиаграммы типсоединенияточекдиаграммы типсоединительнойлинии типстороныэлементаграфическойсхемы типформыотчета типшкалырадарнойдиаграммы факторлиниитрендадиаграммы фигуракнопки фигурыграфическойсхемы фиксациявтаблице форматдняшкалывремени форматкартинки ширинаподчиненныхэлементовформы ";
+  const v8_system_enums_objects_properties = "виддвижениябухгалтерии виддвижениянакопления видпериодарегистрарасчета видсчета видточкимаршрутабизнеспроцесса использованиеагрегатарегистранакопления использованиегруппиэлементов использованиережимапроведения использованиесреза периодичностьагрегатарегистранакопления режимавтовремя режимзаписидокумента режимпроведениядокумента ";
+  const v8_system_enums_exchange_plans = "авторегистрацияизменений допустимыйномерсообщения отправкаэлементаданных получениеэлементаданных ";
+  const v8_system_enums_tabular_document = "использованиерасшифровкитабличногодокумента ориентациястраницы положениеитоговколоноксводнойтаблицы положениеитоговстроксводнойтаблицы положениетекстаотносительнокартинки расположениезаголовкагруппировкитабличногодокумента способчтениязначенийтабличногодокумента типдвустороннейпечати типзаполненияобластитабличногодокумента типкурсоровтабличногодокумента типлиниирисункатабличногодокумента типлинииячейкитабличногодокумента типнаправленияпереходатабличногодокумента типотображениявыделениятабличногодокумента типотображениялинийсводнойтаблицы типразмещениятекстатабличногодокумента типрисункатабличногодокумента типсмещениятабличногодокумента типузоратабличногодокумента типфайлатабличногодокумента точностьпечати чередованиерасположениястраниц ";
+  const v8_system_enums_sheduler = "отображениевремениэлементовпланировщика ";
+  const v8_system_enums_formatted_document = "типфайлаформатированногодокумента ";
+  const v8_system_enums_query = "обходрезультатазапроса типзаписизапроса ";
+  const v8_system_enums_report_builder = "видзаполнениярасшифровкипостроителяотчета типдобавленияпредставлений типизмеренияпостроителяотчета типразмещенияитогов ";
+  const v8_system_enums_files = "доступкфайлу режимдиалогавыборафайла режимоткрытияфайла ";
+  const v8_system_enums_query_builder = "типизмеренияпостроителязапроса ";
+  const v8_system_enums_data_analysis = "видданныханализа методкластеризации типединицыинтервалавременианализаданных типзаполнениятаблицырезультатаанализаданных типиспользованиячисловыхзначенийанализаданных типисточникаданныхпоискаассоциаций типколонкианализаданныхдереворешений типколонкианализаданныхкластеризация типколонкианализаданныхобщаястатистика типколонкианализаданныхпоискассоциаций типколонкианализаданныхпоискпоследовательностей типколонкимоделипрогноза типмерырасстоянияанализаданных типотсеченияправилассоциации типполяанализаданных типстандартизациианализаданных типупорядочиванияправилассоциациианализаданных типупорядочиванияшаблоновпоследовательностейанализаданных типупрощениядереварешений ";
+  const v8_system_enums_xml_json_xs_dom_xdto_ws = "wsнаправлениепараметра вариантxpathxs вариантзаписидатыjson вариантпростоготипаxs видгруппымоделиxs видфасетаxdto действиепостроителяdom завершенностьпростоготипаxs завершенностьсоставноготипаxs завершенностьсхемыxs запрещенныеподстановкиxs исключениягруппподстановкиxs категорияиспользованияатрибутаxs категорияограниченияидентичностиxs категорияограниченияпространствименxs методнаследованияxs модельсодержимогоxs назначениетипаxml недопустимыеподстановкиxs обработкапробельныхсимволовxs обработкасодержимогоxs ограничениезначенияxs параметрыотбораузловdom переносстрокjson позициявдокументеdom пробельныесимволыxml типатрибутаxml типзначенияjson типканоническогоxml типкомпонентыxs типпроверкиxml типрезультатаdomxpath типузлаdom типузлаxml формаxml формапредставленияxs форматдатыjson экранированиесимволовjson ";
+  const v8_system_enums_data_composition_system = "видсравнениякомпоновкиданных действиеобработкирасшифровкикомпоновкиданных направлениесортировкикомпоновкиданных расположениевложенныхэлементоврезультатакомпоновкиданных расположениеитоговкомпоновкиданных расположениегруппировкикомпоновкиданных расположениеполейгруппировкикомпоновкиданных расположениеполякомпоновкиданных расположениереквизитовкомпоновкиданных расположениересурсовкомпоновкиданных типбухгалтерскогоостаткакомпоновкиданных типвыводатекстакомпоновкиданных типгруппировкикомпоновкиданных типгруппыэлементовотборакомпоновкиданных типдополненияпериодакомпоновкиданных типзаголовкаполейкомпоновкиданных типмакетагруппировкикомпоновкиданных типмакетаобластикомпоновкиданных типостаткакомпоновкиданных типпериодакомпоновкиданных типразмещениятекстакомпоновкиданных типсвязинаборовданныхкомпоновкиданных типэлементарезультатакомпоновкиданных расположениелегендыдиаграммыкомпоновкиданных типпримененияотборакомпоновкиданных режимотображенияэлементанастройкикомпоновкиданных режимотображениянастроеккомпоновкиданных состояниеэлементанастройкикомпоновкиданных способвосстановлениянастроеккомпоновкиданных режимкомпоновкирезультата использованиепараметракомпоновкиданных автопозицияресурсовкомпоновкиданных вариантиспользованиягруппировкикомпоновкиданных расположениересурсоввдиаграммекомпоновкиданных фиксациякомпоновкиданных использованиеусловногооформлениякомпоновкиданных ";
+  const v8_system_enums_email = "важностьинтернетпочтовогосообщения обработкатекстаинтернетпочтовогосообщения способкодированияинтернетпочтовоговложения способкодированиянеasciiсимволовинтернетпочтовогосообщения типтекстапочтовогосообщения протоколинтернетпочты статусразборапочтовогосообщения ";
+  const v8_system_enums_logbook = "режимтранзакциизаписижурналарегистрации статустранзакциизаписижурналарегистрации уровеньжурналарегистрации ";
+  const v8_system_enums_cryptography = "расположениехранилищасертификатовкриптографии режимвключениясертификатовкриптографии режимпроверкисертификатакриптографии типхранилищасертификатовкриптографии ";
+  const v8_system_enums_zip = "кодировкаименфайловвzipфайле методсжатияzip методшифрованияzip режимвосстановленияпутейфайловzip режимобработкиподкаталоговzip режимсохраненияпутейzip уровеньсжатияzip ";
+  const v8_system_enums_other = "звуковоеоповещение направлениепереходакстроке позициявпотоке порядокбайтов режимблокировкиданных режимуправленияблокировкойданных сервисвстроенныхпокупок состояниефоновогозадания типподписчикадоставляемыхуведомлений уровеньиспользованиязащищенногосоединенияftp ";
+  const v8_system_enums_request_schema = "направлениепорядкасхемызапроса типдополненияпериодамисхемызапроса типконтрольнойточкисхемызапроса типобъединениясхемызапроса типпараметрадоступнойтаблицысхемызапроса типсоединениясхемызапроса ";
+  const v8_system_enums_properties_of_metadata_objects = "httpметод автоиспользованиеобщегореквизита автопрефиксномеразадачи вариантвстроенногоязыка видиерархии видрегистранакопления видтаблицывнешнегоисточникаданных записьдвиженийприпроведении заполнениепоследовательностей индексирование использованиебазыпланавидоврасчета использованиебыстроговыбора использованиеобщегореквизита использованиеподчинения использованиеполнотекстовогопоиска использованиеразделяемыхданныхобщегореквизита использованиереквизита назначениеиспользованияприложения назначениерасширенияконфигурации направлениепередачи обновлениепредопределенныхданных оперативноепроведение основноепредставлениевидарасчета основноепредставлениевидахарактеристики основноепредставлениезадачи основноепредставлениепланаобмена основноепредставлениесправочника основноепредставлениесчета перемещениеграницыприпроведении периодичностьномерабизнеспроцесса периодичностьномерадокумента периодичностьрегистрарасчета периодичностьрегистрасведений повторноеиспользованиевозвращаемыхзначений полнотекстовыйпоискпривводепостроке принадлежностьобъекта проведение разделениеаутентификацииобщегореквизита разделениеданныхобщегореквизита разделениерасширенийконфигурацииобщегореквизита режимавтонумерацииобъектов режимзаписирегистра режимиспользованиямодальности режимиспользованиясинхронныхвызововрасширенийплатформыивнешнихкомпонент режимповторногоиспользованиясеансов режимполученияданныхвыборапривводепостроке режимсовместимости режимсовместимостиинтерфейса режимуправленияблокировкойданныхпоумолчанию сериикодовпланавидовхарактеристик сериикодовпланасчетов сериикодовсправочника созданиепривводе способвыбора способпоискастрокипривводепостроке способредактирования типданныхтаблицывнешнегоисточникаданных типкодапланавидоврасчета типкодасправочника типмакета типномерабизнеспроцесса типномерадокумента типномеразадачи типформы удалениедвижений ";
+  const v8_system_enums_differents = "важностьпроблемыприменениярасширенияконфигурации вариантинтерфейсаклиентскогоприложения вариантмасштабаформклиентскогоприложения вариантосновногошрифтаклиентскогоприложения вариантстандартногопериода вариантстандартнойдатыначала видграницы видкартинки видотображенияполнотекстовогопоиска видрамки видсравнения видцвета видчисловогозначения видшрифта допустимаядлина допустимыйзнак использованиеbyteordermark использованиеметаданныхполнотекстовогопоиска источникрасширенийконфигурации клавиша кодвозвратадиалога кодировкаxbase кодировкатекста направлениепоиска направлениесортировки обновлениепредопределенныхданных обновлениеприизмененииданных отображениепанелиразделов проверказаполнения режимдиалогавопрос режимзапускаклиентскогоприложения режимокругления режимоткрытияформприложения режимполнотекстовогопоиска скоростьклиентскогосоединения состояниевнешнегоисточникаданных состояниеобновленияконфигурациибазыданных способвыборасертификатаwindows способкодированиястроки статуссообщения типвнешнейкомпоненты типплатформы типповеденияклавишиenter типэлементаинформацииовыполненииобновленияконфигурациибазыданных уровеньизоляциитранзакций хешфункция частидаты";
+  const CLASS = v8_system_sets_of_values + v8_system_enums_interface + v8_system_enums_objects_properties + v8_system_enums_exchange_plans + v8_system_enums_tabular_document + v8_system_enums_sheduler + v8_system_enums_formatted_document + v8_system_enums_query + v8_system_enums_report_builder + v8_system_enums_files + v8_system_enums_query_builder + v8_system_enums_data_analysis + v8_system_enums_xml_json_xs_dom_xdto_ws + v8_system_enums_data_composition_system + v8_system_enums_email + v8_system_enums_logbook + v8_system_enums_cryptography + v8_system_enums_zip + v8_system_enums_other + v8_system_enums_request_schema + v8_system_enums_properties_of_metadata_objects + v8_system_enums_differents;
+  const v8_shared_object = "comобъект ftpсоединение httpзапрос httpсервисответ httpсоединение wsопределения wsпрокси xbase анализданных аннотацияxs блокировкаданных буфердвоичныхданных включениеxs выражениекомпоновкиданных генераторслучайныхчисел географическаясхема географическиекоординаты графическаясхема группамоделиxs данныерасшифровкикомпоновкиданных двоичныеданные дендрограмма диаграмма диаграммаганта диалогвыборафайла диалогвыборацвета диалогвыборашрифта диалограсписаниярегламентногозадания диалогредактированиястандартногопериода диапазон документdom документhtml документацияxs доставляемоеуведомление записьdom записьfastinfoset записьhtml записьjson записьxml записьzipфайла записьданных записьтекста записьузловdom запрос защищенноесоединениеopenssl значенияполейрасшифровкикомпоновкиданных извлечениетекста импортxs интернетпочта интернетпочтовоесообщение интернетпочтовыйпрофиль интернетпрокси интернетсоединение информациядляприложенияxs использованиеатрибутаxs использованиесобытияжурналарегистрации источникдоступныхнастроеккомпоновкиданных итераторузловdom картинка квалификаторыдаты квалификаторыдвоичныхданных квалификаторыстроки квалификаторычисла компоновщикмакетакомпоновкиданных компоновщикнастроеккомпоновкиданных конструктормакетаоформлениякомпоновкиданных конструкторнастроеккомпоновкиданных конструкторформатнойстроки линия макеткомпоновкиданных макетобластикомпоновкиданных макетоформлениякомпоновкиданных маскаxs менеджеркриптографии наборсхемxml настройкикомпоновкиданных настройкисериализацииjson обработкакартинок обработкарасшифровкикомпоновкиданных обходдереваdom объявлениеатрибутаxs объявлениенотацииxs объявлениеэлементаxs описаниеиспользованиясобытиядоступжурналарегистрации описаниеиспользованиясобытияотказвдоступежурналарегистрации описаниеобработкирасшифровкикомпоновкиданных описаниепередаваемогофайла описаниетипов определениегруппыатрибутовxs определениегруппымоделиxs определениеограниченияидентичностиxs определениепростоготипаxs определениесоставноготипаxs определениетипадокументаdom определенияxpathxs отборкомпоновкиданных пакетотображаемыхдокументов параметрвыбора параметркомпоновкиданных параметрызаписиjson параметрызаписиxml параметрычтенияxml переопределениеxs планировщик полеанализаданных полекомпоновкиданных построительdom построительзапроса построительотчета построительотчетаанализаданных построительсхемxml поток потоквпамяти почта почтовоесообщение преобразованиеxsl преобразованиекканоническомуxml процессорвыводарезультатакомпоновкиданныхвколлекциюзначений процессорвыводарезультатакомпоновкиданныхвтабличныйдокумент процессоркомпоновкиданных разыменовательпространствименdom рамка расписаниерегламентногозадания расширенноеимяxml результатчтенияданных своднаядиаграмма связьпараметравыбора связьпотипу связьпотипукомпоновкиданных сериализаторxdto сертификатклиентаwindows сертификатклиентафайл сертификаткриптографии сертификатыудостоверяющихцентровwindows сертификатыудостоверяющихцентровфайл сжатиеданных системнаяинформация сообщениепользователю сочетаниеклавиш сравнениезначений стандартнаядатаначала стандартныйпериод схемаxml схемакомпоновкиданных табличныйдокумент текстовыйдокумент тестируемоеприложение типданныхxml уникальныйидентификатор фабрикаxdto файл файловыйпоток фасетдлиныxs фасетколичестваразрядовдробнойчастиxs фасетмаксимальноговключающегозначенияxs фасетмаксимальногоисключающегозначенияxs фасетмаксимальнойдлиныxs фасетминимальноговключающегозначенияxs фасетминимальногоисключающегозначенияxs фасетминимальнойдлиныxs фасетобразцаxs фасетобщегоколичестваразрядовxs фасетперечисленияxs фасетпробельныхсимволовxs фильтрузловdom форматированнаястрока форматированныйдокумент фрагментxs хешированиеданных хранилищезначения цвет чтениеfastinfoset чтениеhtml чтениеjson чтениеxml чтениеzipфайла чтениеданных чтениетекста чтениеузловdom шрифт элементрезультатакомпоновкиданных ";
+  const v8_universal_collection = "comsafearray деревозначений массив соответствие списокзначений структура таблицазначений фиксированнаяструктура фиксированноесоответствие фиксированныймассив ";
+  const TYPE = v8_shared_object + v8_universal_collection;
+  const LITERAL = "null истина ложь неопределено";
+  const NUMBERS = hljs.inherit(hljs.NUMBER_MODE);
+  const STRINGS = {
+    className: "string",
+    begin: '"|\\|',
+    end: '"|$',
+    contains: [{ begin: '""' }]
+  };
+  const DATE = {
+    begin: "'",
+    end: "'",
+    excludeBegin: true,
+    excludeEnd: true,
+    contains: [
+      {
+        className: "number",
+        begin: "\\d{4}([\\.\\\\/:-]?\\d{2}){0,5}"
+      }
+    ]
+  };
+  const PUNCTUATION = {
+    match: /[;()+\-:=,]/,
+    className: "punctuation",
+    relevance: 0
+  };
+  const COMMENTS = hljs.inherit(hljs.C_LINE_COMMENT_MODE);
+  const META = {
+    className: "meta",
+    begin: "#|&",
+    end: "$",
+    keywords: {
+      $pattern: UNDERSCORE_IDENT_RE2,
+      keyword: KEYWORD + METAKEYWORD
+    },
+    contains: [COMMENTS]
+  };
+  const SYMBOL = {
+    className: "symbol",
+    begin: "~",
+    end: ";|:",
+    excludeEnd: true
+  };
+  const FUNCTION = {
+    className: "function",
+    variants: [
+      {
+        begin: "процедура|функция",
+        end: "\\)",
+        keywords: "процедура функция"
+      },
+      {
+        begin: "конецпроцедуры|конецфункции",
+        keywords: "конецпроцедуры конецфункции"
+      }
+    ],
+    contains: [
+      {
+        begin: "\\(",
+        end: "\\)",
+        endsParent: true,
+        contains: [
+          {
+            className: "params",
+            begin: UNDERSCORE_IDENT_RE2,
+            end: ",",
+            excludeEnd: true,
+            endsWithParent: true,
+            keywords: {
+              $pattern: UNDERSCORE_IDENT_RE2,
+              keyword: "знач",
+              literal: LITERAL
+            },
+            contains: [
+              NUMBERS,
+              STRINGS,
+              DATE
+            ]
+          },
+          COMMENTS
+        ]
+      },
+      hljs.inherit(hljs.TITLE_MODE, { begin: UNDERSCORE_IDENT_RE2 })
+    ]
+  };
+  return {
+    name: "1C:Enterprise",
+    case_insensitive: true,
+    keywords: {
+      $pattern: UNDERSCORE_IDENT_RE2,
+      keyword: KEYWORD,
+      built_in: BUILTIN,
+      class: CLASS,
+      type: TYPE,
+      literal: LITERAL
+    },
+    contains: [
+      META,
+      FUNCTION,
+      COMMENTS,
+      SYMBOL,
+      NUMBERS,
+      STRINGS,
+      DATE,
+      PUNCTUATION
+    ]
+  };
+}
+function gherkin(hljs) {
+  return {
+    name: "Gherkin",
+    aliases: ["feature"],
+    keywords: "Feature Background Ability Business Need Scenario Scenarios Scenario Outline Scenario Template Examples Given And Then But When",
+    contains: [
+      {
+        className: "symbol",
+        begin: "\\*",
+        relevance: 0
+      },
+      {
+        className: "meta",
+        begin: "@[^@\\s]+"
+      },
+      {
+        begin: "\\|",
+        end: "\\|\\w*$",
+        contains: [
+          {
+            className: "string",
+            begin: "[^|]+"
+          }
+        ]
+      },
+      {
+        className: "variable",
+        begin: "<",
+        end: ">"
+      },
+      hljs.HASH_COMMENT_MODE,
+      {
+        className: "string",
+        begin: '"""',
+        end: '"""'
+      },
+      hljs.QUOTE_STRING_MODE
+    ]
+  };
+}
+function registerLanguages() {
+  HighlightJS.registerLanguage("json", json);
+  HighlightJS.registerLanguage("xml", xml);
+  HighlightJS.registerLanguage("1c", _1c);
+  HighlightJS.registerLanguage("gherkin", gherkin);
+  HighlightJS.registerLanguage("bsl", function(hljs2) {
+    const definition = hljs2.getLanguage("1c");
+    return hljs2.inherit(definition, {
+      aliases: ["bsl", "1c"]
+    });
+  });
+}
+function configureMarked(marked2) {
+  marked2.setOptions({
+    highlight: function(code, lang) {
+      if (lang && HighlightJS.getLanguage(lang)) {
+        try {
+          return HighlightJS.highlight(code, { language: lang }).value;
+        } catch (err) {
+          console.warn("Ошибка подсветки синтаксиса:", err);
+        }
+      }
+      return HighlightJS.highlightAuto(code).value;
+    },
+    breaks: true,
+    gfm: true,
+    langPrefix: "language-",
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false
+  });
+}
+function highlightCodeBlocks(html2) {
+  return html2.replace(/<pre><code class="language-([^"]*)">([\s\S]*?)<\/code><\/pre>/g, (_match, lang, code) => {
+    try {
+      const decodedCode = decodeHtmlEntities(code);
+      const highlighted = HighlightJS.highlight(decodedCode, { language: lang || "plaintext" }).value;
+      return `<pre><code class="language-${lang} hljs">${highlighted}</code></pre>`;
+    } catch (error2) {
+      console.warn("Ошибка подсветки синтаксиса для языка:", lang, error2);
+      return `<pre><code class="language-${lang}">${code}</code></pre>`;
+    }
+  });
+}
+function decodeHtmlEntities(text) {
+  const textarea = document.createElement("textarea");
+  textarea.innerHTML = text;
+  return textarea.value;
+}
+function createErrorHTML(message) {
+  return `
+        <div style="color: #dc3545; text-align: center; padding: 40px;">
+            <h2>❌ Ошибка</h2>
+            <p>${message}</p>
+        </div>
+    `;
+}
+function createContentHTML(content) {
+  return `<div>${content}</div>`;
+}
+function logError(context, error2) {
+  console.error(`${context}:`, error2);
+}
+let librariesInitialized = false;
+function initializeLibraries() {
+  if (librariesInitialized) return;
+  registerLanguages();
+  configureMarked(marked);
+  librariesInitialized = true;
+}
+function renderMarkdown(markdownString, containerId) {
+  try {
+    initializeLibraries();
+    const html2 = marked.parse(markdownString);
+    const processedHtml = highlightCodeBlocks(html2);
+    const finalHtml = createContentHTML(processedHtml);
+    let targetContainer = null;
+    if (containerId) {
+      targetContainer = document.getElementById(containerId);
+      if (!targetContainer) {
+        logError("Контейнер не найден", new Error(`Элемент с ID "${containerId}" не найден`));
+        return;
+      }
+    } else {
+      targetContainer = document.getElementById("markdownContent");
+      if (!targetContainer) {
+        logError("Основной контейнер не найден", new Error('Элемент с ID "markdownContent" не найден'));
+        return;
+      }
+    }
+    targetContainer.innerHTML = finalHtml;
+    if (!containerId || containerId === "markdownContent") {
+      const loading = document.getElementById("loading");
+      const emptyState = document.getElementById("emptyState");
+      if (loading) {
+        loading.style.display = "none";
+      }
+      if (emptyState) {
+        emptyState.style.display = "none";
+      }
+    }
+  } catch (error2) {
+    logError("Ошибка рендеринга markdown", error2);
+    const errorHtml = createErrorHTML("Ошибка рендеринга markdown: " + error2.message);
+    let targetContainer = null;
+    if (containerId) {
+      targetContainer = document.getElementById(containerId);
+    } else {
+      targetContainer = document.getElementById("markdownContent");
+    }
+    if (targetContainer) {
+      targetContainer.innerHTML = errorHtml;
+    }
+  }
+}
+function clearMarkdown(containerId) {
+  let targetContainer = null;
+  if (containerId) {
+    targetContainer = document.getElementById(containerId);
+    if (!targetContainer) {
+      logError("Контейнер не найден", new Error(`Элемент с ID "${containerId}" не найден`));
+      return;
+    }
+  } else {
+    targetContainer = document.getElementById("markdownContent");
+    if (!targetContainer) {
+      logError("Основной контейнер не найден", new Error('Элемент с ID "markdownContent" не найден'));
+      return;
+    }
+  }
+  targetContainer.innerHTML = "";
+  if (!containerId || containerId === "markdownContent") {
+    const emptyState = document.getElementById("emptyState");
+    if (emptyState) {
+      emptyState.style.display = "block";
+    }
+  }
+}
+function isMarkdownSupported() {
+  return typeof marked !== "undefined";
+}
+if (typeof window !== "undefined") {
+  window.renderMarkdown = renderMarkdown;
+  window.clearMarkdown = clearMarkdown;
+  window.isMarkdownSupported = isMarkdownSupported;
+}
+class MarkdownViewer {
+  constructor() {
+    if (!isMarkdownSupported()) {
+      console.error("Markdown не поддерживается в данной среде");
+      return;
+    }
+    console.log("Markdown Viewer инициализирован");
+    console.log("Доступные функции:");
+    console.log("- renderMarkdown(markdownString, containerId?)");
+    console.log("- clearMarkdown(containerId)");
+    console.log("- isMarkdownSupported()");
+    console.log("renderMarkdown доступна:", typeof renderMarkdown === "function");
+    console.log("clearMarkdown доступна:", typeof clearMarkdown === "function");
+  }
+}
+document.addEventListener("DOMContentLoaded", () => {
+  new MarkdownViewer();
+});
+
+</script>
+  <style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Segoe WPC", system-ui, "Inter", "Ubuntu", "Droid Sans", sans-serif;
+    font-size: 16px;
+    line-height: 22px;
+    color: #333;
+    background-color: #f8f9fa;
+    height: 100vh;
+    overflow: hidden;
+}
+
+.viewer-container {
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+.content {
+    flex: 1;
+    overflow-y: auto;
+    padding: 20px;
+    background: white;
+}
+
+.markdown-content {
+    max-width: 100%;
+    margin: 0 auto;
+}
+
+/* Markdown стили */
+.markdown-content h1 {
+    color: #2c3e50;
+    border-bottom: 2px solid #3498db;
+    padding-bottom: 10px;
+    margin-bottom: 20px;
+    font-size: 2.2em;
+}
+
+.markdown-content h2 {
+    color: #34495e;
+    border-bottom: 1px solid #bdc3c7;
+    padding-bottom: 5px;
+    margin-top: 30px;
+    margin-bottom: 15px;
+    font-size: 1.8em;
+}
+
+.markdown-content h3 {
+    color: #34495e;
+    margin-top: 25px;
+    margin-bottom: 10px;
+    font-size: 1.4em;
+}
+
+.markdown-content h4, .markdown-content h5, .markdown-content h6 {
+    color: #34495e;
+    margin-top: 20px;
+    margin-bottom: 10px;
+}
+
+.markdown-content p {
+    margin-bottom: 15px;
+    font-size: 14px;
+    line-height: 22px;
+}
+
+.markdown-content ul, .markdown-content ol {
+    margin-bottom: 15px;
+    padding-left: 30px;
+}
+
+.markdown-content li {
+    margin-bottom: 5px;
+}
+
+.markdown-content blockquote {
+    border-left: 4px solid #3498db;
+    padding-left: 20px;
+    margin: 20px 0;
+    color: #7f8c8d;
+    font-style: italic;
+    background: #f8f9fa;
+    padding: 15px 20px;
+    border-radius: 0 5px 5px 0;
+}
+
+.markdown-content :not(pre) > code {
+    font-family: 'Consolas', 'SFMono-Regular', 'Liberation Mono', 'Courier New', 'Menlo', 'Monaco', 'Ubuntu Mono', monospace;
+    font-size: 0.95em;
+    background: #f2f2f2;
+    color: inherit;
+    border: 1px solid #e1e4e8;
+    padding: 0.2em 0.4em;
+    border-radius: 4px;
+}
+
+.markdown-content pre {
+    background: #f6f8fa;
+    color: #24292e;
+    padding: 12px;
+    border-radius: 5px;
+    overflow-x: auto;
+    margin: 20px 0;
+    position: relative;
+    border: 1px solid #e1e4e8;
+}
+
+.markdown-content pre code {
+    background: none;
+    padding: 0;
+    color: inherit;
+    font-size: 13px;
+    font-family: 'Consolas', 'SFMono-Regular', 'Liberation Mono', 'Courier New', 'Menlo', 'Monaco', 'Ubuntu Mono', monospace;
+    line-height: 1.5;
+    tab-size: 4;
+    border: none;
+}
+
+.markdown-content table {
+    border-collapse: collapse;
+    width: 100%;
+    margin: 20px 0;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+}
+
+.markdown-content th, .markdown-content td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: left;
+}
+
+.markdown-content th {
+    background: #f8f9fa;
+    font-weight: 600;
+}
+
+.markdown-content tr:nth-child(even) {
+    background: #f8f9fa;
+}
+
+.markdown-content a {
+    color: #3498db;
+    text-decoration: none;
+}
+
+.markdown-content a:hover {
+    text-decoration: underline;
+}
+
+.markdown-content img {
+    max-width: 100%;
+    height: auto;
+    border-radius: 5px;
+    margin: 10px 0;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+.markdown-content hr {
+    border: none;
+    height: 2px;
+    background: linear-gradient(to right, transparent, #bdc3c7, transparent);
+    margin: 30px 0;
+}
+
+/* Специальные стили для языков программирования - светлая тема */
+.language-bsl {
+    background: #f6f8fa !important;
+}
+
+.language-gherkin {
+    background: #f6f8fa !important;
+}
+
+.language-json {
+    background: #f6f8fa !important;
+}
+
+/* Улучшенные стили для подсветки кода - светлая тема */
+.markdown-content pre code.hljs {
+    background: #f6f8fa !important;
+    color: #24292e !important;
+    padding: 0 !important;
+    border-radius: 5px !important;
+    overflow-x: auto !important;
+    font-size: 13px !important;
+    line-height: 1.5 !important;
+    font-family: 'Consolas', 'SFMono-Regular', 'Liberation Mono', 'Courier New', 'Menlo', 'Monaco', 'Ubuntu Mono', monospace !important;
+}
+
+.markdown-content pre code.hljs .hljs-keyword {
+    color: #d73a49 !important;
+    font-weight: bold !important;
+}
+
+.markdown-content pre code.hljs .hljs-string {
+    color: #032f62 !important;
+}
+
+.markdown-content pre code.hljs .hljs-comment {
+    color: #6a737d !important;
+    font-style: italic !important;
+}
+
+.markdown-content pre code.hljs .hljs-number {
+    color: #005cc5 !important;
+}
+
+.markdown-content pre code.hljs .hljs-function .hljs-title {
+    color: #6f42c1 !important;
+}
+
+.markdown-content pre code.hljs .hljs-built_in {
+    color: #e36209 !important;
+}
+
+.markdown-content pre code.hljs .hljs-type {
+    color: #005cc5 !important;
+}
+
+.markdown-content pre code.hljs .hljs-literal {
+    color: #e36209 !important;
+}
+
+.markdown-content pre code.hljs .hljs-attr {
+    color: #005cc5 !important;
+}
+
+.markdown-content pre code.hljs .hljs-punctuation {
+    color: #6a737d !important;
+}
+
+/* Адаптивность */
+@media (max-width: 768px) {
+    .content {
+        padding: 15px;
+    }
+}
+
+/* Стили для состояний */
+.loading {
+    display: none;
+    text-align: center;
+    padding: 40px;
+    color: #6c757d;
+}
+
+.loading.show {
+    display: block;
+}
+
+.empty-state {
+    text-align: center;
+    padding: 60px 20px;
+    color: #6c757d;
+}
+
+.empty-state h2 {
+    margin-bottom: 15px;
+    color: #495057;
+}
+
+.empty-state p {
+    font-size: 14px;
+    line-height: 22px;
+}
+pre code.hljs {
+  display: block;
+  overflow-x: auto;
+  padding: 1em
+}
+code.hljs {
+  padding: 3px 5px
+}
+/*!
+  Theme: GitHub
+  Description: Light theme as seen on github.com
+  Author: github.com
+  Maintainer: @Hirse
+  Updated: 2021-05-15
+
+  Outdated base version: https://github.com/primer/github-syntax-light
+  Current colors taken from GitHub's CSS
+*/
+.hljs {
+  color: #24292e;
+  background: #ffffff
+}
+.hljs-doctag,
+.hljs-keyword,
+.hljs-meta .hljs-keyword,
+.hljs-template-tag,
+.hljs-template-variable,
+.hljs-type,
+.hljs-variable.language_ {
+  /* prettylights-syntax-keyword */
+  color: #d73a49
+}
+.hljs-title,
+.hljs-title.class_,
+.hljs-title.class_.inherited__,
+.hljs-title.function_ {
+  /* prettylights-syntax-entity */
+  color: #6f42c1
+}
+.hljs-attr,
+.hljs-attribute,
+.hljs-literal,
+.hljs-meta,
+.hljs-number,
+.hljs-operator,
+.hljs-variable,
+.hljs-selector-attr,
+.hljs-selector-class,
+.hljs-selector-id {
+  /* prettylights-syntax-constant */
+  color: #005cc5
+}
+.hljs-regexp,
+.hljs-string,
+.hljs-meta .hljs-string {
+  /* prettylights-syntax-string */
+  color: #032f62
+}
+.hljs-built_in,
+.hljs-symbol {
+  /* prettylights-syntax-variable */
+  color: #e36209
+}
+.hljs-comment,
+.hljs-code,
+.hljs-formula {
+  /* prettylights-syntax-comment */
+  color: #6a737d
+}
+.hljs-name,
+.hljs-quote,
+.hljs-selector-tag,
+.hljs-selector-pseudo {
+  /* prettylights-syntax-entity-tag */
+  color: #22863a
+}
+.hljs-subst {
+  /* prettylights-syntax-storage-modifier-import */
+  color: #24292e
+}
+.hljs-section {
+  /* prettylights-syntax-markup-heading */
+  color: #005cc5;
+  font-weight: bold
+}
+.hljs-bullet {
+  /* prettylights-syntax-markup-list */
+  color: #735c0f
+}
+.hljs-emphasis {
+  /* prettylights-syntax-markup-italic */
+  color: #24292e;
+  font-style: italic
+}
+.hljs-strong {
+  /* prettylights-syntax-markup-bold */
+  color: #24292e;
+  font-weight: bold
+}
+.hljs-addition {
+  /* prettylights-syntax-markup-inserted */
+  color: #22863a;
+  background-color: #f0fff4
+}
+.hljs-deletion {
+  /* prettylights-syntax-markup-deleted */
+  color: #b31d28;
+  background-color: #ffeef0
+}
+.hljs-char.escape_,
+.hljs-link,
+.hljs-params,
+.hljs-property,
+.hljs-punctuation,
+.hljs-tag {
+  /* purposely ignored */
+  
+}
+</style>
+</head>
+<body>
+    <div class="viewer-container">
+        <div class="content">
+            <div class="loading" id="loading">Обработка...</div>
+            <div class="empty-state" id="emptyState">
+                <h2>Markdown Viewer готов к работе</h2>
+                <p>Используйте глобальную функцию renderMarkdown() для отображения markdown контента</p>
+            </div>
+            <div class="markdown-content" id="markdownContent"></div>
+        </div>
+    </div>
+
+</body>
+</html>
