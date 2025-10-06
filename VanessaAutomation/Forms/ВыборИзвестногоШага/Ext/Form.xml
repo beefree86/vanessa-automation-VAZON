@@ -2224,6 +2224,10 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Использовать markdown viewer</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Use markdown viewer</v8:content>
+				</v8:item>
 			</Title>
 			<Type>
 				<v8:Type>xs:boolean</v8:Type>
@@ -2233,7 +2237,11 @@
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Markdown viewer</v8:content>
+					<v8:content>Описание (Markdown)</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Description (Markdown)</v8:content>
 				</v8:item>
 			</Title>
 			<Type>
