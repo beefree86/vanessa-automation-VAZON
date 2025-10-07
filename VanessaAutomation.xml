@@ -14013,6 +14013,7 @@ Default: ffmpeg</v8:content>
 			<Template>CSS_3D_Сarousel</Template>
 			<Template>CSS_Skrinkast</Template>
 			<Template>КартинкаПоказатьПодробности</Template>
+			<Template>MarkdownViewer</Template>
 		</ChildObjects>
 	</ExternalDataProcessor>
 </MetaDataObject>
