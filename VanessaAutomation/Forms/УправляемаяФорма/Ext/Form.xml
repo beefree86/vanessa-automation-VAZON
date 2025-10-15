@@ -33424,20 +33424,8 @@ Click on the hyperlink for more details.</v8:content>
 								</Button>
 								<Button name="ТаблоПеременныхЗагрузить" id="4076">
 									<Type>UsualButton</Type>
-									<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
+									<CommandName>Form.Command.ЗаписьВидео1САвторизацияВСервисе</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4077"/>
-								</Button>
-								<Button name="ЗагрузитьИзСистемыОтката" id="4078">
-									<Type>UsualButton</Type>
-									<Enabled>false</Enabled>
-									<CommandName>Form.Command.ЗагрузитьИзСистемыОтката</CommandName>
-									<ExtendedTooltip name="ЗагрузитьИзСистемыОткатаРасширеннаяПодсказка" id="4079"/>
-								</Button>
-								<Button name="ВыгрузитьВСистемуОтката" id="4080">
-									<Type>UsualButton</Type>
-									<Enabled>false</Enabled>
-									<CommandName>Form.Command.ВыгрузитьВСистемуОтката</CommandName>
-									<ExtendedTooltip name="ВыгрузитьВСистемуОткатаРасширеннаяПодсказка" id="4081"/>
 								</Button>
 								<Button name="ТаблоПеременныхВыгрузить" id="4074">
 									<Type>UsualButton</Type>
@@ -33450,6 +33438,61 @@ Click on the hyperlink for more details.</v8:content>
 									<CommandName>Form.Command.ЗакрытьТаблоПеременных</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхЗакрытьТаблоПеременныхРасширеннаяПодсказка" id="2059"/>
 								</Button>
+								<CommandBar name="КоманднаяПанель" id="4088">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Командная панель</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Командная панель</v8:content>
+										</v8:item>
+									</ToolTip>
+									<ExtendedTooltip name="КоманднаяПанельРасширеннаяПодсказка" id="4089"/>
+									<ChildItems>
+										<Popup name="ГруппаКнопокСистемыОтката" id="4082">
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Система отката</v8:content>
+												</v8:item>
+											</Title>
+											<ToolTip>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Группа кнопок системы отката</v8:content>
+												</v8:item>
+											</ToolTip>
+											<ExtendedTooltip name="ГруппаКнопокСистемыОткатаРасширеннаяПодсказка" id="4083"/>
+											<ChildItems>
+												<Button name="ЗагрузитьИзСистемыОтката" id="4078">
+													<Type>CommandBarButton</Type>
+													<Enabled>false</Enabled>
+													<CommandName>Form.Command.ЗагрузитьИзСистемыОтката</CommandName>
+													<ExtendedTooltip name="ЗагрузитьИзСистемыОткатаРасширеннаяПодсказка" id="4079"/>
+												</Button>
+												<Button name="ВыгрузитьВСистемуОтката" id="4080">
+													<Type>CommandBarButton</Type>
+													<Enabled>false</Enabled>
+													<CommandName>Form.Command.ВыгрузитьВСистемуОтката</CommandName>
+													<ExtendedTooltip name="ВыгрузитьВСистемуОткатаРасширеннаяПодсказка" id="4081"/>
+												</Button>
+												<Button name="ИнформацияОСистемеОтката" id="4084">
+													<Type>CommandBarButton</Type>
+													<CommandName>Form.Command.ИнформацияОСистемеОтката</CommandName>
+													<ExtendedTooltip name="ИнформацияОСистемеОткатаРасширеннаяПодсказка" id="4085"/>
+												</Button>
+											</ChildItems>
+										</Popup>
+									</ChildItems>
+								</CommandBar>
+								<InputField name="Поле1" id="4090">
+									<ContextMenu name="Поле1КонтекстноеМеню" id="4091"/>
+									<ExtendedTooltip name="Поле1РасширеннаяПодсказка" id="4092"/>
+								</InputField>
 								<InputField name="ШагПроверкиЗначенияПеременной" id="4043">
 									<DataPath>ШагПроверкиЗначенияПеременной</DataPath>
 									<ReadOnly>true</ReadOnly>
@@ -45014,6 +45057,21 @@ Click on the hyperlink for more details.</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>ЗагрузитьИзСистемыОтката</Action>
+		</Command>
+		<Command name="ИнформацияОСистемеОтката" id="191">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Информация о системе отката</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Информация о системе отката</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>VanessaИнформацияОСистемеОтката</Action>
 		</Command>
 	</Commands>
 </Form>
