@@ -44,11 +44,12 @@
 * [Леонид Паутов, Анастасия Андриянова. Промышленное тестирование конфигураций в 1С](https://infostart.ru/1c/articles/2299156/)
 * [Александр Кунташов. Автоматизация тестирования решений на 1С: Ожидания vs Реальность](https://infostart.ru/1c/articles/2407502/)
 * [Татьяна Головкина. От ручного тестирования до запусков в Docker: наш поиск идеального процесса](https://infostart.ru/1c/articles/2418640/)
+* [Пётр Стрелаев. Несколько способов как упросить анализ отчета Allure при работе с инструментом АТ в 1С Vanessa-Automation](https://habr.com/ru/articles/953962/)
 
 ## СППР + Vanessa Automation
 
-* [Автоматизация тестирования в СППР 2.0. Часть 1](https://www.youtube.com/watch?v=1UBlV4kWx_o)
-* [Автоматизация тестирования в СППР 2.0. Часть 2](https://www.youtube.com/watch?v=gKJmJKIe-nA)
+* Автоматизация тестирования в СППР 2.0. Часть 1 [(ссылка vkvideo)](https://vkvideo.ru/video-63402641_456240263) [(ссылка youtube)](https://www.youtube.com/watch?v=1UBlV4kWx_o)
+* Автоматизация тестирования в СППР 2.0. Часть 2 [(ссылка vkvideo)](https://vkvideo.ru/video-63402641_456240264) [(ссылка youtube)](https://www.youtube.com/watch?v=gKJmJKIe-nA)
 
 ## Внешняя компонента VanessaExt
 
