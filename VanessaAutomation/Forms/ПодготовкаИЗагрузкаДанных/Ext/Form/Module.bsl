@@ -3343,7 +3343,7 @@ Function RL()
 		ReturnData.Insert("s5", "Information registers");
 		ReturnData.Insert("s6", "Accumulation registers");
 		ReturnData.Insert("s7", "Chart of accounts");
-		ReturnData.Insert("s8", "Business process");
+		ReturnData.Insert("s8", "Business processes");
 	Else	
 		ReturnData.Insert("s1", "Константы");
 		ReturnData.Insert("s2", "Справочники");
@@ -3352,7 +3352,7 @@ Function RL()
 		ReturnData.Insert("s5", "Регистры сведений");
 		ReturnData.Insert("s6", "Регистры накопления");
 		ReturnData.Insert("s7", "Планы счетов");
-		ReturnData.Insert("s8", "Бизнес-процесс");
+		ReturnData.Insert("s8", "Бизнес-процессы");
 	EndIf;	 
 	Return ReturnData;	
 EndFunction
