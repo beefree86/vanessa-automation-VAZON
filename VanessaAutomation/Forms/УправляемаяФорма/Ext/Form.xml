@@ -33427,10 +33427,10 @@ Click on the hyperlink for more details.</v8:content>
 									<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
 								</Button>
-								<Button name="ТаблоПеременныхВыгрузить" id="4074">
+								<Button name="ТаблоПеременныхВыгрузить" id="4116">
 									<Type>UsualButton</Type>
 									<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
-									<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4075"/>
+									<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
 								</Button>
 								<Button name="ТаблоПеременныхЗакрытьТаблоПеременных" id="2058">
 									<Type>UsualButton</Type>
@@ -33438,7 +33438,7 @@ Click on the hyperlink for more details.</v8:content>
 									<CommandName>Form.Command.ЗакрытьТаблоПеременных</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхЗакрытьТаблоПеременныхРасширеннаяПодсказка" id="2059"/>
 								</Button>
-								<CommandBar name="КоманднаяПанельСистемыОтката" id="4088">
+								<CommandBar name="КоманднаяПанельСистемыОтката" id="4122">
 									<Title>
 										<v8:item>
 											<v8:lang>ru</v8:lang>
@@ -33451,7 +33451,7 @@ Click on the hyperlink for more details.</v8:content>
 											<v8:content>Командная панель системы отката</v8:content>
 										</v8:item>
 									</ToolTip>
-									<ExtendedTooltip name="КоманднаяПанельСистемыОткатаРасширеннаяПодсказка" id="4089"/>
+									<ExtendedTooltip name="КоманднаяПанельСистемыОткатаРасширеннаяПодсказка" id="4123"/>
 									<ChildItems>
 										<Popup name="ГруппаКнопокСистемыОтката" id="4082">
 											<Title>
@@ -33468,30 +33468,30 @@ Click on the hyperlink for more details.</v8:content>
 											</ToolTip>
 											<ExtendedTooltip name="ГруппаКнопокСистемыОткатаРасширеннаяПодсказка" id="4083"/>
 											<ChildItems>
-												<Button name="ЗагрузитьИзСистемыОтката" id="4078">
+												<Button name="ЗагрузитьИзСистемыОтката" id="4127">
 													<Type>CommandBarButton</Type>
 													<Enabled>false</Enabled>
 													<CommandName>Form.Command.ЗагрузитьИзСистемыОтката</CommandName>
-													<ExtendedTooltip name="ЗагрузитьИзСистемыОткатаРасширеннаяПодсказка" id="4079"/>
+													<ExtendedTooltip name="ЗагрузитьИзСистемыОткатаРасширеннаяПодсказка" id="4118"/>
 												</Button>
-												<Button name="ВыгрузитьВСистемуОтката" id="4080">
+												<Button name="ВыгрузитьВСистемуОтката" id="4119">
 													<Type>CommandBarButton</Type>
 													<Enabled>false</Enabled>
 													<CommandName>Form.Command.ВыгрузитьВСистемуОтката</CommandName>
-													<ExtendedTooltip name="ВыгрузитьВСистемуОткатаРасширеннаяПодсказка" id="4081"/>
+													<ExtendedTooltip name="ВыгрузитьВСистемуОткатаРасширеннаяПодсказка" id="4120"/>
 												</Button>
 												<Button name="ИнформацияОСистемеОтката" id="4084">
 													<Type>CommandBarButton</Type>
 													<CommandName>Form.Command.ИнформацияОСистемеОтката</CommandName>
-													<ExtendedTooltip name="ИнформацияОСистемеОткатаРасширеннаяПодсказка" id="4085"/>
+													<ExtendedTooltip name="ИнформацияОСистемеОткатаРасширеннаяПодсказка" id="4121"/>
 												</Button>
 											</ChildItems>
 										</Popup>
 									</ChildItems>
 								</CommandBar>
-								<InputField name="Поле1" id="4090">
-									<ContextMenu name="Поле1КонтекстноеМеню" id="4091"/>
-									<ExtendedTooltip name="Поле1РасширеннаяПодсказка" id="4092"/>
+								<InputField name="Поле1" id="4124">
+									<ContextMenu name="Поле1КонтекстноеМеню" id="4125"/>
+									<ExtendedTooltip name="Поле1РасширеннаяПодсказка" id="4126"/>
 								</InputField>
 								<InputField name="ШагПроверкиЗначенияПеременной" id="4043">
 									<DataPath>ШагПроверкиЗначенияПеременной</DataPath>
