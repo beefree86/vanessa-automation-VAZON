@@ -33405,16 +33405,6 @@ Click on the hyperlink for more details.</v8:content>
 										<xr:Ref>StdPicture.Refresh</xr:Ref>
 										<xr:LoadTransparent>true</xr:LoadTransparent>
 									</Picture>
-									<Title>
-										<v8:item>
-											<v8:lang>ru</v8:lang>
-											<v8:content>Обновить табло переменных</v8:content>
-										</v8:item>
-										<v8:item>
-											<v8:lang>en</v8:lang>
-											<v8:content>Refresh variables board</v8:content>
-										</v8:item>
-									</Title>
 									<ExtendedTooltip name="ТаблоПеременныхОбновитьТаблоПеременныхРасширеннаяПодсказка" id="1944"/>
 								</Button>
 								<Button name="ТаблоПеременныхПоказатьСлужебныеПеременные" id="2527">
@@ -33444,6 +33434,10 @@ Click on the hyperlink for more details.</v8:content>
 											<v8:lang>ru</v8:lang>
 											<v8:content>Командная панель системы отката</v8:content>
 										</v8:item>
+										<v8:item>
+											<v8:lang>en</v8:lang>
+											<v8:content>The command panel of the rollback system</v8:content>
+										</v8:item>
 									</Title>
 									<ToolTip>
 										<v8:item>
@@ -33457,7 +33451,11 @@ Click on the hyperlink for more details.</v8:content>
 											<Title>
 												<v8:item>
 													<v8:lang>ru</v8:lang>
-													<v8:content>Система отката</v8:content>
+													<v8:content>ГруппаКнопокСистемыОтката</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>en</v8:lang>
+													<v8:content>A Group Of Rollback System Buttons</v8:content>
 												</v8:item>
 											</Title>
 											<ToolTip>
@@ -45002,7 +45000,11 @@ Click on the hyperlink for more details.</v8:content>
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Выгрузить из табло переменных</v8:content>
+					<v8:content>Выгрузить переменные в файл</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to a file</v8:content>
 				</v8:item>
 			</Title>
 			<ToolTip>
@@ -45017,7 +45019,11 @@ Click on the hyperlink for more details.</v8:content>
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Выгрузить в систему отката</v8:content>
+					<v8:content>Выгрузить переменные в систему отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to the rollback system</v8:content>
 				</v8:item>
 			</Title>
 			<ToolTip>
@@ -45032,7 +45038,11 @@ Click on the hyperlink for more details.</v8:content>
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Загрузить из системы отката</v8:content>
+					<v8:content>Загрузить переменные из системы отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from the rollback system</v8:content>
 				</v8:item>
 			</Title>
 			<ToolTip>
@@ -45049,6 +45059,10 @@ Click on the hyperlink for more details.</v8:content>
 					<v8:lang>ru</v8:lang>
 					<v8:content>Информация о системе отката</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Information about the rollback system</v8:content>
+				</v8:item>
 			</Title>
 			<ToolTip>
 				<v8:item>
@@ -45063,7 +45077,11 @@ Click on the hyperlink for more details.</v8:content>
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Загрузить в табло переменных</v8:content>
+					<v8:content>Загрузить переменные из файла</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from a file</v8:content>
 				</v8:item>
 			</Title>
 			<ToolTip>
