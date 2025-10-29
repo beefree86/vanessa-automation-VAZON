@@ -33405,6 +33405,16 @@ Click on the hyperlink for more details.</v8:content>
 										<xr:Ref>StdPicture.Refresh</xr:Ref>
 										<xr:LoadTransparent>true</xr:LoadTransparent>
 									</Picture>
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Обновить табло переменных</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>en</v8:lang>
+											<v8:content>Refresh variables boar</v8:content>
+										</v8:item>
+									</Title>
 									<ExtendedTooltip name="ТаблоПеременныхОбновитьТаблоПеременныхРасширеннаяПодсказка" id="1944"/>
 								</Button>
 								<Button name="ТаблоПеременныхПоказатьСлужебныеПеременные" id="2527">
@@ -33444,6 +33454,10 @@ Click on the hyperlink for more details.</v8:content>
 											<v8:lang>ru</v8:lang>
 											<v8:content>Командная панель системы отката</v8:content>
 										</v8:item>
+										<v8:item>
+											<v8:lang>en</v8:lang>
+											<v8:content>The command panel of the rollback system</v8:content>
+										</v8:item>
 									</ToolTip>
 									<ExtendedTooltip name="КоманднаяПанельСистемыОткатаРасширеннаяПодсказка" id="4123"/>
 									<ChildItems>
@@ -33451,7 +33465,7 @@ Click on the hyperlink for more details.</v8:content>
 											<Title>
 												<v8:item>
 													<v8:lang>ru</v8:lang>
-													<v8:content>ГруппаКнопокСистемыОтката</v8:content>
+													<v8:content>Группа кнопок системы отката</v8:content>
 												</v8:item>
 												<v8:item>
 													<v8:lang>en</v8:lang>
@@ -33462,6 +33476,10 @@ Click on the hyperlink for more details.</v8:content>
 												<v8:item>
 													<v8:lang>ru</v8:lang>
 													<v8:content>Группа кнопок системы отката</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>en</v8:lang>
+													<v8:content>A Group Of Rollback System Buttons</v8:content>
 												</v8:item>
 											</ToolTip>
 											<ExtendedTooltip name="ГруппаКнопокСистемыОткатаРасширеннаяПодсказка" id="4083"/>
@@ -45010,7 +45028,11 @@ Click on the hyperlink for more details.</v8:content>
 			<ToolTip>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Выгрузить из табло переменных</v8:content>
+					<v8:content>Выгрузить переменные в файл</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to a file</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>ВыгрузитьПеременные</Action>
@@ -45029,7 +45051,11 @@ Click on the hyperlink for more details.</v8:content>
 			<ToolTip>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Выгрузить в систему отката</v8:content>
+					<v8:content>Выгрузить переменные в систему отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to the rollback system</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>ВыгрузитьВСистемуОтката</Action>
@@ -45048,7 +45074,11 @@ Click on the hyperlink for more details.</v8:content>
 			<ToolTip>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Загрузить из системы отката</v8:content>
+					<v8:content>Загрузить переменные из системы отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from the rollback system</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>ЗагрузитьИзСистемыОтката</Action>
@@ -45069,6 +45099,10 @@ Click on the hyperlink for more details.</v8:content>
 					<v8:lang>ru</v8:lang>
 					<v8:content>Информация о системе отката</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Information about the rollback system</v8:content>
+				</v8:item>
 			</ToolTip>
 			<Action>VanessaИнформацияОСистемеОтката</Action>
 		</Command>
@@ -45087,7 +45121,11 @@ Click on the hyperlink for more details.</v8:content>
 			<ToolTip>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Загрузить в табло переменных</v8:content>
+					<v8:content>Загрузить переменные из файла</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from a file</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>ЗагрузитьПеременные</Action>
