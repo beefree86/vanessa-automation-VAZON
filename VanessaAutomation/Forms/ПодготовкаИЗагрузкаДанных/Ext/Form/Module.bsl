@@ -82,6 +82,7 @@ Function GetMetadataTypeMap()
 	MetadataTypeMap.Insert("Documents", "DocumentRef");
 	MetadataTypeMap.Insert("ChartsOfCharacteristicTypes", "ChartOfCharacteristicTypesRef");
 	MetadataTypeMap.Insert("ChartsOfAccounts", "ChartOfAccountsRef");
+	MetadataTypeMap.Insert("BusinessProcesses", "BusinessProcessRef");
 
 	Return MetadataTypeMap;
 	
@@ -662,6 +663,119 @@ Procedure ICheckOrCreateChartOfCharacteristicTypesObjectsAtServer(ObjectName, Va
 EndProcedure
 
 #EndRegion
+
+#Region BusinessProcess
+
+&AtClient
+Procedure ICheckOrCreateBusinessProcessObjects(Val ObjectName, Val Values) Export
+	If Not Values.Count() Then
+		Return;
+	EndIf;
+	
+	Files = FilesToUpload(Values);
+	
+	If Files.Count() > 0 Then
+		
+	    Vanessa.ЗапретитьВыполнениеШагов();
+		AddParams = New Structure("Object, Name, Values, LoadTrue", "BusinessProcesses", ObjectName, Values, False);
+		Notify = New NotifyDescription("UploadBinaryDataContinuation", ThisForm, AddParams);
+		BeginPuttingFiles(Notify, Files, , False, ThisForm.UUID);
+		
+	Else
+		
+		ICheckOrCreateBusinessProcessObjectsAtServer(ObjectName, Values, False);
+		
+	EndIf;
+	
+EndProcedure
+
+&AtClient
+Procedure ЯПроверяюИлиСоздаюДляБизнес_ПроцессаОбъекты(Val ИмяОбъекта, Val Значения) Export
+	ICheckOrCreateBusinessProcessObjects(ИмяОбъекта, Значения);
+EndProcedure
+
+&AtClient
+Procedure ICheckOrCreateBusinessProcessObjectsWithDataExchangeLoadTrue(Val ObjectName, Val Values) Export
+	If Not Values.Count() Then
+		Return;
+	EndIf;
+	
+	Files = FilesToUpload(Values);
+	
+	If Files.Count() > 0 Then
+	    Vanessa.ЗапретитьВыполнениеШагов();
+		AddParams = New Structure("Object, Name, Values, LoadTrue", "BusinessProcesses", ObjectName, Values, True);
+		Notify = New NotifyDescription("UploadBinaryDataContinuation", ThisForm, AddParams);
+		BeginPuttingFiles(Notify, Files, , False, ThisForm.UUID);
+		
+	Else
+		
+		ICheckOrCreateBusinessProcessObjectsAtServer(ObjectName, Values, True);
+		
+	EndIf;
+	
+EndProcedure
+
+&AtClient
+Procedure ЯПроверяюИлиСоздаюДляБизнес_ПроцессаОбъектыСОбменДаннымиЗагрузкаИстина(Val ИмяОбъекта, Val Значения) Export
+	ICheckOrCreateBusinessProcessObjectsWithDataExchangeLoadTrue(ИмяОбъекта, Значения);
+EndProcedure
+
+&AtServer
+Procedure ICheckOrCreateBusinessProcessObjectsAtServer(ObjectName, Values, DataExchange = True)
+	ObjectValues = GetValueTableFromVanessaTableArray(Values);
+	ObjectAttributes = New ValueTable;
+	FillColumnsByStandardAttributes(ObjectAttributes, "BusinessProcesses", ObjectName);
+	FillColumnsByCommonAttributes(ObjectAttributes, "BusinessProcesses", ObjectName);
+	FillColumnsByAttributes(ObjectAttributes, "BusinessProcesses", ObjectName);
+	ColumnsNames = New Array;
+	For Each Column In ObjectAttributes.Columns Do
+		If ObjectValues.Columns.Find(Column.Name) = Undefined Then
+			ColumnsNames.Add(Column.Name);
+		EndIf;
+	EndDo;
+	For Each ColumnName In ColumnsNames Do
+		ObjectAttributes.Columns.Delete(ColumnName);
+	EndDo;
+	RefColumnName = ?(ObjectAttributes.Columns.Find("Ref") <> Undefined, "Ref", "Ссылка");
+	For Each Row In ObjectValues Do
+		Ref = GetObjectLinkFromObjectURL(Row[RefColumnName]);
+		If ValueIsFilled(Ref.DataVersion) Then
+			Obj = Ref.GetObject();
+		Else
+			Predefined = StrFind(Row[RefColumnName], "?refName=");
+			If Predefined Then
+				Continue;
+			EndIf;
+			
+			Obj = BusinessProcesses[ObjectName].CreateBusinessProcess();
+			Obj.SetNewObjectRef(Ref);
+		EndIf;		
+		
+		For Each Column In ObjectAttributes.Columns Do
+			If Row[Column.Name] = "" Then
+				Continue;
+			EndIf;
+			If Column.Name = RefColumnName Then
+				Continue;
+			EndIf;
+			If (Column.Name = "DeletionMark" Or Column.Name = "ПометкаУдаления")
+				And Row[Column.Name] = "True" Then
+				Obj.DeletionMark = True;
+				Continue;
+			EndIf;
+			FillTipicalObjectAttributesByValues(Obj, Row, Column);
+		EndDo;
+		If Not ValueIsFilled(Obj.Number) Then
+			Obj.SetNewNumber();
+		EndIf;
+		Obj.DataExchange.Load = DataExchange;
+		TryToWriteObject(Obj, 4);
+	EndDo;
+EndProcedure
+
+#EndRegion
+
 
 &AtServer
 Procedure TryToWriteObject(Obj, MaxCount, Count = 0)
@@ -1358,6 +1472,7 @@ Procedure FillMetadataType()
 	MetadataType.Add("ChartsOfCharacteristicTypes", RepresentationsInLanguage.s4,, PictureLib.ChartOfCharacteristicTypes);
 	MetadataType.Add("InformationRegisters", 		RepresentationsInLanguage.s5,, PictureLib.InformationRegister);
 	MetadataType.Add("AccumulationRegisters", 		RepresentationsInLanguage.s6,, PictureLib.AccumulationRegister);
+	MetadataType.Add("BusinessProcesses", 	     	RepresentationsInLanguage.s8,, PictureLib.BusinessProcess);
 EndProcedure
 
 &AtServer
@@ -1394,7 +1509,8 @@ Procedure FillDataList(Val MetadataTypeValue, Val MetadataValue)
 	If MetadataTypeValue = "Catalogs"
 		OR MetadataTypeValue = "Documents"
 		OR MetadataTypeValue = "ChartsOfCharacteristicTypes"
-		OR MetadataTypeValue = "ChartsOfAccounts" Then
+		OR MetadataTypeValue = "ChartsOfAccounts"
+		OR MetadataTypeValue = "BusinessProcesses" Then
 		FillColumnsByStandardAttributes(DataListValue, MetadataTypeValue, MetadataValue);
 		FillColumnsByCommonAttributes(DataListValue, MetadataTypeValue, MetadataValue);
 		FillColumnsByAttributes(DataListValue, MetadataTypeValue, MetadataValue);
@@ -1705,6 +1821,8 @@ Function MetadataTypeValueSingle(Val MetadataTypeValue)
 		ReturnValue = "AccumulationRegister";
 	ElsIf MetadataTypeValue = "Constants" Then
 		ReturnValue = "Constant";
+	ElsIf MetadataTypeValue = "BusinessProcesses" Then
+		ReturnValue = "BusinessProcess";	
 	Else
 		ReturnValue = "";
 	EndIf;
@@ -1727,6 +1845,8 @@ Function MetadataTypeValueMultiple(Val MetadataTypeValue)
 		ReturnValue = "AccumulationRegisters";
 	ElsIf MetadataTypeValue = "Constant" Then
 		ReturnValue = "Constants";
+	ElsIf MetadataTypeValue = "BusinessProcess" Then
+		ReturnValue = "BusinessProcesses";	
 	Else
 		ReturnValue = "";
 	EndIf;
@@ -1749,6 +1869,8 @@ Function MetadataTypeValueEnFromRu(Val MetadataTypeValue)
 		ReturnValue = "AccumulationRegister";
 	ElsIf MetadataTypeValue = "Константа" Then
 		ReturnValue = "Constant";
+	ElsIf MetadataTypeValue = "БизнесПроцесс" Then
+		ReturnValue = "BusinessProcess";
 	Else
 		ReturnValue = MetadataTypeValue;
 	EndIf;
@@ -1771,6 +1893,8 @@ Function MetadataTypeValueRuFromEn(Val MetadataTypeValue)
 		ReturnValue = "РегистрНакопления";
 	ElsIf MetadataTypeValue = "Constant" Then
 		ReturnValue = "Константа";
+	ElsIf MetadataTypeValue = "BusinessProcess" Then
+		ReturnValue = "БизнесПроцесс";
 	Else
 		ReturnValue = MetadataTypeValue;
 	EndIf;
@@ -2045,7 +2169,8 @@ Function ItIsDataForUpload(Value)
 	Result = (Documents.AllRefsType().ContainsType(TypeVal)
 				Or Catalogs.AllRefsType().ContainsType(TypeVal)
 				Or ChartsOfCharacteristicTypes.AllRefsType().ContainsType(TypeVal)
-				Or ChartsOfAccounts.AllRefsType().ContainsType(TypeVal))
+				Or ChartsOfAccounts.AllRefsType().ContainsType(TypeVal)
+				Or BusinessProcesses.AllRefsType().ContainsType(TypeVal))
 				
 				AND NOT Value.IsEmpty();
 				
@@ -2249,6 +2374,18 @@ Procedure AddStepsByLanguage(Vanessa, AllTests, LangCode)
 										, StrTemplate(LocalizedStringsClient()["s16c_" + LangCode], LocalizedStringsClient()["s16d_" + LangCode], "", "")
 										, LocalizedStringsClient()["s16f_" + LangCode]
 										, "");
+	Vanessa.ДобавитьШагВМассивТестов(AllTests
+										, LocalizedStringsClient()["s19a_" + LangCode]
+										, LocalizedStringsClient()["s19b_" + LangCode]
+										, StrTemplate(LocalizedStringsClient()["s19c_" + LangCode], LocalizedStringsClient()["s19d_" + LangCode], "", "")
+										, LocalizedStringsClient()["s19f_" + LangCode]
+										, "");
+	Vanessa.ДобавитьШагВМассивТестов(AllTests
+										, LocalizedStringsClient()["s20a_" + LangCode]
+										, LocalizedStringsClient()["s20b_" + LangCode]
+										, StrTemplate(LocalizedStringsClient()["s20c_" + LangCode], LocalizedStringsClient()["s20d_" + LangCode], "", "")
+										, LocalizedStringsClient()["s20f_" + LangCode]
+										, "");
 EndProcedure
 
 &AtClient
@@ -2418,6 +2555,8 @@ Function GeneratedFeatureFile()
 					Scenarious.Add(ScenarioInformationRegister(MetadataListRow.Name, MarkdownTables, LangCode));
 				ElsIf MetadataListParentRow.Name = "AccumulationRegisters" Then
 					Scenarious.Add(ScenarioAccumulationRegister(MetadataListRow.Name, MarkdownTables, LangCode));
+				ElsIf MetadataListParentRow.Name = "BusinessProcesses" Then
+					Scenarious.Add(ScenarioBusinessProcess(MetadataListRow.Name, MarkdownTables, LangCode, ThisForm.UseDataExhangeLoadTrue));
 				Else
 					Scenarious.Add("");
 				EndIf;
@@ -2474,6 +2613,8 @@ Function GenerateFeatureFileForRefsAtServer()
 			TypePriority = 5;
 		ElsIf MetadataClass = "Document" Then
 			TypePriority = 6;
+		ElsIf MetadataClass = "BusinessProcess" Then
+			TypePriority = 7;
 		Else
 			Raise NStr("ru = 'Неподдерживаемый класс метаданных!'");
 		EndIf;
@@ -2515,6 +2656,8 @@ Function GenerateFeatureFileForRefsAtServer()
 			ScenarioActionString = ScenarioInformationRegisterActionString(LangCode);
 		ElsIf MetadataClass = "AccumulationRegister" Then
 			ScenarioActionString = ScenarioAccumulationRegisterActionString(LangCode);
+		ElsIf MetadataClass = "BusinessProcess" Then
+			ScenarioActionString = ScenarioBusinessProcessActionString(LangCode, ThisForm.UseDataExhangeLoadTrue);
 		EndIf;
 		
 		If AddComments Then
@@ -2715,6 +2858,30 @@ EndFunction
 &AtServer
 Function ScenarioConstantActionString(LangCode)
 	ReturnValue = LocalizedStringsServer()["s10c_" + LangCode];
+	Return ReturnValue;
+EndFunction
+
+#EndRegion
+
+#Region Scenario_BusinessProcess
+
+&AtServer
+Function ScenarioBusinessProcess(MetadataName, MarkdownTables, LangCode, DataExchangeLoad)
+	Scenario = New Array;	
+	Scenario.Add(StrTemplate(LocalizedStringsServer()[?(DataExchangeLoad, "s20e_", "s19e_") + LangCode], MetadataName));
+	Scenario.Add("");
+	Scenario.Add(Chars.Tab + StrTemplate(ScenarioBusinessProcessActionString(LangCode, DataExchangeLoad), """" + MetadataName + """", Chars.LF, MarkdownTables.ObjectDataMarkdownTable));
+	For Each DataValue In MarkdownTables.TabularSectionsDataMarkdownTables Do
+		Scenario.Add("");
+		Scenario.Add(Chars.Tab + StrTemplate(ScenarioTabularSectionActionString(LangCode), """" + DataValue.Key + """", Chars.LF, DataValue.Value));
+	EndDo;
+	Scenario.Add("");
+	Return StrConcat(Scenario, Chars.LF);
+EndFunction
+
+&AtServer
+Function ScenarioBusinessProcessActionString(LangCode, DataExchangeLoad)
+	ReturnValue = LocalizedStringsServer()[?(DataExchangeLoad, "s20c_", "s19c_") + LangCode];
 	Return ReturnValue;
 EndFunction
 
@@ -2958,7 +3125,8 @@ Function isMetadataObjectAndDataValueNotEmpty(MetadataObject, DataValue)
 				Or Metadata.Documents.Contains(MetadataObject)
 				Or Metadata.ChartsOfCharacteristicTypes.Contains(MetadataObject)
 				Or Metadata.ChartsOfAccounts.Contains(MetadataObject)
-				Or Metadata.ChartsOfCalculationTypes.Contains(MetadataObject))
+				Or Metadata.ChartsOfCalculationTypes.Contains(MetadataObject)
+				Or Metadata.BusinessProcesses.Contains(MetadataObject))
 			And Not DataValue.IsEmpty();
 EndFunction
 
@@ -2975,6 +3143,8 @@ Function GetManagerByMetadataObject(MetadataObject) Export
 		Return ChartsOfAccounts[ObjectName];
 	ElsIf Metadata.ChartsOfCalculationTypes.Contains(MetadataObject) Then
 		Return ChartsOfCalculationTypes[ObjectName];
+	ElsIf Metadata.BusinessProcesses.Contains(MetadataObject) Then
+		Return BusinessProcesses[ObjectName];
 	Else
 		Return Undefined;
 	EndIf;
@@ -3146,8 +3316,13 @@ Procedure UploadBinaryDataContinuation(Files, AdditionalParameters) Export
 		ICheckOrCreateInformationRegisterRecordsAtServer(AdditionalParameters.Name
 															, AdditionalParameters.Values
 															, AdditionalParameters.UseSet
-															, AdditionalParameters.LoadTrue);
+															, AdditionalParameters.LoadTrue);															
+	ElsIf AdditionalParameters.Object = "BusinessProcess" Then
 		
+		ICheckOrCreateBusinessProcessObjectsAtServer(AdditionalParameters.Name
+											, AdditionalParameters.Values
+											, AdditionalParameters.LoadTrue);
+
 	EndIf;	
 	
 EndProcedure
@@ -3168,6 +3343,7 @@ Function RL()
 		ReturnData.Insert("s5", "Information registers");
 		ReturnData.Insert("s6", "Accumulation registers");
 		ReturnData.Insert("s7", "Chart of accounts");
+		ReturnData.Insert("s8", "Business processes");
 	Else	
 		ReturnData.Insert("s1", "Константы");
 		ReturnData.Insert("s2", "Справочники");
@@ -3176,6 +3352,7 @@ Function RL()
 		ReturnData.Insert("s5", "Регистры сведений");
 		ReturnData.Insert("s6", "Регистры накопления");
 		ReturnData.Insert("s7", "Планы счетов");
+		ReturnData.Insert("s8", "Бизнес-процессы");
 	EndIf;	 
 	Return ReturnData;	
 EndFunction
@@ -3403,6 +3580,33 @@ Function LocalizedStringsServer()
 	ReturnData.Insert("s18e_ru", "Сценарий: Создание объектов для плана счетов %1 с ОбменДанными.Загрузка = Истина");
 	ReturnData.Insert("s18f_en", "Creates chart of accounts items with DataExchange.Load = True");
 	ReturnData.Insert("s18f_ru", "Создаёт элементы плана счетов с ОбменДанными.Загрузка = Истина");
+	
+	ReturnData.Insert("s19a_en", "ICheckOrCreateBusinessProcessObjects(ObjectName, Values)");
+	ReturnData.Insert("s19a_ru", "ЯПроверяюИлиСоздаюДляБизнес_ПроцессаОбъекты(ИмяОбъекта, Значения)");
+	ReturnData.Insert("s19b_en", "ICheckOrCreateBusinessProcessObjects");
+	ReturnData.Insert("s19b_ru", "ЯПроверяюИлиСоздаюДляБизнес_ПроцессаОбъекты");
+	ReturnData.Insert("s19c_en", "And I check or create business process %1 objects:%2%3");
+	ReturnData.Insert("s19c_ru", "И я проверяю или создаю для бизнес-процесса %1 объекты:%2%3");
+	ReturnData.Insert("s19d_en", """ObjectName""");
+	ReturnData.Insert("s19d_ru", """ИмяОбъекта""");
+	ReturnData.Insert("s19e_en", "Scenario: Create business process %1 objects");
+	ReturnData.Insert("s19e_ru", "Сценарий: Создание объектов для бизнес-процесса %1");
+	ReturnData.Insert("s19f_en", "Creates business process objects");
+	ReturnData.Insert("s19f_ru", "Создаёт объекты бизнес-процесса");
+
+	ReturnData.Insert("s20a_en", "ICheckOrCreateBusinessProcessObjectsWithDataExchangeLoadTrue(ObjectName, Values)");
+	ReturnData.Insert("s20a_ru", "ЯПроверяюИлиСоздаюДляБизнес_ПроцессаОбъектыСОбменДаннымиЗагрузкаИстина(ИмяОбъекта, Значения)");
+	ReturnData.Insert("s20b_en", "ICheckOrCreateBusinessProcessObjectsWithDataExchangeLoadTrue");
+	ReturnData.Insert("s20b_ru", "ЯПроверяюИлиСоздаюДляБизнес_ПроцессаОбъектыСОбменДаннымиЗагрузкаИстина");
+	ReturnData.Insert("s20c_en", "And I check or create business process %1 objects with data exchange load true:%2%3");
+	ReturnData.Insert("s20c_ru", "И я проверяю или создаю для бизнес-процесса %1 объекты с обмен данными загрузка истина:%2%3");
+	ReturnData.Insert("s20d_en", """ObjectName""");
+	ReturnData.Insert("s20d_ru", """ИмяОбъекта""");
+	ReturnData.Insert("s20e_en", "Scenario: Create business process %1 objects with DataExchange.Load = True");
+	ReturnData.Insert("s20e_ru", "Сценарий: Создание объектов для бизнес-процесса %1 с ОбменДанными.Загрузка = Истина");
+	ReturnData.Insert("s20f_en", "Creates business process objectss with DataExchange.Load = True");
+	ReturnData.Insert("s20f_ru", "Создаёт объекты бизнес-процесса с ОбменДанными.Загрузка = Истина");
+	
 	Return ReturnData;
 EndFunction
 
