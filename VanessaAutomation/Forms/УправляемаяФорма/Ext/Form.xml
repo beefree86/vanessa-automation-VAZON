@@ -33412,7 +33412,7 @@ Click on the hyperlink for more details.</v8:content>
 										</v8:item>
 										<v8:item>
 											<v8:lang>en</v8:lang>
-											<v8:content>Refresh variables board</v8:content>
+											<v8:content>Refresh variables boar</v8:content>
 										</v8:item>
 									</Title>
 									<ExtendedTooltip name="ТаблоПеременныхОбновитьТаблоПеременныхРасширеннаяПодсказка" id="1944"/>
@@ -33422,12 +33422,93 @@ Click on the hyperlink for more details.</v8:content>
 									<CommandName>Form.Command.ПоказатьСлужебныеПеременные</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхПоказатьСлужебныеПеременныеРасширеннаяПодсказка" id="2528"/>
 								</Button>
+								<Button name="ТаблоПеременныхЗагрузить" id="4114">
+									<Type>UsualButton</Type>
+									<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
+									<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
+								</Button>
+								<Button name="ТаблоПеременныхВыгрузить" id="4116">
+									<Type>UsualButton</Type>
+									<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
+									<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
+								</Button>
 								<Button name="ТаблоПеременныхЗакрытьТаблоПеременных" id="2058">
 									<Type>UsualButton</Type>
 									<Width>10</Width>
 									<CommandName>Form.Command.ЗакрытьТаблоПеременных</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхЗакрытьТаблоПеременныхРасширеннаяПодсказка" id="2059"/>
 								</Button>
+								<CommandBar name="КоманднаяПанельСистемыОтката" id="4122">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Командная панель системы отката</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>en</v8:lang>
+											<v8:content>The command panel of the rollback system</v8:content>
+										</v8:item>
+									</Title>
+									<ToolTip>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Командная панель системы отката</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>en</v8:lang>
+											<v8:content>The command panel of the rollback system</v8:content>
+										</v8:item>
+									</ToolTip>
+									<ExtendedTooltip name="КоманднаяПанельСистемыОткатаРасширеннаяПодсказка" id="4123"/>
+									<ChildItems>
+										<Popup name="ГруппаКнопокСистемыОтката" id="4082">
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Группа кнопок системы отката</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>en</v8:lang>
+													<v8:content>A Group Of Rollback System Buttons</v8:content>
+												</v8:item>
+											</Title>
+											<ToolTip>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Группа кнопок системы отката</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>en</v8:lang>
+													<v8:content>A Group Of Rollback System Buttons</v8:content>
+												</v8:item>
+											</ToolTip>
+											<ExtendedTooltip name="ГруппаКнопокСистемыОткатаРасширеннаяПодсказка" id="4083"/>
+											<ChildItems>
+												<Button name="ЗагрузитьИзСистемыОтката" id="4127">
+													<Type>CommandBarButton</Type>
+													<Enabled>false</Enabled>
+													<CommandName>Form.Command.ЗагрузитьИзСистемыОтката</CommandName>
+													<ExtendedTooltip name="ЗагрузитьИзСистемыОткатаРасширеннаяПодсказка" id="4118"/>
+												</Button>
+												<Button name="ВыгрузитьВСистемуОтката" id="4119">
+													<Type>CommandBarButton</Type>
+													<Enabled>false</Enabled>
+													<CommandName>Form.Command.ВыгрузитьВСистемуОтката</CommandName>
+													<ExtendedTooltip name="ВыгрузитьВСистемуОткатаРасширеннаяПодсказка" id="4120"/>
+												</Button>
+												<Button name="ИнформацияОСистемеОтката" id="4084">
+													<Type>CommandBarButton</Type>
+													<CommandName>Form.Command.ИнформацияОСистемеОтката</CommandName>
+													<ExtendedTooltip name="ИнформацияОСистемеОткатаРасширеннаяПодсказка" id="4121"/>
+												</Button>
+											</ChildItems>
+										</Popup>
+									</ChildItems>
+								</CommandBar>
+								<InputField name="Поле1" id="4124">
+									<ContextMenu name="Поле1КонтекстноеМеню" id="4125"/>
+									<ExtendedTooltip name="Поле1РасширеннаяПодсказка" id="4126"/>
+								</InputField>
 								<InputField name="ШагПроверкиЗначенияПеременной" id="4043">
 									<DataPath>ШагПроверкиЗначенияПеременной</DataPath>
 									<ReadOnly>true</ReadOnly>
@@ -44932,6 +45013,122 @@ Click on the hyperlink for more details.</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Action>ЗаписьВидео1САвторизацияВСервисе</Action>
+		</Command>
+		<Command name="ВыгрузитьИзТаблоПеременных" id="188">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выгрузить переменные в файл</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to a file</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выгрузить переменные в файл</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to a file</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ВыгрузитьПеременные</Action>
+		</Command>
+		<Command name="ВыгрузитьВСистемуОтката" id="189">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выгрузить переменные в систему отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to the rollback system</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Выгрузить переменные в систему отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Upload variables to the rollback system</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ВыгрузитьВСистемуОтката</Action>
+		</Command>
+		<Command name="ЗагрузитьИзСистемыОтката" id="190">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить переменные из системы отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from the rollback system</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить переменные из системы отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from the rollback system</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗагрузитьИзСистемыОтката</Action>
+		</Command>
+		<Command name="ИнформацияОСистемеОтката" id="191">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Информация о системе отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Information about the rollback system</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Информация о системе отката</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Information about the rollback system</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>VanessaИнформацияОСистемеОтката</Action>
+		</Command>
+		<Command name="Команда1" id="192"/>
+		<Command name="ЗагрузитьВТаблоПеременных" id="193">
+			<Title>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить переменные из файла</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from a file</v8:content>
+				</v8:item>
+			</Title>
+			<ToolTip>
+				<v8:item>
+					<v8:lang>ru</v8:lang>
+					<v8:content>Загрузить переменные из файла</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Load variables from a file</v8:content>
+				</v8:item>
+			</ToolTip>
+			<Action>ЗагрузитьПеременные</Action>
 		</Command>
 	</Commands>
 </Form>
