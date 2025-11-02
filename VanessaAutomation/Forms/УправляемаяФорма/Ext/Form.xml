@@ -33335,6 +33335,13 @@ Click on the hyperlink for more details.</v8:content>
 															<ContextMenu name="ТаблицаИзвестныхStepDefinitionТипШагаВДеревеКонтекстноеМеню" id="2381"/>
 															<ExtendedTooltip name="ТаблицаИзвестныхStepDefinitionТипШагаВДеревеРасширеннаяПодсказка" id="2382"/>
 														</InputField>
+														<CheckBoxField name="ТаблицаИзвестныхStepDefinitionШагИзФормыКонфигурацииИлиРасширения" id="4134">
+															<DataPath>ТаблицаИзвестныхStepDefinition.ШагИзФормыКонфигурацииИлиРасширения</DataPath>
+															<EditMode>EnterOnInput</EditMode>
+															<CheckBoxType>Auto</CheckBoxType>
+															<ContextMenu name="ТаблицаИзвестныхStepDefinitionШагИзФормыКонфигурацииИлиРасширенияКонтекстноеМеню" id="4135"/>
+															<ExtendedTooltip name="ТаблицаИзвестныхStepDefinitionШагИзФормыКонфигурацииИлиРасширенияРасширеннаяПодсказка" id="4136"/>
+														</CheckBoxField>
 													</ChildItems>
 												</Table>
 											</ChildItems>
