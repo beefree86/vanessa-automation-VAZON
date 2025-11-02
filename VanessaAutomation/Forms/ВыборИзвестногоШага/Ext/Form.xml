@@ -542,6 +542,7 @@
 									<ExtendedTooltip name="MarkdownViewerРасширеннаяПодсказка" id="133"/>
 									<Events>
 										<Event name="DocumentComplete">MarkdownViewerДокументСформирован</Event>
+										<Event name="OnClick">MarkdownViewerПриНажатии</Event>
 									</Events>
 								</HTMLDocumentField>
 							</ChildItems>
