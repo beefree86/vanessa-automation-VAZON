@@ -33335,6 +33335,13 @@ Click on the hyperlink for more details.</v8:content>
 															<ContextMenu name="ТаблицаИзвестныхStepDefinitionТипШагаВДеревеКонтекстноеМеню" id="2381"/>
 															<ExtendedTooltip name="ТаблицаИзвестныхStepDefinitionТипШагаВДеревеРасширеннаяПодсказка" id="2382"/>
 														</InputField>
+														<CheckBoxField name="ТаблицаИзвестныхStepDefinitionШагИзФормыКонфигурацииИлиРасширения" id="4134">
+															<DataPath>ТаблицаИзвестныхStepDefinition.ШагИзФормыКонфигурацииИлиРасширения</DataPath>
+															<EditMode>EnterOnInput</EditMode>
+															<CheckBoxType>Auto</CheckBoxType>
+															<ContextMenu name="ТаблицаИзвестныхStepDefinitionШагИзФормыКонфигурацииИлиРасширенияКонтекстноеМеню" id="4135"/>
+															<ExtendedTooltip name="ТаблицаИзвестныхStepDefinitionШагИзФормыКонфигурацииИлиРасширенияРасширеннаяПодсказка" id="4136"/>
+														</CheckBoxField>
 													</ChildItems>
 												</Table>
 											</ChildItems>
@@ -33422,22 +33429,63 @@ Click on the hyperlink for more details.</v8:content>
 									<CommandName>Form.Command.ПоказатьСлужебныеПеременные</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхПоказатьСлужебныеПеременныеРасширеннаяПодсказка" id="2528"/>
 								</Button>
-								<Button name="ТаблоПеременныхЗагрузить" id="4114">
-									<Type>UsualButton</Type>
-									<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
-									<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
-								</Button>
-								<Button name="ТаблоПеременныхВыгрузить" id="4116">
-									<Type>UsualButton</Type>
-									<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
-									<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
-								</Button>
 								<Button name="ТаблоПеременныхЗакрытьТаблоПеременных" id="2058">
 									<Type>UsualButton</Type>
 									<Width>10</Width>
 									<CommandName>Form.Command.ЗакрытьТаблоПеременных</CommandName>
 									<ExtendedTooltip name="ТаблоПеременныхЗакрытьТаблоПеременныхРасширеннаяПодсказка" id="2059"/>
 								</Button>
+								<CommandBar name="КоманднаяПанельСохранитьЗагрузитьПеременныеИзФайла" id="4130">
+									<Title>
+										<v8:item>
+											<v8:lang>ru</v8:lang>
+											<v8:content>Командная панель переменные из файла</v8:content>
+										</v8:item>
+										<v8:item>
+											<v8:lang>en</v8:lang>
+											<v8:content>Command panel variables from file</v8:content>
+										</v8:item>
+									</Title>
+									<Width>9</Width>
+									<ExtendedTooltip name="КоманднаяПанельСохранитьЗагрузитьПеременныеИзФайлаРасширеннаяПодсказка" id="4131"/>
+									<ChildItems>
+										<Popup name="ГруппаКнопокСохранитьЗагрузитьПеременные" id="4132">
+											<Title>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Сохранить/загрузить переменные</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>en</v8:lang>
+													<v8:content>Save/Load Variables</v8:content>
+												</v8:item>
+											</Title>
+											<ToolTip>
+												<v8:item>
+													<v8:lang>ru</v8:lang>
+													<v8:content>Сохранить/загрузить переменные</v8:content>
+												</v8:item>
+												<v8:item>
+													<v8:lang>en</v8:lang>
+													<v8:content>Save/Load Variables</v8:content>
+												</v8:item>
+											</ToolTip>
+											<ExtendedTooltip name="ГруппаКнопокСохранитьЗагрузитьПеременныеРасширеннаяПодсказка" id="4133"/>
+											<ChildItems>
+												<Button name="ТаблоПеременныхЗагрузить" id="4114">
+													<Type>CommandBarButton</Type>
+													<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
+													<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
+												</Button>
+												<Button name="ТаблоПеременныхВыгрузить" id="4116">
+													<Type>CommandBarButton</Type>
+													<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
+													<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
+												</Button>
+											</ChildItems>
+										</Popup>
+									</ChildItems>
+								</CommandBar>
 								<CommandBar name="КоманднаяПанельСистемыОтката" id="4122">
 									<Title>
 										<v8:item>
@@ -33459,27 +33507,28 @@ Click on the hyperlink for more details.</v8:content>
 											<v8:content>The command panel of the rollback system</v8:content>
 										</v8:item>
 									</ToolTip>
+									<Width>10</Width>
 									<ExtendedTooltip name="КоманднаяПанельСистемыОткатаРасширеннаяПодсказка" id="4123"/>
 									<ChildItems>
 										<Popup name="ГруппаКнопокСистемыОтката" id="4082">
 											<Title>
 												<v8:item>
 													<v8:lang>ru</v8:lang>
-													<v8:content>Группа кнопок системы отката</v8:content>
+													<v8:content>Cистема отката</v8:content>
 												</v8:item>
 												<v8:item>
 													<v8:lang>en</v8:lang>
-													<v8:content>A Group Of Rollback System Buttons</v8:content>
+													<v8:content>Rollback System Buttons</v8:content>
 												</v8:item>
 											</Title>
 											<ToolTip>
 												<v8:item>
 													<v8:lang>ru</v8:lang>
-													<v8:content>Группа кнопок системы отката</v8:content>
+													<v8:content>Система отката</v8:content>
 												</v8:item>
 												<v8:item>
 													<v8:lang>en</v8:lang>
-													<v8:content>A Group Of Rollback System Buttons</v8:content>
+													<v8:content>Rollback System Buttons</v8:content>
 												</v8:item>
 											</ToolTip>
 											<ExtendedTooltip name="ГруппаКнопокСистемыОткатаРасширеннаяПодсказка" id="4083"/>
@@ -33505,10 +33554,6 @@ Click on the hyperlink for more details.</v8:content>
 										</Popup>
 									</ChildItems>
 								</CommandBar>
-								<InputField name="Поле1" id="4124">
-									<ContextMenu name="Поле1КонтекстноеМеню" id="4125"/>
-									<ExtendedTooltip name="Поле1РасширеннаяПодсказка" id="4126"/>
-								</InputField>
 								<InputField name="ШагПроверкиЗначенияПеременной" id="4043">
 									<DataPath>ШагПроверкиЗначенияПеременной</DataPath>
 									<ReadOnly>true</ReadOnly>
@@ -34755,6 +34800,21 @@ Click on the hyperlink for more details.</v8:content>
 						</v8:item>
 					</Title>
 					<Type/>
+				</Column>
+				<Column name="ШагИзФормыКонфигурацииИлиРасширения" id="14">
+					<Title>
+						<v8:item>
+							<v8:lang>ru</v8:lang>
+							<v8:content>Шаг из формы конфигурации или расширения</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Step from a configuration or extension form</v8:content>
+						</v8:item>
+					</Title>
+					<Type>
+						<v8:Type>xs:boolean</v8:Type>
+					</Type>
 				</Column>
 			</Columns>
 		</Attribute>
@@ -45018,11 +45078,11 @@ Click on the hyperlink for more details.</v8:content>
 			<Title>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
-					<v8:content>Выгрузить переменные в файл</v8:content>
+					<v8:content>Сохранить переменные в файл</v8:content>
 				</v8:item>
 				<v8:item>
 					<v8:lang>en</v8:lang>
-					<v8:content>Upload variables to a file</v8:content>
+					<v8:content>Save variables to file</v8:content>
 				</v8:item>
 			</Title>
 			<ToolTip>
@@ -45115,7 +45175,7 @@ Click on the hyperlink for more details.</v8:content>
 				</v8:item>
 				<v8:item>
 					<v8:lang>en</v8:lang>
-					<v8:content>Load variables from a file</v8:content>
+					<v8:content>Load variables from file</v8:content>
 				</v8:item>
 			</Title>
 			<ToolTip>
