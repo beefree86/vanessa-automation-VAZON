@@ -13,6 +13,11 @@
 	<AutoSaveDataInSettings>Use</AutoSaveDataInSettings>
 	<AutoCommandBar name="ФормаКоманднаяПанель" id="-1">
 		<ChildItems>
+			<Button name="ФормаЗакрытьФорму" id="209">
+				<Type>CommandBarButton</Type>
+				<CommandName>Form.Command.ЗакрытьФорму</CommandName>
+				<ExtendedTooltip name="ФормаЗакрытьФормуРасширеннаяПодсказка" id="210"/>
+			</Button>
 			<Button name="ФормаСправка" id="17">
 				<Type>CommandBarButton</Type>
 				<Representation>PictureAndText</Representation>
@@ -333,7 +338,7 @@
 						</UsualGroup>
 					</ChildItems>
 				</Page>
-				<Page name="СтраницаФомированиеСценариевФичаФайлами" id="23">
+				<Page name="СтраницаФомированияСценариевФичаФайлами" id="23">
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
@@ -341,10 +346,10 @@
 						</v8:item>
 						<v8:item>
 							<v8:lang>en</v8:lang>
-							<v8:content>Configuring Scripts</v8:content>
+							<v8:content>Batch generation of feature files</v8:content>
 						</v8:item>
 					</Title>
-					<ExtendedTooltip name="СтраницаФомированиеСценариевФичаФайламиРасширеннаяПодсказка" id="24"/>
+					<ExtendedTooltip name="СтраницаФомированияСценариевФичаФайламиРасширеннаяПодсказка" id="24"/>
 					<ChildItems>
 						<Table name="ТаблицаНастроек" id="25">
 							<Representation>List</Representation>
@@ -531,7 +536,7 @@
 						</Button>
 					</ChildItems>
 				</Page>
-				<Page name="СтраницаНастройкаСценариевПоМетаданным" id="117">
+				<Page name="СтраницаФормированияСценариевПоМетаданным" id="117">
 					<Title>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
@@ -539,19 +544,13 @@
 						</v8:item>
 						<v8:item>
 							<v8:lang>en</v8:lang>
-							<v8:content>Configuring Scripts</v8:content>
+							<v8:content>Generating scenarios from metadata</v8:content>
 						</v8:item>
 					</Title>
 					<Group>AlwaysHorizontal</Group>
-					<ExtendedTooltip name="СтраницаНастройкаСценариевПоМетаданнымРасширеннаяПодсказка" id="118"/>
+					<ExtendedTooltip name="СтраницаФормированияСценариевПоМетаданнымРасширеннаяПодсказка" id="118"/>
 					<ChildItems>
 						<UsualGroup name="ГруппаДеревоМетаданных" id="201">
-							<ToolTip>
-								<v8:item>
-									<v8:lang>ru</v8:lang>
-									<v8:content>Группа дерево метаданных</v8:content>
-								</v8:item>
-							</ToolTip>
 							<Group>Vertical</Group>
 							<Representation>None</Representation>
 							<ShowTitle>false</ShowTitle>
@@ -560,7 +559,7 @@
 								<InputField name="КаталогФайловИсключений1" id="203">
 									<DataPath>КаталогФайловИсключений</DataPath>
 									<TitleLocation>Top</TitleLocation>
-									<ToolTipRepresentation>ShowBottom</ToolTipRepresentation>
+									<ToolTipRepresentation>None</ToolTipRepresentation>
 									<ChoiceButton>true</ChoiceButton>
 									<ClearButton>true</ClearButton>
 									<OpenButton>true</OpenButton>
@@ -570,6 +569,10 @@
 											<v8:item>
 												<v8:lang>en</v8:lang>
 												<v8:content>The directory in which text files with exception objects are stored. For each type of metadata object or event there must be a separate file ("Directories", "Documents", etc.).</v8:content>
+											</v8:item>
+											<v8:item>
+												<v8:lang>ru</v8:lang>
+												<v8:content>Каталог файлов исключений</v8:content>
 											</v8:item>
 										</Title>
 									</ExtendedTooltip>
@@ -585,16 +588,24 @@
 											<v8:lang>ru</v8:lang>
 											<v8:content>Только введенные объекты (Справочники, Документы, ПВХ)</v8:content>
 										</v8:item>
+										<v8:item>
+											<v8:lang>en</v8:lang>
+											<v8:content>Only entered objects (Directories, Documents and others)</v8:content>
+										</v8:item>
 									</Title>
 									<TitleLocation>Right</TitleLocation>
-									<ToolTipRepresentation>ShowBottom</ToolTipRepresentation>
+									<ToolTipRepresentation>None</ToolTipRepresentation>
 									<CheckBoxType>Auto</CheckBoxType>
 									<ContextMenu name="ТолькоВведенныеОбъекты1КонтекстноеМеню" id="207"/>
-									<ExtendedTooltip name="ТолькоВведенныеОбъекты1РасширеннаяПодсказка" id="208">
+									<ExtendedTooltip name="ТолькоВведенныеОбъекты1РасширеннаяПодсказка" id="208" DisplayImportance="VeryLow">
 										<Title formatted="false">
 											<v8:item>
 												<v8:lang>en</v8:lang>
 												<v8:content>When this flag is enabled, only objects for which there is at least one element not marked for deletion in the current infobase will participate in the generation of feature files of extended actions.</v8:content>
+											</v8:item>
+											<v8:item>
+												<v8:lang>ru</v8:lang>
+												<v8:content>Только введенные объекты (Справочники, Документы, ПВХ)</v8:content>
 											</v8:item>
 										</Title>
 									</ExtendedTooltip>
@@ -631,7 +642,11 @@
 													<Title formatted="false">
 														<v8:item>
 															<v8:lang>ru</v8:lang>
-															<v8:content>Дополнительно используется каталог исключений из "Основные настройки"</v8:content>
+															<v8:content>Дополнительно используется каталог файлов исключений и "Только введенные объекты" из "Основные настройки"</v8:content>
+														</v8:item>
+														<v8:item>
+															<v8:lang>en</v8:lang>
+															<v8:content>Additionally, the exclusion file directory and "Only entered objects" from "Basic settings" are used</v8:content>
 														</v8:item>
 													</Title>
 												</ExtendedTooltip>
@@ -694,6 +709,16 @@
 												<InputField name="ДеревоМетаданныхПредставление" id="156">
 													<DataPath>ДеревоМетаданных.Представление</DataPath>
 													<ReadOnly>true</ReadOnly>
+													<Title>
+														<v8:item>
+															<v8:lang>ru</v8:lang>
+															<v8:content>Представление</v8:content>
+														</v8:item>
+														<v8:item>
+															<v8:lang>en</v8:lang>
+															<v8:content>Presentation</v8:content>
+														</v8:item>
+													</Title>
 													<EditMode>EnterOnInput</EditMode>
 													<ContextMenu name="ДеревоМетаданныхПредставлениеКонтекстноеМеню" id="157"/>
 													<ExtendedTooltip name="ДеревоМетаданныхПредставлениеРасширеннаяПодсказка" id="158"/>
@@ -730,6 +755,10 @@
 													<v8:lang>ru</v8:lang>
 													<v8:content>Основные действия</v8:content>
 												</v8:item>
+												<v8:item>
+													<v8:lang>en</v8:lang>
+													<v8:content>Basic actions</v8:content>
+												</v8:item>
 											</Title>
 											<HorizontalStretch>false</HorizontalStretch>
 											<Group>Horizontal</Group>
@@ -764,13 +793,11 @@
 													<v8:lang>ru</v8:lang>
 													<v8:content>Расширенные действий</v8:content>
 												</v8:item>
-											</Title>
-											<ToolTip>
 												<v8:item>
-													<v8:lang>ru</v8:lang>
-													<v8:content>Дерево метаданных группа расширенные действий</v8:content>
+													<v8:lang>en</v8:lang>
+													<v8:content>Advanced Actions</v8:content>
 												</v8:item>
-											</ToolTip>
+											</Title>
 											<HorizontalStretch>false</HorizontalStretch>
 											<Group>Horizontal</Group>
 											<ShowInHeader>true</ShowInHeader>
@@ -1194,6 +1221,10 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Дерево метаданных</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Metadata tree</v8:content>
+				</v8:item>
 			</Title>
 			<Type>
 				<v8:Type>v8:ValueTree</v8:Type>
@@ -1204,6 +1235,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Представление</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Presentation</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -1220,6 +1255,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Данные</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Data</v8:content>
+						</v8:item>
 					</Title>
 					<Type>
 						<v8:Type>xs:string</v8:Type>
@@ -1234,6 +1273,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Типы реквизитов</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Types of props</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -1250,6 +1293,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Стандартный реквизит</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Standard props</v8:content>
+						</v8:item>
 					</Title>
 					<Type>
 						<v8:Type>xs:boolean</v8:Type>
@@ -1260,6 +1307,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Пометка</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Note</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -1287,6 +1338,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Имя длина</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Name length</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -1394,6 +1449,10 @@
 							<v8:lang>ru</v8:lang>
 							<v8:content>Тип объекта метаданных</v8:content>
 						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Metadata object type</v8:content>
+						</v8:item>
 					</Title>
 					<Type>
 						<v8:Type>xs:string</v8:Type>
@@ -1408,6 +1467,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Уровень дерева</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Level tree</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -1427,6 +1490,10 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Картинка реквизит</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Picture props</v8:content>
+				</v8:item>
 			</Title>
 			<Type>
 				<v8:Type>v8ui:Picture</v8:Type>
@@ -1437,6 +1504,10 @@
 				<v8:item>
 					<v8:lang>ru</v8:lang>
 					<v8:content>Картинка таблица</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Picture table</v8:content>
 				</v8:item>
 			</Title>
 			<Type>
@@ -1449,6 +1520,10 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Код сценария для вставки</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Script code to embed</v8:content>
+				</v8:item>
 			</Title>
 			<Type>
 				<v8:Type xmlns:d5p1="http://v8.1c.ru/8.1/data/txtedt">d5p1:TextDocument</v8:Type>
@@ -1460,6 +1535,10 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Таблица исключений</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Exceptions table</v8:content>
+				</v8:item>
 			</Title>
 			<Type>
 				<v8:Type>v8:ValueTable</v8:Type>
@@ -1470,6 +1549,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Тип объекта метаданных</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Metadata object type</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -1485,6 +1568,10 @@
 						<v8:item>
 							<v8:lang>ru</v8:lang>
 							<v8:content>Объект метаданных исключение</v8:content>
+						</v8:item>
+						<v8:item>
+							<v8:lang>en</v8:lang>
+							<v8:content>Metadata object exception</v8:content>
 						</v8:item>
 					</Title>
 					<Type>
@@ -1945,8 +2032,16 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Обновить структуру метаданных</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Update metadata structure</v8:content>
+				</v8:item>
 			</Title>
 			<ToolTip>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Update metadata structure</v8:content>
+				</v8:item>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
 					<v8:content>Обновить структуру метаданных</v8:content>
@@ -1965,11 +2060,19 @@
 					<v8:lang>ru</v8:lang>
 					<v8:content>Сформировать сценарии по метаданным</v8:content>
 				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Generate scenarios from metadata</v8:content>
+				</v8:item>
 			</Title>
 			<ToolTip>
 				<v8:item>
 					<v8:lang>ru</v8:lang>
 					<v8:content>Сформировать сценарии по метаданным</v8:content>
+				</v8:item>
+				<v8:item>
+					<v8:lang>en</v8:lang>
+					<v8:content>Generate scenarios from metadata</v8:content>
 				</v8:item>
 			</ToolTip>
 			<Picture>
