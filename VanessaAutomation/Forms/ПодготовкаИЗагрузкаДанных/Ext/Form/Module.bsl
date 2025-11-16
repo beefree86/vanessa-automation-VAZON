@@ -1213,7 +1213,7 @@ Procedure OnOpen(Cancel)
 	FillStepsLanguage();
 	LocalizedStringFromServer = LocalizedStringsServer();
 	ChangeReplaceRefByAttribute();
-		
+	
 EndProcedure
 
 &AtClient
