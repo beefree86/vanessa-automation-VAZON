@@ -33472,15 +33472,15 @@ Click on the hyperlink for more details.</v8:content>
 											</ToolTip>
 											<ExtendedTooltip name="ГруппаКнопокСохранитьЗагрузитьПеременныеРасширеннаяПодсказка" id="4133"/>
 											<ChildItems>
-												<Button name="ТаблоПеременныхЗагрузить" id="4114">
-													<Type>CommandBarButton</Type>
-													<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
-													<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
-												</Button>
 												<Button name="ТаблоПеременныхВыгрузить" id="4116">
 													<Type>CommandBarButton</Type>
 													<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
 													<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
+												</Button>
+												<Button name="ТаблоПеременныхЗагрузить" id="4114">
+													<Type>CommandBarButton</Type>
+													<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
+													<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
 												</Button>
 											</ChildItems>
 										</Popup>
