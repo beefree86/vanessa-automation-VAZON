@@ -37181,7 +37181,7 @@ For example, in MD this step is used to add a table of contents and fill it. In 
 					<tl>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Тогда HTML документ "%1 Заголовок элемента" стал равен</v8:content>
+							<v8:content>Тогда HTML документ "%1 Заголовок элемента" стал равен "%2 ЗначениеПоля"</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -37203,7 +37203,7 @@ For example, in MD this step is used to add a table of contents and fill it. In 
 					<tl>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Then HTML document "%1 ElementHeader" became equal</v8:content>
+							<v8:content>Then HTML document "%1 ElementHeader" became equal "%2 Value"</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -37230,7 +37230,7 @@ For example, in MD this step is used to add a table of contents and fill it. In 
 					<tl>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Тогда HTML документ с именем '%1 ИмяЭлемента' стал равен</v8:content>
+							<v8:content>Тогда HTML документ с именем '%1 ИмяЭлемента' стал равен "%2 ЗначениеПоля"</v8:content>
 						</v8:item>
 					</tl>
 				</c>
@@ -37252,7 +37252,7 @@ For example, in MD this step is used to add a table of contents and fill it. In 
 					<tl>
 						<v8:item>
 							<v8:lang>ru</v8:lang>
-							<v8:content>Then HTML document named "%1 ElementHeader" became equal</v8:content>
+							<v8:content>Then HTML document named "%1 ElementHeader" became equal "%2 Value"</v8:content>
 						</v8:item>
 					</tl>
 				</c>

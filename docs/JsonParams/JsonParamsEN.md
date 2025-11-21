@@ -178,6 +178,7 @@
          When the test completes, it checks the "Technical Support Information" window for special messages about context server calls.
          If such messages were found, a script error will be raised.
          Detailed information here
+         https://its.1c.ru/db/pubv8devui/content/282/1
 
 *  TestClient debug
 
@@ -507,6 +508,8 @@
             It is also necessary that commands of the form are executed on the PC:
             magick convert file.pdf file.png
             An example result can be seen here.
+            https://www.ghostscript.com/download.html
+            https://www.youtube.com/watch?v=1xnp6CxCktA&list=PLalsS95_a3a8iVPCLjFMY2wj4ZMG2XpVH&index=3&ab_channel=VSL
 
    *  Allure labels data
 
@@ -529,6 +532,7 @@
          From version 13.12 screenshots can be added to jUnit.
          For everything to work correctly - the Screenshot Directory must be located inside the Project Directory.
          Save the screenshots folder as artifacts.
+         https://docs.gitlab.com/ee/ci/unit_test_reports.html#viewing-junit-screenshots-on-gitlab
 
 *  ASDS
 
@@ -674,6 +678,7 @@
          * **VariantsHTMLInstructions**:
             3D Carousel variant - adapted for both PC and mobile
             Details here.
+            https://www.youtube.com/watch?v=dMmjG97nJ_w
 
          * **htmlstyles**:
             Style File
@@ -682,6 +687,7 @@
             Speech Synthesis technology built into browsers is used. Speech synthesis (text-to-speech or tts) involves receiving the synthesized text of the application and its speech reproduction.
             More detailed 
             Text playback starts when you click on the step image.
+            https://developer.mozilla.org/ru/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API
 
       * **markdowncreate**:
          If the checkbox is on, MarkDown screencast will be created during scenario execution.
@@ -724,10 +730,12 @@
             * **audioenginetts**:
                The console command to be used when converting text to speech.
                The  balabolka_console program is used.
+               http://www.cross-plus-a.ru/bconsole.html
 
             * **ttsvoice**:
                Specifies which voice will be used for voice acting. It is allowed to indicate not the full name of the voice in the system, but only a part, for example "Elena".
                You will need to install Microsoft Speech Platform x32 and Server Runtime Languages.
+               https://www.microsoft.com/en-us/download/details.aspx?id=27225
 
             * **speedofspeech**:
                Narrator's speech speed.
@@ -738,14 +746,20 @@
             * **yandexttslanguage**:
                Sets the language in which the speaker will speak. Details here.
                To control accent and pronunciation, see here.
+               https://cloud.yandex.ru/docs/speechkit/tts/request
+               https://yandex.ru/dev/dialogs/alice/doc/speech-tuning-docpage/
 
             * **yandexttsvoice**:
                Sets the voice for the announcer to speak. Details here.
                To control accent and pronunciation, see here.
+               https://cloud.yandex.ru/docs/speechkit/tts/request
+               https://yandex.ru/dev/dialogs/alice/doc/speech-tuning-docpage/
 
             * **yandexttsemotion**:
                Sets the emotion with which the announcer will speak. Details here.
                To control accent and pronunciation, see here.
+               https://cloud.yandex.ru/docs/speechkit/tts/request
+               https://yandex.ru/dev/dialogs/alice/doc/speech-tuning-docpage/
 
             * **yandexttsspeed**:
                The speed (tempo) of synthesized speech.
@@ -765,6 +779,7 @@
                   https://console.cloud.yandex.ru/folders/b1gheo81t4a6eaafe5vd
                   (Directory ID - b1gheo81t4a6eaafe5vd)
                   Retrieving a Directory ID
+                  https://cloud.yandex.ru/docs/resource-manager/operations/folder/get-id
 
                * **yandexttsoauthtoken**:
                   The OAuth token is used in the authentication procedure in Yandex.Cloud
@@ -783,12 +798,15 @@
 
             * **amazonttslanguage**:
                See the correspondence of language and voice here.
+               https://docs.aws.amazon.com/en_us/polly/latest/dg/voicelist.html
 
             * **amazonttsvoice**:
                See the correspondence of language and voice here.
+               https://docs.aws.amazon.com/en_us/polly/latest/dg/voicelist.html
 
             * **amazonttsengine**:
                See the options for the value for the "Engine" field here.
+               https://docs.aws.amazon.com/en_us/polly/latest/dg/voicelist.html
 
             * **amazonttsregion**:
                The field specifies the region parameter. The default is us-east-1.
@@ -826,6 +844,7 @@
             * **sberttsvoice**:
                Sets the voice to generate.
                Examples of voices can be found here
+               https://developer.sberdevices.ru/docs/ru/smartservices/synthesize_smartspeech#%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D0%B3%D0%BE%D0%BB%D0%BE%D1%81%D0%BE%D0%B2-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B8%D0%BD%D1%82%D0%B5%D0%B7%D0%B0
 
       *  Voice test
 
@@ -851,6 +870,8 @@
          Allows you to create video instructions.
          A video describing the settings is in this playlist.
          It is also recommended to read this FAQ.
+         https://www.youtube.com/watch?v=QSDvDQDLyLk&list=PLalsS95_a3a_m9ieRJgD3XPWCP9goa9GC
+         https://github.com/Pr-Mex/vanessa-automation/blob/develop/docs/FAQ/MakeAutoVideo.md
 
       * **videopath**:
          Directory where will be placed result of assembly videos or animated screencast.
@@ -913,6 +934,7 @@
                "C:\Program Files\ImageMagick-X.X.X-Q16\convert.exe"
                Download: https://imagemagick.org/script/download.php
                For versions earlier than 7 during the installation, the following item is required for installation: Install legacy utilities (e. G. Convert)
+               https://imagemagick.org/script/download.php
 
          * **comandrecvideo**:
             Command to start VLC for screen recording. You can specify bitrate and other parameters.

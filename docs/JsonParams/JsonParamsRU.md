@@ -178,6 +178,7 @@
          При завершении работы теста проверяет в окне "Информация для технической поддержки" наличие специальных сообщений о контекстных серверных вызовах.
          Если такие сообщения были найдены, то будет вызвана ошибка сценария.
          Подробная информация тут
+         https://its.1c.ru/db/pubv8devui/content/282/1
 
 *  Отладка клиента тестирования
 
@@ -506,6 +507,8 @@
             Также необходимо, чтобы на ПК выполнялись команды вида:
             magick convert file.pdf file.png
             Пример результата можно посмотреть тут.
+            https://www.ghostscript.com/download.html
+            https://www.youtube.com/watch?v=1xnp6CxCktA&list=PLalsS95_a3a8iVPCLjFMY2wj4ZMG2XpVH&index=3&ab_channel=VSL
 
    *  Данные аллюр меток
 
@@ -528,6 +531,7 @@
          С версии 13.12 в jUnit можно добавлять скриншоты.
          Чтобы все корректно работало - КаталогСкриншотов должен быть расположен внутри КаталогаПроекта.
          Папку скриншотов сохранять как артефакты.
+         https://docs.gitlab.com/ee/ci/unit_test_reports.html#viewing-junit-screenshots-on-gitlab
 
 *  СППР
 
@@ -673,6 +677,7 @@
          * **ВариантСтилейHTMLИнструкции {VariantsHTMLInstructions}**:
             Вариант 3D Карусель - адаптирован как под ПК так и под мобильные устройства
             Подробности тут.
+            https://www.youtube.com/watch?v=dMmjG97nJ_w
 
          * **СтилиHTMLИнструкции {htmlstyles}**:
             Файл стилей
@@ -681,6 +686,7 @@
             Используется встроенная в браузеры технология Синтеза речи. Синтез речи (text-to-speech или tts) подразумевает получение синтезированного текста приложения и его речевое воспроизведение.
             Подробнее
             Воспроизведение текста начинается при клике на картинку шага.
+            https://developer.mozilla.org/ru/docs/Web/API/Web_Speech_API/Using_the_Web_Speech_API#%D1%81%D0%B8%D0%BD%D1%82%D0%B5%D0%B7_%D1%80%D0%B5%D1%87%D0%B8
 
       * **СоздаватьИнструкциюMarkdown {markdowncreate}**:
          Если флаг установлен, то во время выполнения сценария будет создаваться скринкаст в формате MarkDown.
@@ -723,10 +729,12 @@
             * **ЗаписьВидеоПутьКДвижкуTTS {audioenginetts}**:
                Консольная команда, которая будет использована при конвертации текста в речь.
                Используется программа balabolka_console.
+               https://cross-plus-a.com/bconsole.htm
 
             * **ЗаписьВидеоИмяTTS {ttsvoice}**:
                Указывает какой голос будет использован для озвучки. Допускается указывать не полное название голоса в системе, а только часть, например "Elena".
                Понадобится установить Microsoft Speech Platform х32 и Server Runtime Languages.
+               https://www.microsoft.com/en-us/download/details.aspx?id=27225
 
             * **ЗаписьВидеоСкоростьПроизношения {speedofspeech}**:
                Скорость произношения текста диктором.
@@ -737,14 +745,20 @@
             * **ЗаписьВидеоYandexTTSЯзык {yandexttslanguage}**:
                Задаёт язык, на котором будет говорить диктор. Подробности здесь.
                Управление ударением и произношением см тут.
+               https://cloud.yandex.ru/docs/speechkit/tts/request
+               https://yandex.ru/dev/dialogs/alice/doc/speech-tuning-docpage/
 
             * **ЗаписьВидеоYandexTTSГолос {yandexttsvoice}**:
                Задаёт голос, которым будет говорить диктор. Подробности здесь.
                Управление ударением и произношением см тут.
+               https://cloud.yandex.ru/docs/speechkit/tts/request
+               https://yandex.ru/dev/dialogs/alice/doc/speech-tuning-docpage/
 
             * **ЗаписьВидеоYandexTTSЭмоция {yandexttsemotion}**:
                Задаёт эмоцию, с которой будет говорить диктор. Подробности здесь.
                Управление ударением и произношением см тут.
+               https://cloud.yandex.ru/docs/speechkit/tts/request
+               https://yandex.ru/dev/dialogs/alice/doc/speech-tuning-docpage/
 
             * **ЗаписьВидеоYandexTTSСкорость {yandexttsspeed}**:
                Скорость (темп) синтезированной речи.
@@ -764,6 +778,7 @@
                   https://console.cloud.yandex.ru/folders/b1gheo81t4a6eaafe5vd
                   (Идентификатор каталога - b1gheo81t4a6eaafe5vd)
                   Получение идентификатора каталога 
+                  https://cloud.yandex.ru/docs/resource-manager/operations/folder/get-id
 
                * **ЗаписьВидеоYandexTTSOauthToken {yandexttsoauthtoken}**:
                   OAuth-токен используется в процедуре аутентификации в Яндекс.Облаке
@@ -772,6 +787,7 @@
                                    2. Сгенерировать токен;
                                    3. Сохранить его в текстовый файл;
                                    4. Указать путь к текстовому файлу с токеном.
+                  https://cloud.yandex.ru/docs/iam/concepts/authorization/oauth-token
 
                * **ЗаписьВидеоYandexTTSApiKey {yandexttsapikey}**:
                   API ключ используется в процедуре аутентификации в Яндекс.Облаке
@@ -782,12 +798,15 @@
 
             * **ЗаписьВидеоAmazonЯзык {amazonttslanguage}**:
                Соответствие языка и голоса смотрите здесь.
+               https://docs.aws.amazon.com/en_us/polly/latest/dg/voicelist.html
 
             * **ЗаписьВидеоAmazonГолос {amazonttsvoice}**:
                Соответствие языка и голоса смотрите здесь.
+               https://docs.aws.amazon.com/en_us/polly/latest/dg/voicelist.html
 
             * **ЗаписьВидеоAmazonДвижок {amazonttsengine}**:
                Варианты значения для поля "Движок" смотрите здесь.
+               https://docs.aws.amazon.com/en_us/polly/latest/dg/voicelist.html
 
             * **ЗаписьВидеоAmazonРегион {amazonttsregion}**:
                В поле указывается параметр регион. Значение по умолчанию: us-east-1.
@@ -825,6 +844,7 @@
             * **ЗаписьВидеоСберTTSГолос {sberttsvoice}**:
                Задает голос для генерации.
                Примеры голосов можно посмотреть здесь
+               https://developer.sberdevices.ru/docs/ru/smartservices/synthesize_smartspeech#%D0%BF%D1%80%D0%B8%D0%BC%D0%B5%D1%80%D1%8B-%D0%B3%D0%BE%D0%BB%D0%BE%D1%81%D0%BE%D0%B2-%D0%B4%D0%BB%D1%8F-%D1%81%D0%B8%D0%BD%D1%82%D0%B5%D0%B7%D0%B0
 
       *  Тест голоса
 
@@ -850,6 +870,8 @@
          Позволяет создавать видео инструкции.
          Видео по описанию настроек находится в этом плей листе.
          Также рекомендуется прочитать этот FAQ. 
+         https://www.youtube.com/watch?v=QSDvDQDLyLk&list=PLalsS95_a3a_m9ieRJgD3XPWCP9goa9GC
+         https://github.com/Pr-Mex/vanessa-automation/blob/develop/docs/FAQ/MakeAutoVideo.md
 
       * **КаталогВыгрузкиИнструкцийВидео {videopath}**:
          Каталог, в которой будут помещен результат сборки видео или анимированного скринкаста.
@@ -912,6 +934,7 @@
                "C:\Program Files\ImageMagick-Х.Х.Х-Q16\convert.exe"
                Скачать: https://imagemagick.org/script/download.php
                Для версий младше 7 в процессе установки обязательным к установке является пункт: Install legacy utilities (e. g. convert)
+               https://imagemagick.org/script/download.php
 
          * **ЗаписьВидеоКомандаНачатьЗаписьВидео {comandrecvideo}**:
             Команда, которая будет запускать VLC для начала записи экрана. В команде возможно редактирование битрейта и других настроек.
