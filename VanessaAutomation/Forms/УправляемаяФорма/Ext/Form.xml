@@ -19377,6 +19377,29 @@ For this option to work, you must enable the use of the VanessaExt addin.</v8:co
 																				<Event name="OnChange">ВыводитьЛогВКонсольПриИзменении</Event>
 																			</Events>
 																		</CheckBoxField>
+																		<CheckBoxField name="МаскироватьПарольВЛоге" id="4137">
+																			<DataPath>Объект.МаскироватьПарольВЛоге</DataPath>
+																			<TitleLocation>Right</TitleLocation>
+																			<ToolTipRepresentation>ShowBottom</ToolTipRepresentation>
+																			<CheckBoxType>Auto</CheckBoxType>
+																			<ContextMenu name="МаскироватьПарольВЛогеКонтекстноеМеню" id="4138"/>
+																			<ExtendedTooltip name="МаскироватьПарольВЛогеРасширеннаяПодсказка" id="4139">
+																				<AutoMaxWidth>false</AutoMaxWidth>
+																				<Title formatted="false">
+																					<v8:item>
+																						<v8:lang>ru</v8:lang>
+																						<v8:content>Маскируется пароль пользователя в логе /P"*****"</v8:content>
+																					</v8:item>
+																					<v8:item>
+																						<v8:lang>en</v8:lang>
+																						<v8:content>The user's password is masked in the log /P"*****"</v8:content>
+																					</v8:item>
+																				</Title>
+																			</ExtendedTooltip>
+																			<Events>
+																				<Event name="OnChange">МаскироватьПарольВЛогеПриИзменении</Event>
+																			</Events>
+																		</CheckBoxField>
 																	</ChildItems>
 																</UsualGroup>
 															</ChildItems>
@@ -19680,6 +19703,8 @@ If the field is empty, then the log will not be output to a text file.</v8:conte
 																							<v8:content>Allure group basic settings first row right column</v8:content>
 																						</v8:item>
 																					</Title>
+																					<Group>Vertical</Group>
+																					<Behavior>Usual</Behavior>
 																					<Representation>None</Representation>
 																					<ShowTitle>false</ShowTitle>
 																					<ExtendedTooltip name="ГруппаAllureОсновныеНастройкиПерваяСтрокаПравыйСтолбецРасширеннаяПодсказка" id="3694"/>
@@ -19704,6 +19729,111 @@ If the field is empty, then the log will not be output to a text file.</v8:conte
 																								</Title>
 																							</ExtendedTooltip>
 																						</CheckBoxField>
+																						<InputField name="СписокИсключаемыхПеременныхAllure" id="4140">
+																							<DataPath>Объект.СписокИсключаемыхПеременныхAllure</DataPath>
+																							<Title>
+																								<v8:item>
+																									<v8:lang>ru</v8:lang>
+																									<v8:content>Список имен переменных исключаемых из замены</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>en</v8:lang>
+																									<v8:content>List of tags to exclude</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>am</v8:lang>
+																									<v8:content>አዳዲስ ሆኖ ይታያል</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>az</v8:lang>
+																									<v8:content>Siyahısı tags исключаемых</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>bg</v8:lang>
+																									<v8:content>Списък на изключване на тагове</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>de</v8:lang>
+																									<v8:content>Liste der ausgeschlossenen Tags</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>es</v8:lang>
+																									<v8:content>La lista de exclusión de las etiquetas</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>et</v8:lang>
+																									<v8:content>Nimekiri исключаемых-i</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>fr</v8:lang>
+																									<v8:content>La liste des exclus des balises</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>hu</v8:lang>
+																									<v8:content>A lista kizárt kategória</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>it</v8:lang>
+																									<v8:content>Elenco esclusi tag</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>ka</v8:lang>
+																									<v8:content>სია გამორიცხული საკვანძო სიტყვები</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>lt</v8:lang>
+																									<v8:content>Sąrašas žymių исключаемых</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>lv</v8:lang>
+																									<v8:content>Saraksts atbrīvoto tagiem</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>mn</v8:lang>
+																									<v8:content>Жагсаалтаас хассан tags</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>pl</v8:lang>
+																									<v8:content>Lista blokowanych elementów</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>ro</v8:lang>
+																									<v8:content>Lista excluse tag-uri</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>sl</v8:lang>
+																									<v8:content>Seznam izključenih oznake</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>sv</v8:lang>
+																									<v8:content>Listan över undantagna taggar</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>tr</v8:lang>
+																									<v8:content>İstisna listesi etiketleri</v8:content>
+																								</v8:item>
+																								<v8:item>
+																									<v8:lang>vi</v8:lang>
+																									<v8:content>Danh sách các tag bị loại trừ</v8:content>
+																								</v8:item>
+																							</Title>
+																							<TitleLocation>Top</TitleLocation>
+																							<ToolTipRepresentation>ShowBottom</ToolTipRepresentation>
+																							<ContextMenu name="СписокИсключаемыхПеременныхAllureКонтекстноеМеню" id="4141"/>
+																							<ExtendedTooltip name="СписокИсключаемыхПеременныхAllureРасширеннаяПодсказка" id="4142">
+																								<AutoMaxWidth>false</AutoMaxWidth>
+																								<Title formatted="true">
+																									<v8:item>
+																										<v8:lang>ru</v8:lang>
+																										<v8:content>Имена переменных из списка не будут заменены на их значения</v8:content>
+																									</v8:item>
+																									<v8:item>
+																										<v8:lang>en</v8:lang>
+																										<v8:content>Enter tags in the field. If the tag is detected in the feature, the whole feature will not be uploaded. If the tag is found in the scenario, only this scenario will not be uploaded.</v8:content>
+																									</v8:item>
+																								</Title>
+																							</ExtendedTooltip>
+																						</InputField>
 																					</ChildItems>
 																				</UsualGroup>
 																			</ChildItems>
@@ -33472,15 +33602,15 @@ Click on the hyperlink for more details.</v8:content>
 											</ToolTip>
 											<ExtendedTooltip name="ГруппаКнопокСохранитьЗагрузитьПеременныеРасширеннаяПодсказка" id="4133"/>
 											<ChildItems>
-												<Button name="ТаблоПеременныхВыгрузить" id="4116">
-													<Type>CommandBarButton</Type>
-													<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
-													<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
-												</Button>
 												<Button name="ТаблоПеременныхЗагрузить" id="4114">
 													<Type>CommandBarButton</Type>
 													<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
 													<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
+												</Button>
+												<Button name="ТаблоПеременныхВыгрузить" id="4116">
+													<Type>CommandBarButton</Type>
+													<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
+													<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
 												</Button>
 											</ChildItems>
 										</Popup>
