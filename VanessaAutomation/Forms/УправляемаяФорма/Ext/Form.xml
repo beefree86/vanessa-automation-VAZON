@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="UTF-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <Form xmlns="http://v8.1c.ru/8.3/xcf/logform" xmlns:app="http://v8.1c.ru/8.2/managed-application/core" xmlns:cfg="http://v8.1c.ru/8.1/data/enterprise/current-config" xmlns:dcscor="http://v8.1c.ru/8.1/data-composition-system/core" xmlns:dcsset="http://v8.1c.ru/8.1/data-composition-system/settings" xmlns:ent="http://v8.1c.ru/8.1/data/enterprise" xmlns:lf="http://v8.1c.ru/8.2/managed-application/logform" xmlns:style="http://v8.1c.ru/8.1/data/ui/style" xmlns:sys="http://v8.1c.ru/8.1/data/ui/fonts/system" xmlns:v8="http://v8.1c.ru/8.1/data/core" xmlns:v8ui="http://v8.1c.ru/8.1/data/ui" xmlns:web="http://v8.1c.ru/8.1/data/ui/colors/web" xmlns:win="http://v8.1c.ru/8.1/data/ui/colors/windows" xmlns:xr="http://v8.1c.ru/8.3/xcf/readable" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" version="2.10">
 	<AutoSaveDataInSettings>Use</AutoSaveDataInSettings>
 	<Group>Horizontal</Group>
@@ -33602,15 +33602,15 @@ Click on the hyperlink for more details.</v8:content>
 											</ToolTip>
 											<ExtendedTooltip name="ГруппаКнопокСохранитьЗагрузитьПеременныеРасширеннаяПодсказка" id="4133"/>
 											<ChildItems>
-												<Button name="ТаблоПеременныхЗагрузить" id="4114">
-													<Type>CommandBarButton</Type>
-													<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
-													<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
-												</Button>
 												<Button name="ТаблоПеременныхВыгрузить" id="4116">
 													<Type>CommandBarButton</Type>
 													<CommandName>Form.Command.ВыгрузитьИзТаблоПеременных</CommandName>
 													<ExtendedTooltip name="ТаблоПеременныхВыгрузитьРасширеннаяПодсказка" id="4117"/>
+												</Button>
+												<Button name="ТаблоПеременныхЗагрузить" id="4114">
+													<Type>CommandBarButton</Type>
+													<CommandName>Form.Command.ЗагрузитьВТаблоПеременных</CommandName>
+													<ExtendedTooltip name="ТаблоПеременныхЗагрузитьРасширеннаяПодсказка" id="4115"/>
 												</Button>
 											</ChildItems>
 										</Popup>
