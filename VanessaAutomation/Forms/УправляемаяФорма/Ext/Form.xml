@@ -19377,6 +19377,29 @@ For this option to work, you must enable the use of the VanessaExt addin.</v8:co
 																				<Event name="OnChange">ВыводитьЛогВКонсольПриИзменении</Event>
 																			</Events>
 																		</CheckBoxField>
+																		<CheckBoxField name="МаскироватьПарольВЛоге" id="4137">
+																			<DataPath>Объект.МаскироватьПарольВЛоге</DataPath>
+																			<TitleLocation>Right</TitleLocation>
+																			<ToolTipRepresentation>ShowBottom</ToolTipRepresentation>
+																			<CheckBoxType>Auto</CheckBoxType>
+																			<ContextMenu name="МаскироватьПарольВЛогеКонтекстноеМеню" id="4138"/>
+																			<ExtendedTooltip name="МаскироватьПарольВЛогеРасширеннаяПодсказка" id="4139">
+																				<AutoMaxWidth>false</AutoMaxWidth>
+																				<Title formatted="false">
+																					<v8:item>
+																						<v8:lang>ru</v8:lang>
+																						<v8:content>Маскируется пароль пользователя в логе /P"*****"</v8:content>
+																					</v8:item>
+																					<v8:item>
+																						<v8:lang>en</v8:lang>
+																						<v8:content>The user's password is masked in the log /P"*****"</v8:content>
+																					</v8:item>
+																				</Title>
+																			</ExtendedTooltip>
+																			<Events>
+																				<Event name="OnChange">МаскироватьПарольВЛогеПриИзменении</Event>
+																			</Events>
+																		</CheckBoxField>
 																	</ChildItems>
 																</UsualGroup>
 															</ChildItems>
